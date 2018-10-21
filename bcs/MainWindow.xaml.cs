@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CLProject;
 
 namespace bcs
 {
@@ -20,9 +21,27 @@ namespace bcs
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const string AMessage1 = "Приложение загружено";
+        private const string AMessage2 = "Приложение запущено";
+        private const string AMessage3 = "Приложение остановлено";
+        private const string AMessage4 = "Приложение выгружено";
+
+        private ProjectClass Project;
+
         public MainWindow()
         {
             InitializeComponent();
+            Project = new ProjectClass("Application");
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Title = string.Format("{0} v{1}", Title, ProgramInfo.Version);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Project.Dispose();
         }
     }
 }
