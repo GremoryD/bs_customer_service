@@ -27,11 +27,13 @@ namespace bcs
         private const string AMessage4 = "Приложение выгружено";
 
         private ProjectClass Project;
+        private WebSocketClientClass WebSocketClient;
 
         public MainWindow()
         {
             InitializeComponent();
             Project = new ProjectClass("Application");
+            WebSocketClient = new WebSocketClientClass(ref Project);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -41,7 +43,23 @@ namespace bcs
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            WebSocketClient.Stop();
             Project.Dispose();
+        }
+
+        private void barButtonItem1_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            WebSocketClient.Start();
+        }
+
+        private void BarButtonItem_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            WebSocketClient.Stop();
+        }
+
+        private void BarButtonItem_ItemClick_1(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            WebSocketClient.Send("aaaaa");
         }
     }
 }
