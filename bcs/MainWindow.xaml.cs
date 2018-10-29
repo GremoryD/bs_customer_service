@@ -27,13 +27,13 @@ namespace bcs
         private const string AMessage4 = "Приложение выгружено";
 
         private ProjectClass Project;
-        private WebSocketClientClass WebSocketClient;
+        private WebSocketClass WebSocketClient;
 
         public MainWindow()
         {
             InitializeComponent();
             Project = new ProjectClass("Application");
-            WebSocketClient = new WebSocketClientClass(ref Project);
+            WebSocketClient = new WebSocketClass(ref Project, "ws://192.168.1.67:8091", "/");
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

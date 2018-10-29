@@ -11,19 +11,32 @@ using System.Threading;
 
 namespace bcs
 {
-    class WebSocketClientClass
+    class WebSocketClass
     {
         private ProjectClass Project;
-        private WebSocket ws = new WebSocket("ws://192.168.1.67:8091");
+        private WebSocket ws;
+        private string wsURL;
+        private string wsPath;
         private bool IsStoping;
 
-        public WebSocketClientClass(ref ProjectClass AProject)
+        public bool IsAlive { get => ws.IsAlive; }
+
+        public WebSocketClass(ref ProjectClass AProject, string AwsURL, string AwsPath)
         {
             Project = AProject;
+            wsURL = AwsURL;
+            wsPath = AwsPath;
             IsStoping = false;
+            ws = new WebSocket(AwsURL + AwsPath);
             ws.OnOpen += HandlerOpen;
             ws.OnMessage += HandlerMessage;
             ws.OnClose += HandlerClose;
+            ws.OnError += HandlerError;
+        }
+
+        private void HandlerError(object sender, ErrorEventArgs e)
+        {
+            MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void HandlerOpen(object sender, EventArgs e)
