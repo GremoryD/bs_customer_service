@@ -9,6 +9,10 @@ using WebSocketSharp;
 using WebSocketSharp.Server;
 using System.Collections.Concurrent;
 using Newtonsoft.Json;
+using ServerLib;
+using ServerLib.JTypes;
+using ServerLib.JTypes.Client;
+using ServerLib.JTypes.Server;
 
 namespace bcsserver
 {
@@ -217,9 +221,9 @@ namespace bcsserver
             Handler = AHandler;
             Project = AProject;
             IsAuthenticated = false;
-            Receiver.Start();
-            Monitoring.Start();
-            Sender.Start();
+            //Receiver.Start();
+            //Monitoring.Start();
+            //Sender.Start();
         }
 
         private static void ReceiverThread()
@@ -300,14 +304,94 @@ namespace bcsserver
 
         public void Stop()
         {
+            if (_flagActive)
+            {
+                _flagActive = false;
+
+                RemoveSession();   
+            }
+
             IsClosing = true;
         }
 
+        private void RemoveSession()
+        {
+            DatabaseParameterValuesClass Param = new DatabaseParameterValuesClass();
+            Param.CreateParameterValue("Token", _token);
+
+            Project.Database.Execute("Logout", ref Param);
+        }
+
+        private bool _flagActive = false;
+        private string _token = null; 
+
+        /// <summary>
+        /// Обработка конкретного запроса
+        /// </summary>
+        /// <param name="AData">JSON запроса</param>
+        /// <returns></returns>
         public string Receive(string AData)
         {
             string Response = string.Empty;
             bool IsLogin = false;
 
+            var obj = JUtils.Deserialize(AData);
+
+            bool login = JUtils.ValidType(obj, typeof(Login));
+
+            if (!_flagActive && !login)
+            {
+                Response = JsonConvert.SerializeObject(ErrorNotAuthenticated);
+            }
+            else if (login)
+            {
+                var lCl = obj.ToObject<Login>();
+
+                DatabaseParameterValuesClass Param = new DatabaseParameterValuesClass();
+                Param.CreateParameterValue("SessionId", SessionID);
+                Param.CreateParameterValue("Login", lCl.UserName);
+                Param.CreateParameterValue("Password", lCl.Password);
+                Param.CreateParameterValue("AccessToken");
+                Param.CreateParameterValue("UserId");
+                Param.CreateParameterValue("FirstName");
+                Param.CreateParameterValue("LastName");
+                Param.CreateParameterValue("Patronymic");
+                Param.CreateParameterValue("Function");
+                Param.CreateParameterValue("LoginDate");
+
+                Project.Database.Execute("Login", ref Param);
+
+                long userId = Convert.ToInt64(Param.ParameterByName("UserId").Value.ToString());
+                bool success = userId > 0;
+                LoginResponse res = new LoginResponse();
+
+                if (success)
+                {
+                    if (_flagActive)
+                    {
+                        RemoveSession();
+                    }
+
+                    _flagActive = true;
+
+                    res.AccessToken = Param.ParameterByName("AccessToken").Value.ToString();
+                    res.FirstName = Param.ParameterByName("FirstName").Value.ToString();
+                    res.Function = Param.ParameterByName("Function").Value.ToString();
+                    res.LastName = Param.ParameterByName("LastName").Value.ToString();
+                    res.Patronymic = Param.ParameterByName("Patronymic").Value.ToString();
+                    res.State = ServerLib.JTypes.Enums.ResponseState.Ok;
+                    res.UserId = userId;
+                    res.LastLogin = DateTime.Parse(Param.ParameterByName("LoginDate").Value.ToString()).ToUniversalTime();
+
+                    _token = res.AccessToken;
+                }
+                else
+                {
+                    res.State = ServerLib.JTypes.Enums.ResponseState.Error;
+                }
+                Response = JUtils.Serialize(res);
+            }
+            /*
             try
             {
                 IsLogin = JsonConvert.DeserializeAnonymousType(AData, new { command = "" }).command.ToLower() == "login";
@@ -320,8 +404,9 @@ namespace bcsserver
             }
             else
             {
-                Response = JsonConvert.SerializeObject(ErrorNotAuthenticated);
+                
             }
+            */
             return (Response);
         }
     }
