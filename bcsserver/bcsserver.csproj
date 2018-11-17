@@ -68,9 +68,6 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CLProject">
-      <HintPath>..\..\cl\CLProject\bin\Debug\CLProject.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -207,6 +204,10 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Class Library Project\CLProject\CLProject.csproj">
+      <Project>{6d0bbdfc-621d-4cf6-893f-9a9d1f102104}</Project>
+      <Name>CLProject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ServerLib\ServerLib.csproj">
       <Project>{88d9580f-382e-41d0-b681-8618bece8bed}</Project>
       <Name>ServerLib</Name>
