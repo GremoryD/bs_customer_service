@@ -174,12 +174,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Class Library Project\CLProject\CLProject.csproj">
-      <Project>{6d0bbdfc-621d-4cf6-893f-9a9d1f102104}</Project>
-      <Name>CLProject</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\img_quit.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -208,6 +202,16 @@
     <Resource Include="Resources\img_service_stop.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Class Library Project\CLProject\CLProject.csproj">
+      <Project>{6d0bbdfc-621d-4cf6-893f-9a9d1f102104}</Project>
+      <Name>CLProject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServerLib\ServerLib.csproj">
+      <Project>{88d9580f-382e-41d0-b681-8618bece8bed}</Project>
+      <Name>ServerLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

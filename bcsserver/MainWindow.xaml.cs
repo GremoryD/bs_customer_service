@@ -81,11 +81,23 @@ namespace bcsserver
 
             Project.Database.Connections.CreateConnection("conn");
 
-            Project.Database.Parameters.CreateParameter("Request", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Входной запрос в формате JSON");
-            Project.Database.Parameters.CreateParameter("Response", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Ответ в формате JSON", 4000, string.Empty);
+            Project.Database.Parameters.CreateParameter("SessionId", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Идентификатор сессии сервера");
+            Project.Database.Parameters.CreateParameter("Login", System.Data.ParameterDirection.Input , OracleDbType.NVarchar2, "Логин пользователя");
+            Project.Database.Parameters.CreateParameter("Password", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Пароль пользователя");
+            Project.Database.Parameters.CreateParameter("AccessToken", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Токен доступа");
+            Project.Database.Parameters.CreateParameter("UserId", System.Data.ParameterDirection.Output, OracleDbType.Decimal, "Id пользователя в БД");
+            Project.Database.Parameters.CreateParameter("FirstName", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Имя пользователя");
+            Project.Database.Parameters.CreateParameter("LastName", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Фамилия пользователя");
+            Project.Database.Parameters.CreateParameter("Patronymic", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Отчество пользователя");
+            Project.Database.Parameters.CreateParameter("Function", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Должность пользователя");
+            Project.Database.Parameters.CreateParameter("LoginDate", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Дата последнего входа пользователя");
+
+            Project.Database.Parameters.CreateParameter("Token", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Токен доступа");
 
             Project.Database.Commands.CreateCommand("conn", RequestType.Reader, "ConnectionCheck", "SELECT 1 FROM DUAL", "Проверка соединения с базой данных");
-            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Login", "USR.LOGIN(:Request, :Response)", "Аутентификация пользователя");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Login", "USR.LOGIN(:SessionId, :Login, :Password, " +
+                ":AccessToken, :UserId, :FirstName, :LastName, :Patronymic, :Function, :LoginDate)", "Аутентификация пользователя");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Logout", "USR.LOGOUT(:Token)", "Выход");
 
             DatabaseCheck.Start();
             SetSettingsButtons();

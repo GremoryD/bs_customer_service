@@ -33,7 +33,7 @@ namespace bcs
         {
             InitializeComponent();
             Project = new ProjectClass("Application");
-            WebSocketClient = new WebSocketClass(ref Project, "ws://192.168.1.67:8091", "/");
+            WebSocketClient = new WebSocketClass(ref Project, "ws://127.0.0.1:2843", "/");
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

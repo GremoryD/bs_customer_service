@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bcsserver", "bcsserver\bcss
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLProject", "..\Class Library Project\CLProject\CLProject.csproj", "{6D0BBDFC-621D-4CF6-893F-9A9D1F102104}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BCS User Interface", "BCS User Interface\BCS User Interface.csproj", "{B1D163A4-BC6E-4C7E-85B0-31016CC67382}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerLib", "ServerLib\ServerLib.csproj", "{88D9580F-382E-41D0-B681-8618BECE8BED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{6D0BBDFC-621D-4CF6-893F-9A9D1F102104}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D0BBDFC-621D-4CF6-893F-9A9D1F102104}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D0BBDFC-621D-4CF6-893F-9A9D1F102104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1D163A4-BC6E-4C7E-85B0-31016CC67382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1D163A4-BC6E-4C7E-85B0-31016CC67382}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1D163A4-BC6E-4C7E-85B0-31016CC67382}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1D163A4-BC6E-4C7E-85B0-31016CC67382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88D9580F-382E-41D0-B681-8618BECE8BED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88D9580F-382E-41D0-B681-8618BECE8BED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88D9580F-382E-41D0-B681-8618BECE8BED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88D9580F-382E-41D0-B681-8618BECE8BED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
