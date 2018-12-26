@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using WebSocketSharp;
 using WebSocketSharp.Net;
 using CLProject;
+using ServerLib;
 using System.Windows;
 using System.Threading;
 
-namespace bcs
+namespace BCS_User_Interface
 {
-    class WebSocketClass
+    public class WebSocketClass
     {
         private ProjectClass Project;
         private WebSocket ws;
@@ -36,12 +37,12 @@ namespace bcs
 
         private void HandlerError(object sender, ErrorEventArgs e)
         {
-            MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //Project.Log.Error(e.Message);
         }
 
         private void HandlerOpen(object sender, EventArgs e)
         {
-            MessageBox.Show("Open");
+            //MessageBox.Show("Open");
         }
 
         private void HandlerClose(object sender, CloseEventArgs e)
@@ -66,11 +67,11 @@ namespace bcs
             ws.Close();
         }
 
-        public void Send(string AMessage)
-        {
+        public void Send(object AMessage)
+        { 
             if (ws.IsAlive)
             {
-                ws.Send(AMessage);
+                ws.Send(JUtils.Serialize(AMessage));
             }
         }
 

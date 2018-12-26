@@ -1,32 +1,16 @@
-﻿<Window
+﻿<Window xmlns:Views="clr-namespace:bcs.Views" 
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:bcs"
-        xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" x:Class="bcs.MainWindow"
+        xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" 
+        xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+        x:Class="bcs.MainWindow"
         mc:Ignorable="d"
-        Title="Поддержка клиентов" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="Поддержка клиентов" Height="646.463" Width="530" >
     <Grid>
-
-        <dxr:RibbonControl RibbonStyle="Office2010" ShowApplicationButton="True" VerticalAlignment="Top">
-            <dxr:RibbonControl.ToolbarItems>
-                <dxb:BarButtonItemLink BarItemName="barButtonItem1"/>
-            </dxr:RibbonControl.ToolbarItems>
-            <dxr:RibbonControl.ApplicationMenu>
-                <dxr:ApplicationMenu/>
-            </dxr:RibbonControl.ApplicationMenu>
-            <dxr:RibbonDefaultPageCategory Caption="defaultCategory">
-                <dxr:RibbonPage Caption="Тест соединения с сервером">
-                    <dxr:RibbonPageGroup Caption="Tools" ShowCaptionButton="False">
-                        <dxb:BarButtonItem x:Name="barButtonItem1" Content="Соединение с сервером" LargeGlyph="{dx:DXImage Image=ServerMode_32x32.png}" ItemClick="barButtonItem1_ItemClick"/>
-                        <dxb:BarButtonItem Content="Закрыть соединение с сервером" RibbonStyle="Large" LargeGlyph="{dx:DXImage Image=Close_32x32.png}" Glyph="{dx:DXImage Image=Close_16x16.png}" ItemClick="BarButtonItem_ItemClick"/>
-                        <dxb:BarButtonItem Content="Отправка запроса в сервер" LargeGlyph="{dx:DXImage Image=Announcement_32x32.png}" Glyph="{dx:DXImage Image=Announcement_16x16.png}" ItemClick="BarButtonItem_ItemClick_1"/>
-                    </dxr:RibbonPageGroup>
-                </dxr:RibbonPage>
-            </dxr:RibbonDefaultPageCategory>
-        </dxr:RibbonControl>
-        <dxr:RibbonStatusBarControl Margin="0" VerticalAlignment="Bottom"/>
-
+        <Views:LoginView />
     </Grid>
 </Window>

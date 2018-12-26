@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ServerLib.JTypes.Client;
+using ServerLib.JTypes.Client; 
 
 namespace BCS_User_Interface
 {
@@ -38,7 +38,9 @@ namespace BCS_User_Interface
                 Password = Password.Password,
                 UserName = Login.Text
             };
-            App.WebSocketClient.Send(login);
+
+            App.WebSocketClient.Send(login); 
         }
+         
     }
 }

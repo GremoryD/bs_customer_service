@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="bcs.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:bcs.ViewModels"
+             xmlns:local="clr-namespace:bcs.Views" 
+             mc:Ignorable="d" >
+    <UserControl.DataContext>
+        <vm:LoginViewModel></vm:LoginViewModel>
+    </UserControl.DataContext>
+    <Grid Background="#FFF3F3F3" >
+        <dxe:TextEdit x:Name="Login" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" NullText="Логин" Margin="55,216,55,0" Height="38" VerticalAlignment="Top" Text="{Binding Path=LoginInput}"/>
+        <dxe:PasswordBoxEdit x:Name="Password" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" NullText="Пароль" Margin="55,278,55,0" Height="38" VerticalAlignment="Top" Text="{Binding Path=PasswordInput}"/>
+        <dx:SimpleButton x:Name="simpleButton" Content="Авторизация" Margin="90,343,91,180" Command="{Binding LoginCommand}"/>
+    </Grid>
+</UserControl>

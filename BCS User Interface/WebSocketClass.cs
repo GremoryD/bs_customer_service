@@ -68,7 +68,7 @@ namespace BCS_User_Interface
         }
 
         public void Send(object AMessage)
-        {
+        { 
             if (ws.IsAlive)
             {
                 ws.Send(JUtils.Serialize(AMessage));
