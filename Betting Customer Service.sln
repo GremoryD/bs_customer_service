@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerLib", "ServerLib\Serv
 		{6D0BBDFC-621D-4CF6-893F-9A9D1F102104} = {6D0BBDFC-621D-4CF6-893F-9A9D1F102104}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLProject", "..\cl_project\CLProject\CLProject.csproj", "{6D0BBDFC-621D-4CF6-893F-9A9D1F102104}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLProject", "..\Class Library Project\CLProject\CLProject.csproj", "{6D0BBDFC-621D-4CF6-893F-9A9D1F102104}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
