@@ -34,7 +34,7 @@ namespace ServerLib
 
         static public bool ValidType(JObject jObject, Type type)
         {
-            return (Newtonsoft.Json.Schema.Extensions.IsValid(jObject, Schema(type)));
+            return Newtonsoft.Json.Schema.Extensions.IsValid(jObject, Schema(type));
         }
 
         static public string Serialize(object obj)

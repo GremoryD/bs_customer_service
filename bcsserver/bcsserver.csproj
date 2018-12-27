@@ -205,6 +205,10 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Class Library Project\CLProject\CLProject.csproj">
+      <Project>{6d0bbdfc-621d-4cf6-893f-9a9d1f102104}</Project>
+      <Name>CLProject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ServerLib\ServerLib.csproj">
       <Project>{88d9580f-382e-41d0-b681-8618bece8bed}</Project>
       <Name>ServerLib</Name>
