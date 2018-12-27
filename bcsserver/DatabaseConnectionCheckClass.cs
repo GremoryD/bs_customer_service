@@ -31,15 +31,17 @@ namespace bcsserver
             {
                 IsWorking = true;
                 string mess = "Не установлено";
-                try
-                {
+               
                     if (MainForm.DatabaseConnectionInit() && ((System.Data.DataTable)MainForm.Project.Database.Execute("ConnectionCheck")).Rows.Count == 1)
                     {
                         mess = "Установлено";
-                    }
+                }
+                try
+                {
                 }
                 catch
                 {
+
                     mess = "Ошибка";
                 }
                 finally

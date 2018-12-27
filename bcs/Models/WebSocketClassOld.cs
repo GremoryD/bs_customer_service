@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace bcs
 {
-    class WebSocketClass
+    public class WebSocketClassOld
     {
         private ProjectClass Project;
         private WebSocket ws;
@@ -21,7 +21,7 @@ namespace bcs
 
         public bool IsAlive { get => ws.IsAlive; }
 
-        public WebSocketClass(ref ProjectClass AProject, string AwsURL, string AwsPath)
+        public WebSocketClassOld(ref ProjectClass AProject, string AwsURL, string AwsPath)
         {
             Project = AProject;
             wsURL = AwsURL;
