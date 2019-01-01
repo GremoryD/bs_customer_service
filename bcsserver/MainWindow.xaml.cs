@@ -37,7 +37,7 @@ namespace bcsserver
         /// <summary>
         /// Класс сервера
         /// </summary>
-        private ServerClass Server;
+        private WebSocketServerClass Server;
 
         /// <summary>
         /// Признак того, что сервер запущен
@@ -68,7 +68,7 @@ namespace bcsserver
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             DatabaseCheck = new DatabaseConnectionCheckClass(this);
-            Server = new ServerClass(this, ref Project);
+            Server = new WebSocketServerClass(ref Project);
 
             Title = string.Format("{0} v{1}", Title, ProgramInfo.Version);
 
@@ -81,23 +81,23 @@ namespace bcsserver
 
             Project.Database.Connections.CreateConnection("conn");
 
-            Project.Database.Parameters.CreateParameter("SessionId", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Идентификатор сессии сервера");
+            Project.Database.Parameters.CreateParameter("WebSocketID", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Идентификатор сессии сервера");
             Project.Database.Parameters.CreateParameter("Login", System.Data.ParameterDirection.Input , OracleDbType.NVarchar2, "Логин пользователя");
             Project.Database.Parameters.CreateParameter("Password", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Пароль пользователя");
-            Project.Database.Parameters.CreateParameter("AccessToken", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Токен доступа");
-            Project.Database.Parameters.CreateParameter("UserId", System.Data.ParameterDirection.Output, OracleDbType.Decimal, "Id пользователя в БД");
-            Project.Database.Parameters.CreateParameter("FirstName", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Имя пользователя");
-            Project.Database.Parameters.CreateParameter("LastName", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Фамилия пользователя");
-            Project.Database.Parameters.CreateParameter("Patronymic", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Отчество пользователя");
-            Project.Database.Parameters.CreateParameter("Function", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Должность пользователя");
-            Project.Database.Parameters.CreateParameter("LoginDate", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Дата последнего входа пользователя");
-
+            Project.Database.Parameters.CreateParameter("AccessToken", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Токен доступа", 100);
+            Project.Database.Parameters.CreateParameter("UserId", System.Data.ParameterDirection.Output, OracleDbType.Decimal, "Id пользователя в БД", 20);
+            Project.Database.Parameters.CreateParameter("FirstName", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Имя пользователя", 100);
+            Project.Database.Parameters.CreateParameter("LastName", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Фамилия пользователя", 100);
+            Project.Database.Parameters.CreateParameter("MidleName", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Отчество пользователя", 100);
+            Project.Database.Parameters.CreateParameter("Job", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Должность пользователя", 200);
+            Project.Database.Parameters.CreateParameter("LastLoginDate", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Дата последнего входа пользователя", 30);
+            Project.Database.Parameters.CreateParameter("Active", System.Data.ParameterDirection.Output, OracleDbType.Decimal, "Признак активности пользователя (1 - активен, 0 - заблокирован)", 20);
             Project.Database.Parameters.CreateParameter("Token", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Токен доступа");
+            Project.Database.Parameters.CreateParameter("State", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "статус завершения SQL-запроса", 20);
 
             Project.Database.Commands.CreateCommand("conn", RequestType.Reader, "ConnectionCheck", "SELECT 1 FROM DUAL", "Проверка соединения с базой данных");
-            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Login", "USR.LOGIN(:SessionId, :Login, :Password, " +
-                ":AccessToken, :UserId, :FirstName, :LastName, :Patronymic, :Function, :LoginDate)", "Аутентификация пользователя");
-            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Logout", "USR.LOGOUT(:Token)", "Выход");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Login", "USR.LOGIN(:WebSocketID, :Login, :Password, :AccessToken, :UserId, :FirstName, :LastName, :MidleName, :Job, :LastLoginDate, :Active)", "Аутентификация пользователя");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Logout", "USR.LOGOUT(:Token, :State)", "Выход из системы");
 
             DatabaseCheck.Start();
             SetSettingsButtons();
