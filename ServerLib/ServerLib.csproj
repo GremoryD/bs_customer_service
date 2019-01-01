@@ -44,17 +44,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JTypes\Client\AbsAll.cs" />
-    <Compile Include="JTypes\Enums\RequestType.cs" />
+    <Compile Include="JTypes\Client\BaseRequestClass.cs" />
     <Compile Include="JTypes\Client\Login.cs" />
+    <Compile Include="JTypes\Client\Logout.cs" />
+    <Compile Include="JTypes\Enums\Commands.cs" />
     <Compile Include="JTypes\Enums\ResponseState.cs" />
-    <Compile Include="JTypes\Server\AbsResponseAll.cs" />
-    <Compile Include="JTypes\Server\LoginResponse.cs" />
-    <Compile Include="JUtils.cs" />
+    <Compile Include="JTypes\Enums\UserActive.cs" />
+    <Compile Include="JTypes\Server\BaseResponseClass.cs" />
+    <Compile Include="JTypes\Server\Exceptions.cs" />
+    <Compile Include="JTypes\Server\Logout.cs" />
+    <Compile Include="JTypes\Server\UserInformationClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Class Library Project\CLProject\CLProject.csproj">
+      <Project>{6d0bbdfc-621d-4cf6-893f-9a9d1f102104}</Project>
+      <Name>CLProject</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

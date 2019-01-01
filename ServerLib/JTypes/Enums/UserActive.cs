@@ -1,7 +1,7 @@
 ﻿namespace ServerLib.JTypes.Enums
 {
-    public enum ResponseState
+    public enum UserActive
     {
-        ok, error
+        active, inactive
     }
 }

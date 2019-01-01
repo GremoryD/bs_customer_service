@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebSocketSharp;
-using WebSocketSharp.Net;
 using CLProject;
-using ServerLib;
 using System.Windows;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace BCS_User_Interface
 {
@@ -71,7 +66,7 @@ namespace BCS_User_Interface
         { 
             if (ws.IsAlive)
             {
-                ws.Send(JUtils.Serialize(AMessage));
+                ws.Send(JsonConvert.SerializeObject(AMessage));
             }
         }
 

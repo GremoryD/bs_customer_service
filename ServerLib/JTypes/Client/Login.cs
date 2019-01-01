@@ -1,25 +1,18 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServerLib.JTypes.Client
 {
-    public class Login : AbsAll
+    public class Login : BaseRequestClass
     {
-        [JsonProperty("login")]
-        [JsonRequired]
-        public string UserName { get; set; }
+        [JsonProperty("login", Required = Required.Always)]
+        public string UserName { get; set; } = null;
 
-        [JsonProperty("password")]
-        [JsonRequired]
-        public string Password { get; set; }
+        [JsonProperty("password", Required = Required.Always)]
+        public string Password { get; set; } = null;
 
         public Login()
         {
-            // RequestType = Enums.RequestType.Login;
+            Command = Enums.Commands.login;
         }
     }
 }

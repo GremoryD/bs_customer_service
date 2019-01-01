@@ -1,7 +1,7 @@
 ﻿namespace ServerLib.JTypes.Enums
 {
-    public enum ResponseState
+    public enum Commands
     {
-        ok, error
+        login, logout
     }
 }
