@@ -31,7 +31,7 @@
     <PublisherName>MassAccess</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>10</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -118,13 +118,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Handlers\LoginClass.cs" />
+    <Compile Include="Handlers\LogoutClass.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SessionClass.cs" />
-    <Compile Include="UserInformationClass.cs" />
+    <Compile Include="Handlers\UserInformationClass.cs" />
     <Compile Include="WebSocketHandlerClass.cs" />
     <Compile Include="WebSocketServerClass.cs" />
     <Page Include="MainWindow.xaml">

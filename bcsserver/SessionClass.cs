@@ -7,10 +7,21 @@ using ServerLib.JTypes.Server;
 
 namespace bcsserver
 {
+    /// <summary>
+    /// Класс сессии пользователя
+    /// </summary>
     public class UserSessionClass
     {
+        /// <summary>
+        /// Вспомогательный класс проекта
+        /// </summary>
         public ProjectClass Project;
+
+        /// <summary>
+        /// Идентификатор сессии WebSocket-сервера
+        /// </summary>
         public string WebSocketSessionID { get; set; } = null;
+
         public ConcurrentQueue<string> Responses = new ConcurrentQueue<string>();
         private ConcurrentQueue<string> Requests = new ConcurrentQueue<string>();
         private WebSocketHandlerClass Handler;
@@ -23,7 +34,7 @@ namespace bcsserver
         /// <summary>
         /// Признак аутентификации пользователя
         /// </summary>
-        private bool IsAuthenticated { get { return UserInformation.UserId > 0; } }
+        public bool IsAuthenticated { get { return Login.UserId > 0; } }
 
         /// <summary>
         /// Поток обработки входной очереди
@@ -36,9 +47,19 @@ namespace bcsserver
         private Thread OutputQueueProcessing;
 
         /// <summary>
+        /// Класс аутентификации пользователя
+        /// </summary>
+        public Handlers.LoginClass Login;
+
+        /// <summary>
+        /// Класс аутентификации пользователя
+        /// </summary>
+        public Handlers.LogoutClass Logout;
+
+        /// <summary>
         /// Класс информации о пользователе
         /// </summary>
-        private UserInformationClass UserInformation;
+        public Handlers.UserInformationClass UserInformation;
 
         /// <summary>
         /// Конструктор класса сессии пользователя
@@ -52,8 +73,16 @@ namespace bcsserver
             Handler = AHandler;
             Project = AProject;
             IsActive = true;
-            UserInformation = new UserInformationClass();
+
+            Login = new Handlers.LoginClass();
+            Login.SetUserSession(this);
+
+            Logout = new Handlers.LogoutClass();
+            Logout.SetUserSession(this);
+
+            UserInformation = new Handlers.UserInformationClass();
             UserInformation.SetUserSession(this);
+
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
             OutputQueueProcessing = new Thread(OutputQueueProcessingThread);
             InputQueueProcessing.Start();
@@ -67,7 +96,7 @@ namespace bcsserver
         {
             if (IsAuthenticated)
             {
-                UserInformation.KillSession(UserInformation.Token);
+                Logout.KillSession(Login.Token);
             }
             IsActive = false;
         }
@@ -83,21 +112,28 @@ namespace bcsserver
                         string Command = JsonConvert.DeserializeAnonymousType(Request, new { command = string.Empty }).command.ToLower();
                         if (Command == "login")
                         {
-                            UserInformation.Login(Request);
+                            Login.Login(Request);
                         }
                         else
                         {
                             string Token = JsonConvert.DeserializeAnonymousType(Request, new { token = string.Empty }).token;
-                            if (IsAuthenticated && Token == UserInformation.Token)
+                            if (Token == Login.Token)
                             {
-                                switch (Command)
+                                if (IsAuthenticated)
                                 {
-                                    case "logout":
-                                        UserInformation.Logout(Request);
-                                        break;
-                                    default:
-                                        OutputQueueAddObject(Exceptions.ErrorUnknownCommand);
-                                        break;
+                                    switch (Command)
+                                    {
+                                        case "logout":
+                                            Logout.Logout(Request);
+                                            break;
+                                        default:
+                                            OutputQueueAddObject(Exceptions.ErrorUnknownCommand);
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    OutputQueueAddObject(Exceptions.ErrorNotAuthenticated);
                                 }
                             }
                             else

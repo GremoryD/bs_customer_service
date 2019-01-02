@@ -12,7 +12,7 @@ namespace bcsserver
     /// </summary>
     internal class DatabaseConnectionCheckClass : IDisposable
     {
-        private const int TimerInterval = 2000;
+        private const int TimerInterval = 3000;
 
         private MainWindow MainForm;
         public bool IsWorking = false;

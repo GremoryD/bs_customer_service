@@ -12,13 +12,22 @@ namespace bcsserver
     /// </summary>
     public class WebSocketHandlerClass : WebSocketBehavior
     {
+        /// <summary>
+        /// Потокозащищённый словарь сессий клиентов
+        /// </summary>
         private static ConcurrentDictionary<string, UserSessionClass> UserSessions = new ConcurrentDictionary<string, UserSessionClass>();
+
+        /// <summary>
+        /// Вспомогательный класс проекта
+        /// </summary>
         private ProjectClass Project;
 
-        public WebSocketHandlerClass()
-        {
-        }
+        public WebSocketHandlerClass() { }
 
+        /// <summary>
+        /// Конструктор класса обработки WebSocket-соединений
+        /// </summary>
+        /// <param name="AProject">Вспомогательный класс проекта</param>
         public WebSocketHandlerClass(ref ProjectClass AProject)
         {
             Project = AProject;
@@ -54,7 +63,7 @@ namespace bcsserver
         /// <summary>
         /// Вызывается при закрытии WebSocket-соядинения
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">Содержит данные события OnClose</param>
         protected override void OnClose(CloseEventArgs e)
         {
             if (UserSessions.TryGetValue(ID, out UserSessionClass UserSession))

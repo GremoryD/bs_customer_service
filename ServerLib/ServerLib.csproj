@@ -52,7 +52,8 @@
     <Compile Include="JTypes\Enums\UserActive.cs" />
     <Compile Include="JTypes\Server\BaseResponseClass.cs" />
     <Compile Include="JTypes\Server\Exceptions.cs" />
-    <Compile Include="JTypes\Server\Logout.cs" />
+    <Compile Include="JTypes\Server\LoginClass.cs" />
+    <Compile Include="JTypes\Server\LogoutClass.cs" />
     <Compile Include="JTypes\Server\UserInformationClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
