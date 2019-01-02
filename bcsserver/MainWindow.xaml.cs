@@ -55,7 +55,7 @@ namespace bcsserver
         private int previousSelection = 0;
 
         private System.Threading.Timer ServerStateTimer;
-        private const int ServerStateTimerInterval = 500;
+        private const int ServerStateTimerInterval = 1000;
 
         public MainWindow()
         {
@@ -85,19 +85,21 @@ namespace bcsserver
             Project.Database.Parameters.CreateParameter("Login", System.Data.ParameterDirection.Input , OracleDbType.NVarchar2, "Логин пользователя");
             Project.Database.Parameters.CreateParameter("Password", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Пароль пользователя");
             Project.Database.Parameters.CreateParameter("AccessToken", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Токен доступа", 100);
-            Project.Database.Parameters.CreateParameter("UserId", System.Data.ParameterDirection.Output, OracleDbType.Decimal, "Id пользователя в БД", 20);
+            Project.Database.Parameters.CreateParameter("AccessUserId", System.Data.ParameterDirection.Output, OracleDbType.Decimal, "Id пользователя в БД", 20);
+            Project.Database.Parameters.CreateParameter("UserId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Id пользователя в БД", 20);
             Project.Database.Parameters.CreateParameter("FirstName", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Имя пользователя", 100);
             Project.Database.Parameters.CreateParameter("LastName", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Фамилия пользователя", 100);
             Project.Database.Parameters.CreateParameter("MidleName", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Отчество пользователя", 100);
             Project.Database.Parameters.CreateParameter("Job", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Должность пользователя", 200);
-            Project.Database.Parameters.CreateParameter("LastLoginDate", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Дата последнего входа пользователя", 30);
             Project.Database.Parameters.CreateParameter("Active", System.Data.ParameterDirection.Output, OracleDbType.Decimal, "Признак активности пользователя (1 - активен, 0 - заблокирован)", 20);
-            Project.Database.Parameters.CreateParameter("Token", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Токен доступа");
-            Project.Database.Parameters.CreateParameter("State", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "статус завершения SQL-запроса", 20);
+            Project.Database.Parameters.CreateParameter("Token", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Ключ доступа");
+            Project.Database.Parameters.CreateParameter("State", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Статус завершения SQL-запроса", 20);
+            Project.Database.Parameters.CreateParameter("ErrorText", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Текст ошибки выполнения SQL-запроса", 500);
 
             Project.Database.Commands.CreateCommand("conn", RequestType.Reader, "ConnectionCheck", "SELECT 1 FROM DUAL", "Проверка соединения с базой данных");
-            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Login", "USR.LOGIN(:WebSocketID, :Login, :Password, :AccessToken, :UserId, :FirstName, :LastName, :MidleName, :Job, :LastLoginDate, :Active)", "Аутентификация пользователя");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Login", "USR.LOGIN(:WebSocketID, :Login, :Password, :AccessToken, :AccessUserId, :Active)", "Аутентификация пользователя");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Logout", "USR.LOGOUT(:Token, :State)", "Выход из системы");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserInformation", "USR.GET_USER_INFORMATION(:Token, :UserId, :FirstName, :LastName, :MidleName, :Job, :Active, :State, :ErrorText)", "Чтение информации и пользователе");
 
             DatabaseCheck.Start();
             SetSettingsButtons();

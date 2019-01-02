@@ -2,6 +2,6 @@
 {
     public enum Commands
     {
-        login, logout
+        login, logout, user_information
     }
 }

@@ -65,7 +65,7 @@ namespace bcsserver
         public void Start()
         {
             wsServer = new WebSocketServer(System.Net.IPAddress.Any, Properties.Settings.Default.port);
-            //wsServer.WebSocketServices.AddService<WebSocketHandlerClass>("/", a);
+            //wsServer.WebSocketServices.AddService<WebSocketHandlerClass>("/", );
             wsServer.AddWebSocketService("/", HandlerMainCreator);
             wsServer.Start();
             StartTime = DateTime.Now;
