@@ -10,8 +10,8 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using bcs.Models;
 using CLProject;
 
 namespace bcs
@@ -24,6 +24,16 @@ namespace bcs
         public MainWindow()
         {
             InitializeComponent(); 
-        } 
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            NavigationService.Instance.UnregisterWindow();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Instance.RegisterWindow(this);
+        }
     }
 }

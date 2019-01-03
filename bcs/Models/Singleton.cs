@@ -11,6 +11,7 @@ namespace bcs.Models
 {
     public class Singleton
     {
+        public String SessionID; 
         private static Singleton _instance;
         public static Singleton instance
         {

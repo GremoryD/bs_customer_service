@@ -31,7 +31,7 @@ namespace BCS_User_Interface
         }
 
         private void HandlerError(object sender, ErrorEventArgs e)
-        {
+        { 
             //Project.Log.Error(e.Message);
         }
 
@@ -48,6 +48,12 @@ namespace BCS_User_Interface
         private void HandlerMessage(object sender, MessageEventArgs e)
         {
             MessageBox.Show(e.Data);
+        }
+
+
+        private void HandlerMessage(object sender, Object e)
+        {
+            MessageBox.Show(e.ToString());
         }
 
         public void Start()
