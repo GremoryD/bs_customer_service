@@ -36,13 +36,13 @@ namespace bcs.ViewModels
             {
                 Password = PasswordInput,
                 UserName = LoginInput
-            }; 
-            Singleton.instance.SendLogin(login);
-            IsWait = true;
-            Notify("IsWait");
-
+            };
             try
-            { 
+            {
+
+                Singleton.instance.SendLogin(login);
+                IsWait = true;
+                Notify("IsWait");
                 NavigationService.Instance.Navigate(new ClientViewModel());
             }
             catch { }
