@@ -9,8 +9,16 @@ using System.Threading.Tasks;
 
 namespace bcs.Models
 {
+    public enum ResponseType
+    {
+        Login,
+        AnythingElse
+    }
+
     public class Singleton
     {
+        private ResponseType? _remainingData = null;
+
         public String SessionID; 
         private static Singleton _instance;
         public static Singleton instance
@@ -29,14 +37,32 @@ namespace bcs.Models
         public Singleton()
         { 
             WebSocketClient = new WebSocketClass(ref Project, Properties.Settings.Default.WSServer, "/");
+            //WebSocketClient.OnMessage += MessageRecievd;
             WebSocketClient.Start();
         }
 
+        private void MessageRecievd(object sender, string e)
+        {
+            if (_remainingData == null)
+                return;
 
-        public void SendLogin(Login login)
-        { 
-            WebSocketClient.Send(login);
+            switch (_remainingData)
+            {
+                case ResponseType.Login:
+
+                    break;
+                case ResponseType.AnythingElse:
+
+                    break;
+            }
+
+            _remainingData = null;
         }
 
-    }
+        public void SendLogin(Login login)
+        {
+            _remainingData = ResponseType.Login;
+            WebSocketClient.Send(login);
+        }
+    } 
 }

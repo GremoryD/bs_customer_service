@@ -16,6 +16,7 @@ namespace BCS_User_Interface
         private bool IsStoping;
 
         public bool IsAlive { get => ws.IsAlive; }
+        public AutoResetEvent OnMessage;
 
         public WebSocketClass(ref ProjectClass AProject, string AwsURL, string AwsPath)
         {
@@ -47,9 +48,11 @@ namespace BCS_User_Interface
 
         private void HandlerMessage(object sender, MessageEventArgs e)
         {
+
+            OnMessage.Set();
+
             MessageBox.Show(e.Data);
         }
-
 
         private void HandlerMessage(object sender, Object e)
         {
@@ -93,4 +96,5 @@ namespace BCS_User_Interface
             Reconnect.Start();
         }
     }
+         
 }
