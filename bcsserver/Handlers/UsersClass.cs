@@ -59,6 +59,7 @@ namespace bcsserver.Handlers
                                 FirstName = row["FIRST_NAME"] == DBNull.Value ? null : row["FIRST_NAME"].ToString(),
                                 LastName = row["LAST_NAME"] == DBNull.Value ? null : row["LAST_NAME"].ToString(),
                                 MidleName = row["MIDLE_NAME"] == DBNull.Value ? null : row["MIDLE_NAME"].ToString(),
+                                JobId = Convert.ToInt64(row["POSITION_ID"].ToString()),
                                 Job = row["POSITION"].ToString(),
                                 Active = Convert.ToInt32(row["ACTIVE"].ToString()) == 1 ? ServerLib.JTypes.Enums.UserActive.activated : ServerLib.JTypes.Enums.UserActive.blocked
                             };
