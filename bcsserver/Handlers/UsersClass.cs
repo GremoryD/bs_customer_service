@@ -125,5 +125,22 @@ namespace bcsserver.Handlers
         {
             RefreshDataTimer.Change(1, Timeout.Infinite);
         }
+
+        /// <summary>
+        /// Добавление пользователя
+        /// </summary>
+        /// <param name="ARequest">Запрос в формате JSON-объекта</param>
+        public void UserAdd(string ARequest)
+        {
+            try
+            {
+                ServerLib.JTypes.Client.UserAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UserAddClass>(ARequest);
+                SendData();
+            }
+            catch (Exception ex)
+            {
+                UserSession.OutputQueueAddObject(new { command = ServerLib.JTypes.Enums.Commands.user_add.ToString(), code = ex.HResult, description = ex.Message });
+            }
+        }
     }
 }

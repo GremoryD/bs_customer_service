@@ -47,6 +47,7 @@
     <Compile Include="JTypes\Client\BaseRequestClass.cs" />
     <Compile Include="JTypes\Client\Login.cs" />
     <Compile Include="JTypes\Client\Logout.cs" />
+    <Compile Include="JTypes\Client\UserAddClass.cs" />
     <Compile Include="JTypes\Enums\Commands.cs" />
     <Compile Include="JTypes\Enums\ListCommands.cs" />
     <Compile Include="JTypes\Enums\ResponseState.cs" />
