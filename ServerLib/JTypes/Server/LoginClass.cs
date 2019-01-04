@@ -16,7 +16,7 @@ namespace ServerLib.JTypes.Server
 
         public LoginClass()
         {
-            Command = Enums.Commands.login;
+            Type = Enums.Commands.login;
         }
     }
 }

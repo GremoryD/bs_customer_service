@@ -4,7 +4,7 @@
     {
         public LogoutClass()
         {
-            Command = Enums.Commands.logout;
+            Type = Enums.Commands.logout;
         }
     }
 }

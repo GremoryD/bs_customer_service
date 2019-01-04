@@ -6,8 +6,8 @@ namespace ServerLib.JTypes.Server
 {
     public abstract class BaseResponseClass
     {
-        [JsonProperty("command", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
-        public Enums.Commands Command { get; set; }
+        [JsonProperty("type", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
+        public Enums.Commands Type { get; set; }
 
         [JsonProperty("state", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
         public ResponseState State { get; set; }

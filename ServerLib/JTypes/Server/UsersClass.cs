@@ -9,7 +9,7 @@ namespace ServerLib.JTypes.Server
 
         public UsersClass()
         {
-            Command = Enums.Commands.users;
+            Type = Enums.Commands.users;
             Users = new List<UserClass>();
         }
     }
