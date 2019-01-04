@@ -30,19 +30,20 @@ namespace bcs.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private async void LoginF()
+        private void LoginF()
         {
             Login login = new Login()
             {
                 Password = PasswordInput,
                 UserName = LoginInput
             };
+
             try
             {
-
                 Singleton.instance.SendLogin(login);
                 IsWait = true;
                 Notify("IsWait");
+
                 NavigationService.Instance.Navigate(new ClientViewModel());
             }
             catch { }

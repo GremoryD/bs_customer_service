@@ -30,16 +30,9 @@ namespace bcs.Models
 
         public Singleton()
         { 
-            WebSocketClient = new WebSocketClass(ref Project, Properties.Settings.Default.WSServer, "/");
-            //WebSocketClient.OnMessage += MessageRecievd;
+            WebSocketClient = new WebSocketClass(ref Project, Properties.Settings.Default.WSServer, "/"); 
             WebSocketClient.Start();
-        }
-
-        private void MessageRecievd(object sender, string e)
-        {
-             
-             
-        }
+        } 
 
         public void SendLogin(Login login)
         { 

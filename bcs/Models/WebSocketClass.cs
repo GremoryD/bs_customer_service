@@ -14,8 +14,7 @@ namespace BCS_User_Interface
         private string wsURL;
         private string wsPath;
         private bool IsStoping;
-
-        public bool IsAlive { get => ws.IsAlive; }
+         
         public AutoResetEvent OnMessage;
 
         public WebSocketClass(ref ProjectClass AProject, string AwsURL, string AwsPath)
@@ -28,7 +27,7 @@ namespace BCS_User_Interface
             ws.OnOpen += HandlerOpen;
             ws.OnMessage += HandlerMessage;
             ws.OnClose += HandlerClose;
-            ws.OnError += HandlerError;
+            ws.OnError += HandlerError; 
         }
 
         private void HandlerError(object sender, ErrorEventArgs e)
@@ -49,7 +48,7 @@ namespace BCS_User_Interface
         private void HandlerMessage(object sender, MessageEventArgs e)
         {
 
-            OnMessage.Set();
+            //OnMessage.Set();
 
             MessageBox.Show(e.Data);
         }
@@ -72,7 +71,8 @@ namespace BCS_User_Interface
         }
 
         public void Send(object AMessage)
-        { 
+        {
+             
             if (ws.IsAlive)
             {
                 ws.Send(JsonConvert.SerializeObject(AMessage));
