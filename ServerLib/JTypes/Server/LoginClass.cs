@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ServerLib.JTypes.Server
 {
@@ -10,8 +11,8 @@ namespace ServerLib.JTypes.Server
         [JsonProperty(PropertyName = "user_id", Required = Required.Always)]
         public long UserId { get; set; } = 0;
 
-        [JsonProperty(PropertyName = "active", Required = Required.Always)]
-        public int Active { get; set; } = 0;
+        [JsonProperty(PropertyName = "active", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
+        public Enums.UserActive Active { get; set; }
 
         public LoginClass()
         {
