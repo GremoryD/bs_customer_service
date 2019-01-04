@@ -155,6 +155,9 @@ namespace bcsserver
                                             case ServerLib.JTypes.Enums.Commands.user_add:
                                                 Users.UserAdd(Request);
                                                 break;
+                                            case ServerLib.JTypes.Enums.Commands.user_edit:
+                                                Users.UserEdit(Request);
+                                                break;
                                         }
                                     }
                                     else

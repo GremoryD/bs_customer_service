@@ -4,8 +4,6 @@ using Newtonsoft.Json;
 using System.Threading;
 using System.Collections.Concurrent;
 
-using System.Collections.Generic;
-
 namespace bcsserver.Handlers
 {
     public class UsersClass
@@ -147,21 +145,56 @@ namespace bcsserver.Handlers
                         Param.CreateParameterValue("InLastName", Request.LastName);
                         Param.CreateParameterValue("InMidleName", Request.MidleName);
                         Param.CreateParameterValue("InActive", Request.Active);
-                        Param.CreateParameterValue("InId", Request.JobId);
+                        Param.CreateParameterValue("JobId", Request.JobId);
                         Param.CreateParameterValue("AccessUserId");
+                        Param.CreateParameterValue("Job");
                         Param.CreateParameterValue("State");
                         Param.CreateParameterValue("ErrorText");
                         UserSession.Project.Database.Execute("UserAdd", ref Param);
                         if(Param.ParameterByName("State").Value.ToString() == "ok")
                         {
-                            ServerLib.JTypes.Server.UserAddClass NewUser = new ServerLib.JTypes.Server.UserAddClass();
-                            NewUser.Login = Request.Login;
-                            NewUser.FirstName = Request.FirstName;
+                            ServerLib.JTypes.Server.UserAddClass NewUser = new ServerLib.JTypes.Server.UserAddClass
+                            {
+                                Id = Convert.ToInt64(Param.ParameterByName("AccessUserId").Value.ToString()),
+                                Login = Request.Login,
+                                FirstName = Request.FirstName,
+                                LastName = Request.LastName,
+                                MidleName = Request.MidleName,
+                                Active = Request.Active,
+                                JobId = Request.JobId,
+                                Job = Param.ParameterByName("Job").Value.ToString()
+                            };
+                            UserSession.OutputQueueAddObject(NewUser);
                         }
                     }
                     catch (Exception ex)
                     {
                         UserSession.OutputQueueAddObject(new { command = ServerLib.JTypes.Enums.Commands.user_add.ToString(), code = ex.HResult, description = ex.Message });
+                    }
+                });
+                th.Start();
+            }
+        }
+
+        /// <summary>
+        /// Изменение пользователя
+        /// </summary>
+        /// <param name="ARequest">Запрос в формате JSON-объекта</param>
+        public void UserEdit(string ARequest)
+        {
+            if (UserSession.IsAuthenticated)
+            {
+                Thread th = new Thread(() =>
+                {
+                    try
+                    {
+                        ServerLib.JTypes.Client.UserEditClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UserEditClass>(ARequest);
+                        DatabaseParameterValuesClass Param = new DatabaseParameterValuesClass();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        UserSession.OutputQueueAddObject(new { command = ServerLib.JTypes.Enums.Commands.user_edit.ToString(), code = ex.HResult, description = ex.Message });
                     }
                 });
                 th.Start();
