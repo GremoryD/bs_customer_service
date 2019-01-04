@@ -2,6 +2,6 @@
 {
     public enum UserActive
     {
-        active, inactive
+        activated, blocked
     }
 }

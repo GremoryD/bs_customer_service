@@ -10,9 +10,14 @@ namespace bcsserver.Handlers
         private UserSessionClass UserSession;
 
         /// <summary>
-        /// Таймер обновления данных пользователя
+        /// Таймер обновления данных 
         /// </summary>
         private System.Threading.Timer RefreshDataTimer;
+
+        /// <summary>
+        /// Признак запуска потока чтения данных
+        /// </summary>
+        private bool IsRunning = false;
 
         public UserInformationClass()
         {
@@ -29,17 +34,18 @@ namespace bcsserver.Handlers
         }
 
         /// <summary>
-        /// Поток обновления данных пользователя
+        /// Поток обновления данных 
         /// </summary>
         /// <param name="state"></param>
         private void RefreshDataProcessing(object state)
         {
-            if (UserSession.IsAuthenticated)
+            if (UserSession.IsAuthenticated && !IsRunning)
             {
                 Thread th = new Thread(() =>
                     {
                         try
                         {
+                            IsRunning = true;
                             DatabaseParameterValuesClass Param = new DatabaseParameterValuesClass();
                             Param.CreateParameterValue("Token", UserSession.Login.Token);
                             Param.CreateParameterValue("UserId", UserSession.Login.UserId);
@@ -58,7 +64,7 @@ namespace bcsserver.Handlers
                                 LastName = Param.ParameterByName("LastName").Value.ToString();
                                 MidleName = Param.ParameterByName("MidleName").Value.ToString();
                                 Job = Param.ParameterByName("Job").Value.ToString();
-                                Active = Convert.ToInt32(Param.ParameterByName("Active").Value.ToString());
+                                Active = Convert.ToInt32(Param.ParameterByName("Active").Value.ToString()) == 1 ? ServerLib.JTypes.Enums.UserActive.activated : ServerLib.JTypes.Enums.UserActive.blocked;
                                 State = ServerLib.JTypes.Enums.ResponseState.ok;
                                 if(JsonConvert.SerializeObject(this) != OldMessage)
                                 {
@@ -68,7 +74,11 @@ namespace bcsserver.Handlers
                         }
                         catch (Exception ex)
                         {
-                            UserSession.Project.Log.Error(string.Format("UserInformation.RefreshDataProcessing > {0}", ex.Message));
+                            UserSession.Project.Log.Error(string.Format("UserInformation.RefreshDataProcessing {0}", ex.Message));
+                        }
+                        finally
+                        {
+                            IsRunning = false;
                         }
                     });
                 th.Start();
@@ -77,9 +87,9 @@ namespace bcsserver.Handlers
         }
 
         /// <summary>
-        /// Чтение из базы данных и отправка данных пользователя клиенту
+        /// Принудительное чтение из базы данных и отправка данных клиенту
         /// </summary>
-        public void SendUserInformation()
+        public void SendData()
         {
             RefreshDataTimer.Change(1, Timeout.Infinite);
         }

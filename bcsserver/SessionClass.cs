@@ -61,6 +61,8 @@ namespace bcsserver
         /// </summary>
         public Handlers.UserInformationClass UserInformation;
 
+        public Handlers.UsersClass Users;
+
         /// <summary>
         /// Конструктор класса сессии пользователя
         /// </summary>
@@ -82,6 +84,9 @@ namespace bcsserver
 
             UserInformation = new Handlers.UserInformationClass();
             UserInformation.SetUserSession(this);
+
+            Users = new Handlers.UsersClass(this);
+            //Users.SetUserSession(this);
 
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
             OutputQueueProcessing = new Thread(OutputQueueProcessingThread);
@@ -125,6 +130,9 @@ namespace bcsserver
                                     {
                                         case "logout":
                                             Logout.Logout(Request);
+                                            break;
+                                        case "users":
+                                            Users.SendData();
                                             break;
                                         default:
                                             OutputQueueAddObject(Exceptions.ErrorUnknownCommand);

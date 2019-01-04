@@ -39,11 +39,11 @@ namespace bcsserver.Handlers
                 if (_UserId > 0)
                 {
                     Token = _Active == 1 ? Param.ParameterByName("AccessToken").Value.ToString() : null;
-                    UserId = _UserId;
-                    Active = _Active;
+                    Active = _Active == 1 ? ServerLib.JTypes.Enums.UserActive.activated : ServerLib.JTypes.Enums.UserActive.blocked;
+                    UserId = Active == ServerLib.JTypes.Enums.UserActive.activated ? _UserId : 0;
                     State = ServerLib.JTypes.Enums.ResponseState.ok;
                     UserSession.OutputQueueAddObject(this);
-                    UserSession.UserInformation.SendUserInformation();
+                    UserSession.UserInformation.SendData();
                 }
                 else
                 {
