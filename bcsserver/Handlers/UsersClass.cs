@@ -132,14 +132,39 @@ namespace bcsserver.Handlers
         /// <param name="ARequest">Запрос в формате JSON-объекта</param>
         public void UserAdd(string ARequest)
         {
-            try
+            if (UserSession.IsAuthenticated)
             {
-                ServerLib.JTypes.Client.UserAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UserAddClass>(ARequest);
-                SendData();
-            }
-            catch (Exception ex)
-            {
-                UserSession.OutputQueueAddObject(new { command = ServerLib.JTypes.Enums.Commands.user_add.ToString(), code = ex.HResult, description = ex.Message });
+                Thread th = new Thread(() =>
+                {
+                    try
+                    {
+                        ServerLib.JTypes.Client.UserAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UserAddClass>(ARequest);
+                        DatabaseParameterValuesClass Param = new DatabaseParameterValuesClass();
+                        Param.CreateParameterValue("Token", Request.Token);
+                        Param.CreateParameterValue("Login", Request.Login);
+                        Param.CreateParameterValue("Password", Request.Password);
+                        Param.CreateParameterValue("InFirstName", Request.FirstName);
+                        Param.CreateParameterValue("InLastName", Request.LastName);
+                        Param.CreateParameterValue("InMidleName", Request.MidleName);
+                        Param.CreateParameterValue("InActive", Request.Active);
+                        Param.CreateParameterValue("InId", Request.JobId);
+                        Param.CreateParameterValue("AccessUserId");
+                        Param.CreateParameterValue("State");
+                        Param.CreateParameterValue("ErrorText");
+                        UserSession.Project.Database.Execute("UserAdd", ref Param);
+                        if(Param.ParameterByName("State").Value.ToString() == "ok")
+                        {
+                            ServerLib.JTypes.Server.UserAddClass NewUser = new ServerLib.JTypes.Server.UserAddClass();
+                            NewUser.Login = Request.Login;
+                            NewUser.FirstName = Request.FirstName;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        UserSession.OutputQueueAddObject(new { command = ServerLib.JTypes.Enums.Commands.user_add.ToString(), code = ex.HResult, description = ex.Message });
+                    }
+                });
+                th.Start();
             }
         }
     }

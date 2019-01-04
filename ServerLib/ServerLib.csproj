@@ -56,6 +56,7 @@
     <Compile Include="JTypes\Server\Exceptions.cs" />
     <Compile Include="JTypes\Server\LoginClass.cs" />
     <Compile Include="JTypes\Server\LogoutClass.cs" />
+    <Compile Include="JTypes\Server\UserAddClass.cs" />
     <Compile Include="JTypes\Server\UserClass.cs" />
     <Compile Include="JTypes\Server\UserInformationClass.cs" />
     <Compile Include="JTypes\Server\UsersClass.cs" />
