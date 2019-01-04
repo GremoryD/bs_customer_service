@@ -22,7 +22,10 @@ namespace ServerLib.JTypes.Server
         [JsonProperty(PropertyName = "midle_name", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public string MidleName { get; set; } = null;
 
-        [JsonProperty(PropertyName = "job", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "job_id", Required = Required.Always)]
+        public long JobId { get; set; }
+
+        [JsonProperty(PropertyName = "job", Required = Required.Always)]
         public string Job { get; set; } = null;
 
         [JsonProperty(PropertyName = "active", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
