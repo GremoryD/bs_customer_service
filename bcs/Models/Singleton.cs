@@ -1,6 +1,8 @@
 ﻿using BCS_User_Interface;
 using CLProject;
+using Newtonsoft.Json;
 using ServerLib.JTypes.Client;
+using ServerLib.JTypes.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +13,12 @@ namespace bcs.Models
 { 
 
     public class Singleton
-    { 
+    {
+        public event EventHandler<LoginClass> OnLogonSuccess;
 
         public String SessionID; 
         private static Singleton _instance;
-        public static Singleton instance
+        public static Singleton Instance
         {
             get
             {
@@ -30,9 +33,24 @@ namespace bcs.Models
 
         public Singleton()
         { 
-            WebSocketClient = new WebSocketClass(ref Project, Properties.Settings.Default.WSServer, "/"); 
+            WebSocketClient = new WebSocketClass(ref Project, Properties.Settings.Default.WSServer, "/");
+            WebSocketClient.GotResponse += ParseMessage;
             WebSocketClient.Start();
-        } 
+        }
+
+        private void ParseMessage(object sender, ResponseInfo e)
+        {
+            switch (e.Command)
+            {
+                case "login": 
+                    OnLogonSuccess?.Invoke(this, JsonConvert.DeserializeObject<LoginClass>(e.Data));
+
+                    break;
+                default:
+
+                    break;
+            }
+        }
 
         public void SendLogin(Login login)
         { 

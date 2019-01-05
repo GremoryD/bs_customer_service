@@ -1,12 +1,14 @@
 ﻿using bcs.Models;
 using CLProject;
 using ServerLib.JTypes.Client;
+using ServerLib.JTypes.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace bcs.ViewModels
@@ -16,12 +18,14 @@ namespace bcs.ViewModels
         public String LoginInput { get; set; }
         public String PasswordInput { get; set; }
         public Boolean IsWait { get; set; }
-        public ICommand LoginCommand { get; set; } 
+        public ICommand LoginCommand { get; set; }
 
 
         public LoginViewModel()
         {
-            LoginCommand = new SimpleCommand(LoginF); 
+            Singleton.Instance.OnLogonSuccess += LogonDone;
+
+            LoginCommand = new SimpleCommand(LoginF);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -38,13 +42,17 @@ namespace bcs.ViewModels
                 UserName = LoginInput
             };
 
+            Singleton.Instance.SendLogin(login);
+            IsWait = true;
+            Notify("IsWait");
+        }
+
+        private void LogonDone(object sender, LoginClass e)
+        {
             try
             {
-                Singleton.instance.SendLogin(login);
-                IsWait = true;
-                Notify("IsWait");
-
                 NavigationService.Instance.Navigate(new ClientViewModel());
+                MessageBox.Show(e.Token);
             }
             catch { }
             finally
@@ -53,8 +61,5 @@ namespace bcs.ViewModels
                 Notify("IsWait");
             }
         }
-
-        
-
     }
 }
