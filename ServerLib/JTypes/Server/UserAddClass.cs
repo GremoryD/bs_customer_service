@@ -31,7 +31,7 @@ namespace ServerLib.JTypes.Server
 
         public UserAddClass()
         {
-            Type = Enums.Commands.user_add;
+            Command = Enums.Commands.user_add;
         }
     }
 }

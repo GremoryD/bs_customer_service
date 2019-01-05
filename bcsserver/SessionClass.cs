@@ -130,7 +130,8 @@ namespace bcsserver
                 {
                     try
                     {
-                        Enum.TryParse(JsonConvert.DeserializeAnonymousType(Request, new { command = string.Empty }).command.ToLower(), out ServerLib.JTypes.Enums.Commands Command);
+                        string CommandStr = JsonConvert.DeserializeAnonymousType(Request, new { command = string.Empty }).command.ToLower();
+                        Enum.TryParse(CommandStr, out ServerLib.JTypes.Enums.Commands Command);
                         if (Enum.IsDefined(typeof(ServerLib.JTypes.Enums.Commands), Command) && Command != ServerLib.JTypes.Enums.Commands.none)
                         {
                             if (Command == ServerLib.JTypes.Enums.Commands.login)
@@ -162,23 +163,23 @@ namespace bcsserver
                                     }
                                     else
                                     {
-                                        OutputQueueAddObject(Exceptions.ErrorNotAuthenticated);
+                                        OutputQueueAddObject(new ExceptionClass(Command, ServerLib.JTypes.Enums.ErrorCodes.NotAuthenticated));
                                     }
                                 }
                                 else
                                 {
-                                    OutputQueueAddObject(Exceptions.ErrorIncorrectToken);
+                                    OutputQueueAddObject(new ExceptionClass(Command, ServerLib.JTypes.Enums.ErrorCodes.IncorrectToken));
                                 }
                             }
                         }
                         else
                         {
-                            OutputQueueAddObject(Exceptions.ErrorUnknownCommand);
+                            OutputQueueAddObject(new { command = CommandStr, state = "error", code = "UnknownCommand" });
                         }
                     }
                     catch (Exception ex)
                     {
-                        OutputQueueAddObject(new { state = "error", code = ex.HResult, description = ex.Message });
+                        OutputQueueAddObject(new { state = "error", code = "FatalError", description = ex.Message });
                     }
                 }
                 Thread.Sleep(1);

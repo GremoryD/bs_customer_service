@@ -22,7 +22,7 @@ namespace ServerLib.JTypes.Server
 
         public UserInformationClass()
         {
-            Type = Enums.Commands.user_information;
+            Command = Enums.Commands.user_information;
         }
     }
 }

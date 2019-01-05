@@ -7,10 +7,10 @@ namespace ServerLib.JTypes.Server
     public abstract class BaseResponseClass
     {
         /// <summary>
-        /// Тип объекта в выдаче
+        /// Команда объекта выдачи
         /// </summary>
-        [JsonProperty("type", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
-        public Enums.Commands Type { get; set; }
+        [JsonProperty("command", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
+        public Enums.Commands Command { get; set; }
 
         /// <summary>
         /// Статус обработки запроса к базе данных

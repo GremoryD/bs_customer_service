@@ -28,7 +28,7 @@ namespace ServerLib.JTypes.Server
 
         public UserEditClass()
         {
-            Type = Enums.Commands.user_edit;
+            Command = Enums.Commands.user_edit;
         }
     }
 }

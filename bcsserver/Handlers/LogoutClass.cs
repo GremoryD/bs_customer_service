@@ -26,7 +26,7 @@ namespace bcsserver.Handlers
             }
             catch (Exception ex)
             {
-                UserSession.OutputQueueAddObject(new { command = "logout", code = ex.HResult, description = ex.Message });
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(ServerLib.JTypes.Enums.Commands.logout, ServerLib.JTypes.Enums.ErrorCodes.FatalError, ex.Message));
             }
         }
 
