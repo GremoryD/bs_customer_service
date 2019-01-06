@@ -121,5 +121,39 @@ namespace bcsserver.Handlers
             }
         }
 
+        /// <summary>
+        /// Обработчик изменения должности пользователей
+        /// </summary>
+        /// <param name="ARequest">Запрос в формате JSON-объекта</param>
+        public override void EditProcessing(string ARequest)
+        {
+            try
+            {
+                ServerLib.JTypes.Client.JobEditClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.JobEditClass>(ARequest);
+                DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
+                Params.CreateParameterValue("Token", Request.Token);
+                Params.CreateParameterValue("JobName", Request.JobName);
+                Params.CreateParameterValue("JobId", Request.Id);
+                Params.CreateParameterValue("State");
+                Params.CreateParameterValue("ErrorText");
+                UserSession.Project.Database.Execute("JobEdit", ref Params);
+                if (Params.ParameterByName("State").Value.ToString() == "ok")
+                {
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.JobEditClass
+                    {
+                        Id = Request.Id,
+                        JobName = Request.JobName.Trim()
+                    });
+                }
+                else
+                {
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.job_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").Value.ToString()));
+                }
+            }
+            catch (Exception ex)
+            {
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.job_edit, ErrorCodes.FatalError, ex.Message));
+            }
+        }
     }
 }

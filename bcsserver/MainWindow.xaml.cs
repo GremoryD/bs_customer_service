@@ -113,6 +113,7 @@ namespace bcsserver
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserEdit", "USR.USER_UPDATE(:Token, :UserId, :Password, :InFirstName, :InLastName, :InMidleName, :InActive, :JobId, :Job, :State, :ErrorText)", "Изменение пользователя");
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Jobs", "USR.GET_JOBS(:Token)", "Чтение списка должностей пользователей");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "JobAdd", "USR.JOB_CREATE(:Token, :JobName, :NewId, :State, :ErrorText)", "Добавление должности пользователей");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "JobEdit", "USR.JOB_UPDATE(:Token, :JobName, :JobId, :State, :ErrorText)", "Изменение должности пользователей");
 
             DatabaseCheck.Start();
             SetSettingsButtons();
