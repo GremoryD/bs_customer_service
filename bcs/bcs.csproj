@@ -218,7 +218,9 @@
       <Name>ServerLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\error.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\loading.gif" />
   </ItemGroup>

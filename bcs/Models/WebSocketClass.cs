@@ -9,13 +9,14 @@ using bcs.ViewModels;
 
 namespace BCS_User_Interface
 {
-    public class WebSocketClass
+    public class WebSocketClass  
     {
         private ProjectClass Project;
         private WebSocket ws;
         private string wsURL;
         private string wsPath;
         private bool IsStoping;
+        public Exception exeptions=null;
 
         public event EventHandler<ResponseInfo> GotResponse;
 
@@ -44,17 +45,13 @@ namespace BCS_User_Interface
 
         private void HandlerClose(object sender, CloseEventArgs e)
         {
-            Connect();
+            //Connect();
         }
 
         private void HandlerMessage(object sender, MessageEventArgs e)
-        {
-            string Command = JsonConvert.DeserializeAnonymousType(e.Data.ToString(), new { command = string.Empty }).command.ToLower();
-
-            MessageBox.Show(Command); 
-            GotResponse?.Invoke(this, new ResponseInfo() { Command = Command, Data = e.Data } ); 
-
-
+        { 
+            string Command = JsonConvert.DeserializeAnonymousType(e.Data.ToString(), new { command = string.Empty }).command.ToLower(); 
+            GotResponse?.Invoke(this, new ResponseInfo() { Command = Command, Data = e.Data } );  
         }
 
         private void HandlerMessage(object sender, Object e)
@@ -75,8 +72,7 @@ namespace BCS_User_Interface
         }
 
         public void Send(object AMessage)
-        {
-            //String s = JsonConvert.SerializeObject(AMessage);
+        { 
             if (ws.IsAlive)
             {
                 ws.Send(JsonConvert.SerializeObject(AMessage));
@@ -84,20 +80,16 @@ namespace BCS_User_Interface
         }
 
         private void Connect()
-        {
-            //Thread Reconnect = new Thread(() =>
-            //{
+        { 
             while (!ws.IsAlive && !IsStoping)
             {
                 try
                 {
-                    ws.Connect();
+                    ws.Connect(); 
                 }
-                catch { }
+                catch (Exception ex){ exeptions = ex; return; }
                 Thread.Sleep(1);
-            }
-            //});
-            //Reconnect.Start();
+            } 
         }
     }
 

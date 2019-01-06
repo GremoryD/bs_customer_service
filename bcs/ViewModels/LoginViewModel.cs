@@ -17,13 +17,16 @@ namespace bcs.ViewModels
     {
         public String LoginInput { get; set; }
         public String PasswordInput { get; set; }
+        public String ErrState { get; set; }
         public Boolean IsWait { get; set; }
+        public Boolean IsError { get; set; }
         public ICommand LoginCommand { get; set; }
 
 
         public LoginViewModel()
         {
             Singleton.Instance.OnLogonSuccess += LogonDone;
+            Singleton.Instance.OnError += ErrorShow;
 
             LoginCommand = new SimpleCommand(LoginF);
         }
@@ -42,24 +45,43 @@ namespace bcs.ViewModels
                 UserName = LoginInput
             };
 
-            Singleton.Instance.SendLogin(login);
-            IsWait = true;
-            Notify("IsWait");
+            try
+            {
+                Singleton.Instance.SendLogin(login);
+                IsWait = true;
+                Notify("IsWait");
+                ErrState = "Loading";
+
+                IsError = false;
+                Notify("IsError");
+            } 
+            catch (Exception ex)
+            {
+                ErrorShow(this, ex.ToString());
+            }
         }
 
         private void LogonDone(object sender, LoginClass e)
         {
             try
             {
-                NavigationService.Instance.Navigate(new ClientViewModel());
-                MessageBox.Show(e.Token);
+                NavigationService.Instance.Navigate(new ClientViewModel()); 
             }
-            catch { }
+            catch(Exception ex) {
+                ErrorShow(this, ex.ToString());
+            }
             finally
             {
                 IsWait = false;
                 Notify("IsWait");
             }
+        }
+
+        private void ErrorShow(object sender, string e)
+        {
+            IsError = true;
+            Notify("IsError");
+            ErrState = e; 
         }
     }
 }
