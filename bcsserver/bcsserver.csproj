@@ -118,6 +118,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Handlers\BaseHandlerClass.cs" />
+    <Compile Include="Handlers\JobsClass.cs" />
     <Compile Include="Handlers\LoginClass.cs" />
     <Compile Include="Handlers\LogoutClass.cs" />
     <Compile Include="Handlers\UsersClass.cs" />

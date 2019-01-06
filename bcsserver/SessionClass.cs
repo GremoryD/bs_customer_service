@@ -4,6 +4,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 using Newtonsoft.Json;
 using ServerLib.JTypes.Server;
+using ServerLib.JTypes.Enums;
 
 namespace bcsserver
 {
@@ -78,11 +79,16 @@ namespace bcsserver
         public Handlers.UsersClass Users;
 
         /// <summary>
+        /// Обработчик списка должностей пользователей
+        /// </summary>
+        public Handlers.JobsClass Jobs;
+
+        /// <summary>
         /// Конструктор класса сессии пользователя
         /// </summary>
         /// <param name="AWebSocketSessionIDSessionID">Идентификатор сессии WebSocket-сервера</param>
-        /// <param name="AHandler"></param>
-        /// <param name="AProject"></param>
+        /// <param name="AHandler">Обработчик WebSocket-соединения</param>
+        /// <param name="AProject">Вспомогательный класс проекта</param>
         public UserSessionClass(string AWebSocketSessionIDSessionID, WebSocketHandlerClass AHandler, ref ProjectClass AProject)
         {
             WebSocketSessionID = AWebSocketSessionIDSessionID;
@@ -100,6 +106,7 @@ namespace bcsserver
             UserInformation.SetUserSession(this);
 
             Users = new Handlers.UsersClass(this);
+            Jobs = new Handlers.JobsClass(this);
 
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
             OutputQueueProcessing = new Thread(OutputQueueProcessingThread);
@@ -130,51 +137,71 @@ namespace bcsserver
                 {
                     try
                     {
-                        string CommandStr = JsonConvert.DeserializeAnonymousType(Request, new { command = string.Empty }).command.ToLower();
-                        Enum.TryParse(CommandStr, out ServerLib.JTypes.Enums.Commands Command);
-                        if (Enum.IsDefined(typeof(ServerLib.JTypes.Enums.Commands), Command) && Command != ServerLib.JTypes.Enums.Commands.none)
+                        string CommandStr = string.Empty;
+                        try
                         {
-                            if (Command == ServerLib.JTypes.Enums.Commands.login)
+                            CommandStr = JsonConvert.DeserializeAnonymousType(Request, new { command = string.Empty }).command.ToLower();
+                        }
+                        catch
+                        {
+                            OutputQueueAddObject(new ExceptionClass(Commands.none, ErrorCodes.NotJSONObject));
+                        }
+                        if (CommandStr.Length > 0)
+                        {
+                            Enum.TryParse(CommandStr, out Commands Command);
+                            if (Enum.IsDefined(typeof(Commands), Command) && Command != Commands.none)
                             {
-                                Login.Login(Request);
-                            }
-                            else
-                            {
-                                string Token = JsonConvert.DeserializeAnonymousType(Request, new { token = string.Empty }).token;
-                                if (Token == Login.Token)
+                                if (Command == Commands.login)
                                 {
-                                    if (IsAuthenticated)
+                                    Login.Login(Request);
+                                }
+                                else
+                                {
+                                    string Token = JsonConvert.DeserializeAnonymousType(Request, new { token = string.Empty }).token;
+                                    if (Token == Login.Token)
                                     {
-                                        switch (Command)
+                                        if (IsAuthenticated)
                                         {
-                                            case ServerLib.JTypes.Enums.Commands.logout:
-                                                Logout.Logout(Request);
-                                                break;
-                                            case ServerLib.JTypes.Enums.Commands.users:
-                                                Users.SendData();
-                                                break;
-                                            case ServerLib.JTypes.Enums.Commands.user_add:
-                                                Users.UserAdd(Request);
-                                                break;
-                                            case ServerLib.JTypes.Enums.Commands.user_edit:
-                                                Users.UserEdit(Request);
-                                                break;
+                                            switch (Command)
+                                            {
+                                                case Commands.logout:
+                                                    Logout.Logout(Request);
+                                                    break;
+                                                case Commands.users:
+                                                    Users.SendData();
+                                                    break;
+                                                case Commands.user_add:
+                                                    Users.Add(ARequest: Request);
+                                                    break;
+                                                case Commands.user_edit:
+                                                    Users.Edit(Request);
+                                                    break;
+                                                case Commands.jobs:
+                                                    Jobs.SendData();
+                                                    break;
+                                                case Commands.job_add:
+                                                    Jobs.Add(Request);
+                                                    break;
+                                                case Commands.job_edit:
+                                                    Jobs.Edit(Request);
+                                                    break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            OutputQueueAddObject(new ExceptionClass(Command, ErrorCodes.NotAuthenticated));
                                         }
                                     }
                                     else
                                     {
-                                        OutputQueueAddObject(new ExceptionClass(Command, ServerLib.JTypes.Enums.ErrorCodes.NotAuthenticated));
+                                        OutputQueueAddObject(new ExceptionClass(Command, ErrorCodes.IncorrectToken));
                                     }
                                 }
-                                else
-                                {
-                                    OutputQueueAddObject(new ExceptionClass(Command, ServerLib.JTypes.Enums.ErrorCodes.IncorrectToken));
-                                }
                             }
-                        }
-                        else
-                        {
-                            OutputQueueAddObject(new { command = CommandStr, state = "error", code = "UnknownCommand" });
+                            else
+                            {
+                                OutputQueueAddObject(new { command = CommandStr, state = "error", code = "UnknownCommand" });
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -186,21 +213,36 @@ namespace bcsserver
             }
         }
 
+        /// <summary>
+        /// Добавляет текст запроса во входную очередь
+        /// </summary>
+        /// <param name="ARequest">Текст запроса</param>
         public void InputQueueAdd(string ARequest)
         {
             Requests.Enqueue(ARequest);
         }
 
+        /// <summary>
+        /// Добавляет текст ответа в выходную очередь
+        /// </summary>
+        /// <param name="AResponse">Текст ответа</param>
         public void OutputQueueAddString(string AResponse)
         {
             Responses.Enqueue(AResponse);
         }
 
+        /// <summary>
+        /// Добавляет объект в выходную очередь
+        /// </summary>
+        /// <param name="AResponse">Объект</param>
         public void OutputQueueAddObject(object AResponse)
         {
             OutputQueueAddString(JsonConvert.SerializeObject(AResponse));
         }
 
+        /// <summary>
+        /// Поток передачи данных из выходной очереди через обработчик WebSocket-соединения
+        /// </summary>
         private void OutputQueueProcessingThread()
         {
             while (IsActive)
