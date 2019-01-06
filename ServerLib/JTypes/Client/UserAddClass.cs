@@ -1,10 +1,16 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace ServerLib.JTypes.Server
+namespace ServerLib.JTypes.Client
 {
-    public class UserInformationClass : BaseResponseClass
+    public class UserAddClass : BaseRequestClass
     {
+        [JsonProperty(PropertyName = "login", Required = Required.Always)]
+        public string Login { get; set; } = null;
+
+        [JsonProperty(PropertyName = "password", Required = Required.Always)]
+        public string Password { get; set; } = null;
+
         [JsonProperty(PropertyName = "first_name", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public string FirstName { get; set; } = null;
 
@@ -14,15 +20,15 @@ namespace ServerLib.JTypes.Server
         [JsonProperty(PropertyName = "midle_name", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public string MidleName { get; set; } = null;
 
-        [JsonProperty(PropertyName = "job", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public string Job { get; set; } = null;
+        [JsonProperty(PropertyName = "job_id", Required = Required.Always)]
+        public long JobId { get; set; }
 
         [JsonProperty(PropertyName = "active", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
         public Enums.UserActive Active { get; set; }
 
-        public UserInformationClass()
+        public UserAddClass()
         {
-            Command = Enums.Commands.user_information;
+            Command = Enums.Commands.user_add;
         }
     }
 }

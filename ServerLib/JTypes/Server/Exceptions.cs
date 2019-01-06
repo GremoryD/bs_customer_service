@@ -3,7 +3,7 @@
     /// <summary>
     /// Исключения
     /// </summary>
-    public static class Exceptions
+    public class Exceptions
     {
         public static readonly object ErrorNonTextMessage = new
         {

@@ -22,8 +22,19 @@ namespace bcsserver
         /// </summary>
         public string WebSocketSessionID { get; set; } = null;
 
+        /// <summary>
+        /// Выходная очередь сообщений клиенту
+        /// </summary>
         public ConcurrentQueue<string> Responses = new ConcurrentQueue<string>();
+
+        /// <summary>
+        /// Входная очередь запросов
+        /// </summary>
         private ConcurrentQueue<string> Requests = new ConcurrentQueue<string>();
+
+        /// <summary>
+        /// Обработчик WebSocket-соединения
+        /// </summary>
         private WebSocketHandlerClass Handler;
 
         /// <summary>
@@ -61,6 +72,9 @@ namespace bcsserver
         /// </summary>
         public Handlers.UserInformationClass UserInformation;
 
+        /// <summary>
+        /// Обработчик списка пользователей
+        /// </summary>
         public Handlers.UsersClass Users;
 
         /// <summary>
@@ -86,7 +100,6 @@ namespace bcsserver
             UserInformation.SetUserSession(this);
 
             Users = new Handlers.UsersClass(this);
-            //Users.SetUserSession(this);
 
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
             OutputQueueProcessing = new Thread(OutputQueueProcessingThread);
@@ -106,6 +119,9 @@ namespace bcsserver
             IsActive = false;
         }
 
+        /// <summary>
+        /// Поток обработчика входной очереди запросов
+        /// </summary>
         private void InputQueueProcessingThread()
         {
             while (IsActive)
@@ -114,45 +130,56 @@ namespace bcsserver
                 {
                     try
                     {
-                        string Command = JsonConvert.DeserializeAnonymousType(Request, new { command = string.Empty }).command.ToLower();
-                        if (Command == "login")
+                        string CommandStr = JsonConvert.DeserializeAnonymousType(Request, new { command = string.Empty }).command.ToLower();
+                        Enum.TryParse(CommandStr, out ServerLib.JTypes.Enums.Commands Command);
+                        if (Enum.IsDefined(typeof(ServerLib.JTypes.Enums.Commands), Command) && Command != ServerLib.JTypes.Enums.Commands.none)
                         {
-                            Login.Login(Request);
-                        }
-                        else
-                        {
-                            string Token = JsonConvert.DeserializeAnonymousType(Request, new { token = string.Empty }).token;
-                            if (Token == Login.Token)
+                            if (Command == ServerLib.JTypes.Enums.Commands.login)
                             {
-                                if (IsAuthenticated)
+                                Login.Login(Request);
+                            }
+                            else
+                            {
+                                string Token = JsonConvert.DeserializeAnonymousType(Request, new { token = string.Empty }).token;
+                                if (Token == Login.Token)
                                 {
-                                    switch (Command)
+                                    if (IsAuthenticated)
                                     {
-                                        case "logout":
-                                            Logout.Logout(Request);
-                                            break;
-                                        case "users":
-                                            Users.SendData();
-                                            break;
-                                        default:
-                                            OutputQueueAddObject(Exceptions.ErrorUnknownCommand);
-                                            break;
+                                        switch (Command)
+                                        {
+                                            case ServerLib.JTypes.Enums.Commands.logout:
+                                                Logout.Logout(Request);
+                                                break;
+                                            case ServerLib.JTypes.Enums.Commands.users:
+                                                Users.SendData();
+                                                break;
+                                            case ServerLib.JTypes.Enums.Commands.user_add:
+                                                Users.UserAdd(Request);
+                                                break;
+                                            case ServerLib.JTypes.Enums.Commands.user_edit:
+                                                Users.UserEdit(Request);
+                                                break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        OutputQueueAddObject(new ExceptionClass(Command, ServerLib.JTypes.Enums.ErrorCodes.NotAuthenticated));
                                     }
                                 }
                                 else
                                 {
-                                    OutputQueueAddObject(Exceptions.ErrorNotAuthenticated);
+                                    OutputQueueAddObject(new ExceptionClass(Command, ServerLib.JTypes.Enums.ErrorCodes.IncorrectToken));
                                 }
                             }
-                            else
-                            {
-                                OutputQueueAddObject(Exceptions.ErrorIncorrectToken);
-                            }
+                        }
+                        else
+                        {
+                            OutputQueueAddObject(new { command = CommandStr, state = "error", code = "UnknownCommand" });
                         }
                     }
                     catch (Exception ex)
                     {
-                        OutputQueueAddObject(new { state = "error", code = ex.HResult, description = ex.Message });
+                        OutputQueueAddObject(new { state = "error", code = "FatalError", description = ex.Message });
                     }
                 }
                 Thread.Sleep(1);

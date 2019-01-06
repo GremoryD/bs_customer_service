@@ -69,6 +69,7 @@ namespace bcsserver
             if (UserSessions.TryGetValue(ID, out UserSessionClass UserSession))
             {
                 UserSession.Stop();
+                UserSessions.TryRemove(ID, out UserSessionClass UserSessionRemoved);
             }
         }
 

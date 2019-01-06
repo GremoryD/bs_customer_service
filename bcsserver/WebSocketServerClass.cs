@@ -31,7 +31,7 @@ namespace bcsserver
         {
             get
             {
-                return wsServer == null ? 0 : wsServer.WebSocketServices.SessionCount;
+                return wsServer == null ? 0 :   wsServer.WebSocketServices.SessionCount;
             }
         }
 
