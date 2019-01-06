@@ -86,6 +86,7 @@ namespace bcsserver
             Project.Database.Parameters.CreateParameter("Password", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Пароль пользователя");
             Project.Database.Parameters.CreateParameter("AccessToken", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Токен доступа", 100);
             Project.Database.Parameters.CreateParameter("AccessUserId", System.Data.ParameterDirection.Output, OracleDbType.Decimal, "Id пользователя в БД", 20);
+            Project.Database.Parameters.CreateParameter("NewId", System.Data.ParameterDirection.Output, OracleDbType.Decimal, "Id сущности после создания в БД", 20);
             Project.Database.Parameters.CreateParameter("UserId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Id пользователя в БД", 20);
             Project.Database.Parameters.CreateParameter("InId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Id", 20);
             Project.Database.Parameters.CreateParameter("FirstName", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Имя пользователя", 100);
@@ -95,6 +96,7 @@ namespace bcsserver
             Project.Database.Parameters.CreateParameter("InLastName", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Фамилия пользователя", 100);
             Project.Database.Parameters.CreateParameter("InMidleName", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Отчество пользователя", 100);
             Project.Database.Parameters.CreateParameter("Job", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Должность пользователя", 200);
+            Project.Database.Parameters.CreateParameter("JobName", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Должность пользователя", 200);
             Project.Database.Parameters.CreateParameter("JobId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Идентификатор должности", 20);
             Project.Database.Parameters.CreateParameter("Active", System.Data.ParameterDirection.Output, OracleDbType.Decimal, "Признак активности пользователя (1 - активен, 0 - заблокирован)", 20);
             Project.Database.Parameters.CreateParameter("InActive", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Признак активности пользователя (1 - активен, 0 - заблокирован)", 20);
@@ -110,6 +112,7 @@ namespace bcsserver
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserAdd", "USR.USER_CREATE(:Token, :Login, :Password, :InFirstName, :InLastName, :InMidleName, :InActive, :JobId, :AccessUserId, :Job, :State, :ErrorText)", "Добавление пользователя");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserEdit", "USR.USER_UPDATE(:Token, :UserId, :Password, :InFirstName, :InLastName, :InMidleName, :InActive, :JobId, :Job, :State, :ErrorText)", "Изменение пользователя");
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Jobs", "USR.GET_JOBS(:Token)", "Чтение списка должностей пользователей");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "JobAdd", "USR.JOB_CREATE(:Token, :JobName, :NewId, :State, :ErrorText)", "Добавление должности пользователей");
 
             DatabaseCheck.Start();
             SetSettingsButtons();

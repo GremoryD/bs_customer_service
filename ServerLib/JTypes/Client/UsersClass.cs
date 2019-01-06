@@ -3,7 +3,7 @@
     /// <summary>
     /// Запрос списка пользователей
     /// </summary>
-    class UsersClass : BaseRequestClass
+    public class UsersClass : BaseRequestClass
     {
         public UsersClass()
         {

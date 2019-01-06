@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JTypes\Client\BaseRequestClass.cs" />
+    <Compile Include="JTypes\Client\JobAddClass.cs" />
+    <Compile Include="JTypes\Client\JobsClass.cs" />
     <Compile Include="JTypes\Client\Login.cs" />
     <Compile Include="JTypes\Client\Logout.cs" />
     <Compile Include="JTypes\Client\UserAddClass.cs" />
@@ -58,6 +60,7 @@
     <Compile Include="JTypes\Server\BaseResponseClass.cs" />
     <Compile Include="JTypes\Server\ExceptionClass.cs" />
     <Compile Include="JTypes\Server\Exceptions.cs" />
+    <Compile Include="JTypes\Server\JobAddClass.cs" />
     <Compile Include="JTypes\Server\JobClass.cs" />
     <Compile Include="JTypes\Server\JobsClass.cs" />
     <Compile Include="JTypes\Server\LoginClass.cs" />

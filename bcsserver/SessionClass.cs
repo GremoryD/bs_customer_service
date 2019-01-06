@@ -170,7 +170,7 @@ namespace bcsserver
                                                 case Commands.users:
                                                     Users.SendData();
                                                     break;
-                                                case ServerLib.JTypes.Enums.Commands.user_add:
+                                                case Commands.user_add:
                                                     Users.Add(ARequest: Request);
                                                     break;
                                                 case Commands.user_edit:
@@ -178,6 +178,12 @@ namespace bcsserver
                                                     break;
                                                 case Commands.jobs:
                                                     Jobs.SendData();
+                                                    break;
+                                                case Commands.job_add:
+                                                    Jobs.Add(Request);
+                                                    break;
+                                                case Commands.job_edit:
+                                                    Jobs.Edit(Request);
                                                     break;
                                             }
                                         }
