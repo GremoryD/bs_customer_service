@@ -49,6 +49,7 @@
     <Compile Include="JTypes\Client\Logout.cs" />
     <Compile Include="JTypes\Client\UserAddClass.cs" />
     <Compile Include="JTypes\Client\UserEditClass.cs" />
+    <Compile Include="JTypes\Client\UsersClass.cs" />
     <Compile Include="JTypes\Enums\Commands.cs" />
     <Compile Include="JTypes\Enums\ErrorCodes.cs" />
     <Compile Include="JTypes\Enums\ListCommands.cs" />
@@ -57,6 +58,8 @@
     <Compile Include="JTypes\Server\BaseResponseClass.cs" />
     <Compile Include="JTypes\Server\ExceptionClass.cs" />
     <Compile Include="JTypes\Server\Exceptions.cs" />
+    <Compile Include="JTypes\Server\JobClass.cs" />
+    <Compile Include="JTypes\Server\JobsClass.cs" />
     <Compile Include="JTypes\Server\LoginClass.cs" />
     <Compile Include="JTypes\Server\LogoutClass.cs" />
     <Compile Include="JTypes\Server\UserAddClass.cs" />

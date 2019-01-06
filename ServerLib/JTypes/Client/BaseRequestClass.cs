@@ -4,6 +4,9 @@ using ServerLib.JTypes.Enums;
 
 namespace ServerLib.JTypes.Client
 {
+    /// <summary>
+    /// Абстрактный класс запросов поступающих от клиента
+    /// </summary>
     public abstract class BaseRequestClass
     {
         /// <summary>

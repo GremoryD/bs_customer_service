@@ -5,6 +5,7 @@
     /// </summary>
     public class Exceptions
     {
+        /*
         public static readonly object ErrorNonTextMessage = new
         {
             state = "error",
@@ -53,5 +54,6 @@
             code = 8,
             description = "Incorrect token"
         };
+        */
     }
 }

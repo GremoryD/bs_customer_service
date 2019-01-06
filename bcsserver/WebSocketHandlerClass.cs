@@ -76,7 +76,7 @@ namespace bcsserver
         /// <summary>
         /// Вызывается при получении данных от клиента через WebSocket-соединение
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">Содержит данные события OnMessage</param>
         protected override void OnMessage(MessageEventArgs e)
         {
             try
@@ -89,17 +89,17 @@ namespace bcsserver
                     }
                     else
                     {
-                        SendObject(ServerLib.JTypes.Server.Exceptions.ErrorSessionNotFound);
+                        SendObject(new ServerLib.JTypes.Server.ExceptionClass(ServerLib.JTypes.Enums.Commands.none, ServerLib.JTypes.Enums.ErrorCodes.SessionNotFound));
                     }
                 }
                 else
                 {
-                    SendObject(ServerLib.JTypes.Server.Exceptions.ErrorNonTextMessage);
+                    SendObject(new ServerLib.JTypes.Server.ExceptionClass(ServerLib.JTypes.Enums.Commands.none, ServerLib.JTypes.Enums.ErrorCodes.NonTextMessage));
                 }
             }
             catch (Exception ex)
             {
-                SendObject(new { state = "error", code = ex.HResult, description = ex.Message });
+                SendObject(new ServerLib.JTypes.Server.ExceptionClass(ServerLib.JTypes.Enums.Commands.none, ServerLib.JTypes.Enums.ErrorCodes.FatalError, ex.Message));
             }
         }
     }
