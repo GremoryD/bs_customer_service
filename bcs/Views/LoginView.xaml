@@ -8,12 +8,15 @@
              xmlns:vm="clr-namespace:bcs.ViewModels"
              xmlns:local="clr-namespace:bcs.Views" 
              mc:Ignorable="d" >
-    <UserControl.DataContext>
-        <vm:LoginViewModel></vm:LoginViewModel>
-    </UserControl.DataContext>
     <Grid Background="#FFF3F3F3" >
+
         <dxe:TextEdit x:Name="Login" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" NullText="Логин" Margin="55,216,55,0" Height="38" VerticalAlignment="Top" Text="{Binding Path=LoginInput}"/>
         <dxe:PasswordBoxEdit x:Name="Password" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" NullText="Пароль" Margin="55,278,55,0" Height="38" VerticalAlignment="Top" Text="{Binding Path=PasswordInput}"/>
-        <dx:SimpleButton x:Name="simpleButton" Content="Авторизация" Margin="90,343,91,180" Command="{Binding LoginCommand}"/>
+        <dx:SimpleButton x:Name="simpleButton" Content="Авторизация" Margin="90,343,91,180" Command="{Binding LoginCommand}"   />
+        <Grid Height="70" VerticalAlignment="Top" Margin="0,0,0.4,0" Visibility="{Binding IsWait, Converter={StaticResource cnvBoolVis},FallbackValue=Visible}" >
+            <Label  Content="{Binding ErrState}" Margin="65,10,9,10" FontSize="16" FontWeight="Bold" MinWidth="200" MinHeight="50" />
+            <Image Height="50"   VerticalAlignment="Top" Margin="10,10,0,0" Stretch="Fill" Source="/bcs;component/Images/loading.gif"  Visibility="{Binding IsWait, Converter={StaticResource cnvBoolVis}, FallbackValue=Collapsed}" HorizontalAlignment="Left" Width="50" />
+            <Image Height="50"   VerticalAlignment="Top" Margin="10,10,0,0" Stretch="Fill" Source="/bcs;component/Images/error.png"  Visibility="{Binding IsError, Converter={StaticResource cnvBoolVis}, FallbackValue=Collapsed}" HorizontalAlignment="Left" Width="50" />
+        </Grid>
     </Grid>
 </UserControl>

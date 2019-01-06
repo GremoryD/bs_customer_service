@@ -4,18 +4,21 @@ using CLProject;
 using System.Windows;
 using System.Threading;
 using Newtonsoft.Json;
+using bcs.Models;
+using bcs.ViewModels;
 
 namespace BCS_User_Interface
 {
-    public class WebSocketClass
+    public class WebSocketClass  
     {
         private ProjectClass Project;
         private WebSocket ws;
         private string wsURL;
         private string wsPath;
         private bool IsStoping;
+        public Exception exeptions=null;
 
-        public bool IsAlive { get => ws.IsAlive; }
+        public event EventHandler<ResponseInfo> GotResponse;
 
         public WebSocketClass(ref ProjectClass AProject, string AwsURL, string AwsPath)
         {
@@ -42,12 +45,18 @@ namespace BCS_User_Interface
 
         private void HandlerClose(object sender, CloseEventArgs e)
         {
-            Connect();
+            //Connect();
         }
 
         private void HandlerMessage(object sender, MessageEventArgs e)
+        { 
+            string Command = JsonConvert.DeserializeAnonymousType(e.Data.ToString(), new { command = string.Empty }).command.ToLower(); 
+            GotResponse?.Invoke(this, new ResponseInfo() { Command = Command, Data = e.Data } );  
+        }
+
+        private void HandlerMessage(object sender, Object e)
         {
-            MessageBox.Show(e.Data);
+            MessageBox.Show(e.ToString());
         }
 
         public void Start()
@@ -71,20 +80,22 @@ namespace BCS_User_Interface
         }
 
         private void Connect()
-        {
-            Thread Reconnect = new Thread(() =>
+        { 
+            while (!ws.IsAlive && !IsStoping)
             {
-                while (!ws.IsAlive && !IsStoping)
+                try
                 {
-                    try
-                    {
-                        ws.Connect();
-                    }
-                    catch { }
-                    Thread.Sleep(1);
+                    ws.Connect(); 
                 }
-            });
-            Reconnect.Start();
+                catch (Exception ex){ exeptions = ex; return; }
+                Thread.Sleep(1);
+            } 
         }
+    }
+
+    public struct ResponseInfo
+    {
+        public string Command { get; set; }
+        public String Data { get; set; }
     }
 }

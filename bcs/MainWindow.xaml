@@ -7,10 +7,9 @@
         xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" 
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+        xmlns:vm="clr-namespace:bcs.ViewModels"
         x:Class="bcs.MainWindow"
         mc:Ignorable="d"
-        Title="Поддержка клиентов" Height="646.463" Width="530" >
-    <Grid>
-        <Views:LoginView />
-    </Grid>
+        Title="Поддержка клиентов" Height="646.463" Width="530" Closed="Window_Closed" Loaded="Window_Loaded" >
+    <vm:LoginViewModel />
 </Window>

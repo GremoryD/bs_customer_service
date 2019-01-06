@@ -20,20 +20,14 @@ namespace bcs
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindowOld : Window
-    {
-        private const string AMessage1 = "Приложение загружено";
-        private const string AMessage2 = "Приложение запущено";
-        private const string AMessage3 = "Приложение остановлено";
-        private const string AMessage4 = "Приложение выгружено";
+    { 
 
-        private ProjectClass Project;
-        private WebSocketClassOld WebSocketClient;
+        private ProjectClass Project; 
 
         public MainWindowOld()
         {
             InitializeComponent();
-            Project = new ProjectClass("Application");
-            WebSocketClient = new WebSocketClassOld(ref Project, "ws://127.0.0.1:2843", "/");
+            Project = new ProjectClass("Application"); 
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -42,24 +36,20 @@ namespace bcs
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            WebSocketClient.Stop();
+        { 
             Project.Dispose();
         }
 
         private void barButtonItem1_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
-        {
-            WebSocketClient.Start();
+        { 
         }
 
         private void BarButtonItem_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
-        {
-            WebSocketClient.Stop();
+        { 
         }
 
         private void BarButtonItem_ItemClick_1(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
-        {
-            WebSocketClient.Send("aaaaa");
+        { 
         }
     }
 }
