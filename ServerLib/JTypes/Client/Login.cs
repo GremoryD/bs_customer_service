@@ -1,12 +1,19 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ServerLib.JTypes.Client
 {
     /// <summary>
     /// Запрос аутентификации пользователя в системе
     /// </summary>
-    public class Login : BaseRequestClass
+    public class Login
     {
+        /// <summary>
+        /// Команда запроса
+        /// </summary>
+        [JsonProperty("command", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
+        public Enums.Commands Command { get; set; }
+
         /// <summary>
         /// Логин
         /// </summary>
