@@ -4,7 +4,7 @@ using ServerLib.JTypes.Enums;
 
 namespace ServerLib.JTypes.Server
 {
-    public abstract class BaseResponseClass
+    public class BaseResponseClass
     {
         /// <summary>
         /// Команда объекта выдачи

@@ -25,7 +25,7 @@ namespace bcs.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ws://127.0.0.1:2843")]
+        [global::System.Configuration.DefaultSettingValueAttribute("ws://127.0.0.1:4444")]
         public string WSServer {
             get {
                 return ((string)(this["WSServer"]));
