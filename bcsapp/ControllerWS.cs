@@ -4,14 +4,21 @@ using WebSocketSharp;
 using System.Threading;
 using System.Collections.Concurrent;
 using Newtonsoft.Json;
+using bcsapp.Controls;
+using bcsapp.ViewModels;
+using ServerLib.JTypes.Server;
 
 namespace bcsapp
 {
     /// <summary>
     /// Класс приложения
     /// </summary>
-    public class ApplClass
+    public class ControllerWS
     {
+        public static ControllerWS Instance { get { if (s_instance == null) s_instance=new ControllerWS();return s_instance; }}
+
+
+
         public ProjectClass Project;
         public WebSocket WebSocketClient;
 
@@ -50,14 +57,19 @@ namespace bcsapp
         /// </summary>
         public bool IsAuthenticated { get { return Session.Login.UserId > 0; } }
 
+        #region События
+        public event EventHandler<UserInformationClass> CheckUser;
+        public event EventHandler<LoginClass> LoginDone;
+        public event EventHandler<string> LoginFailed; 
+        #endregion
+
 
         Handlers.SessionClass Session;
+        private static ControllerWS s_instance;
 
-        MainWindow MainForm;
-
-        public ApplClass(MainWindow AMainForm)
+        public ControllerWS()
         {
-            MainForm = AMainForm;
+
             Project = new ProjectClass("BCSApp");
             WebSocketClient = new WebSocket(string.Format("ws://{0}:{1}/", Project.Settings.WebSocketServerAddress, Project.Settings.WebSocketServerPort));
             WebSocketClient.OnMessage += OnWebSocketMessage;
@@ -130,17 +142,18 @@ namespace bcsapp
                 {
                     try
                     {
-                        MainForm.Output.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, new Action(() => { MainForm.Output.Text = string.Format("{0}Recieve: {1}\n\r", MainForm.Output.Text, InputMessage); }));
-                        ServerLib.JTypes.Server.BaseResponseClass Message = JsonConvert.DeserializeObject<ServerLib.JTypes.Server.BaseResponseClass>(InputMessage);
+                        ServerLib.JTypes.Server.BaseResponseClass Message = JsonConvert.DeserializeObject<BaseResponseClass>(InputMessage);
                         if (Message.State == ServerLib.JTypes.Enums.ResponseState.ok)
                         {
-                            switch(Message.Command)
+                            switch (Message.Command)
                             {
                                 case ServerLib.JTypes.Enums.Commands.login:
-                                    Session.LoginProcessing(JsonConvert.DeserializeObject<ServerLib.JTypes.Server.LoginClass>(InputMessage));
+                                    LoginDone?.Invoke(this, JsonConvert.DeserializeObject<LoginClass>(InputMessage));
+                                    Session.LoginProcessing(JsonConvert.DeserializeObject<LoginClass>(InputMessage));
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.user_information:
-                                    Session.UserInformationProcessing(JsonConvert.DeserializeObject<ServerLib.JTypes.Server.UserInformationClass>(InputMessage));
+                                    CheckUser?.Invoke(this, JsonConvert.DeserializeObject<UserInformationClass>(InputMessage));
+                                    Session.UserInformationProcessing(JsonConvert.DeserializeObject<UserInformationClass>(InputMessage));
                                     break;
                             }
                         }
@@ -149,8 +162,18 @@ namespace bcsapp
                             switch (Message.Command)
                             {
                                 case ServerLib.JTypes.Enums.Commands.login:
-                                    Session.LoginErrorProcessing(JsonConvert.DeserializeObject<ServerLib.JTypes.Server.ExceptionClass>(InputMessage));
-                                    break;
+                                    //прилетает в Description Null
+                                    switch (JsonConvert.DeserializeObject<ExceptionClass>(InputMessage).Code)
+                                    {
+                                        case ServerLib.JTypes.Enums.ErrorCodes.IncorrectLoginOrPassword:
+                                            LoginFailed?.Invoke(this,"Неправильный логин или пароль");
+                                            break;
+                                        default:
+                                            LoginFailed?.Invoke(this, "Неопознаная ошибка");
+                                            break;
+                                    }
+                                    Session.LoginErrorProcessing(JsonConvert.DeserializeObject<ExceptionClass>(InputMessage));
+                                    break; 
                             }
                         }
                         else
