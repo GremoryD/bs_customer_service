@@ -27,9 +27,9 @@ namespace bcs.Models
                     _instance =new Singleton();
                 return _instance;
             }
-        } 
+        }
 
-        ProjectClass Project = new ProjectClass("Application");
+        readonly ProjectClass Project = new ProjectClass("Application");
         public WebSocketClass WebSocketClient { set; get; }
 
         public Singleton()
