@@ -11,7 +11,7 @@ namespace ServerLib.JTypes.Server
         /// <summary>
         /// Ключ доступа к данным
         /// </summary>
-        [JsonProperty(PropertyName = "token", Required = Required.AllowNull, NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "token", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public string Token { get; set; } = null;
 
         /// <summary>
