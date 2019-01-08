@@ -44,9 +44,9 @@ namespace bcsapp.ViewModels
                 return LoginInput.Length >= 5 && PasswordInput.Length >=6;
             });
 
-            ControllerWS.Instance.LoginFailed += (_, __) => LoginError(__);
-            ControllerWS.Instance.LoginDone += (_, __) => LoginDone(__);
-            ControllerWS.Instance.CheckUser += (_, __) => CheckUser(__);
+            WebSocketController.Instance.LoginFailed += (_, __) => LoginError(__);
+            WebSocketController.Instance.LoginDone += (_, __) => LoginDone(__);
+            WebSocketController.Instance.CheckUser += (_, __) => CheckUser(__);
         }
 
         private void Notify(string propertyName)
@@ -69,7 +69,7 @@ namespace bcsapp.ViewModels
         { 
             Output = string.Format("{0}Send: {1}\n\r", Output, JsonConvert.SerializeObject(AObject));
             Notify("Output"); 
-            ControllerWS.Instance.OutputQueueAddObject(AObject);
+            WebSocketController.Instance.OutputQueueAddObject(AObject);
         }
 
         private void LoginDone(LoginClass AObject)

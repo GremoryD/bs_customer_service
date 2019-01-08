@@ -19,14 +19,14 @@ namespace bcsapp
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             NavigationService.Instance.RegisterWindow(this);
-            ControllerWS.Instance.Start();
+            WebSocketController.Instance.Start();
         }
 
 
         private void Window_Closed(object sender, EventArgs e)
         {
             NavigationService.Instance.UnregisterWindow();
-            ControllerWS.Instance.Stop();
+            WebSocketController.Instance.Stop();
         }
 
          
@@ -42,7 +42,7 @@ namespace bcsapp
 
         public void SendObject(object AObject)
         { 
-            ControllerWS.Instance.OutputQueueAddObject(AObject);
+            WebSocketController.Instance.OutputQueueAddObject(AObject);
         }
 
         private void LoginError_Click(object sender, RoutedEventArgs e)
