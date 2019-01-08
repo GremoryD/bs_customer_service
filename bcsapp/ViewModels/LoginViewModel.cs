@@ -44,9 +44,9 @@ namespace bcsapp.ViewModels
                 return LoginInput.Length >= 5 && PasswordInput.Length >=6;
             });
 
-            WebSocketController.Instance.LoginFailed += (_, __) => LoginError(__);
+            WebSocketController.Instance.LoginFailed += (_, __) => ErrorMessage(__);
             WebSocketController.Instance.LoginDone += (_, __) => LoginDone(__);
-            WebSocketController.Instance.CheckUser += (_, __) => CheckUser(__);
+            WebSocketController.Instance.ServerErr += (_, __) => ErrorMessage(__);
         }
 
         private void Notify(string propertyName)
@@ -73,30 +73,34 @@ namespace bcsapp.ViewModels
         }
 
         private void LoginDone(LoginClass AObject)
-        {
-            Output = string.Format("{0}Get: {1}\n\r", Output, JsonConvert.SerializeObject(AObject));
-            Notify("Output"); 
-        }
+        { 
+            IsBlocked = false;
+            Notify("IsBlocked");
+            IsError = false;
+            Notify("IsError");
+            ErrState = "";
+            Notify("ErrState");
 
-        private void CheckUser(UserInformationClass userInformation)
-        {
-            if(userInformation.Active == ServerLib.JTypes.Enums.UserActive.blocked)
+            Output = string.Format("{0}Get: {1}\n\r", Output, JsonConvert.SerializeObject(AObject));
+            Notify("Output");
+            if (AObject.Active == ServerLib.JTypes.Enums.UserActive.blocked)
             {
                 IsBlocked = true;
                 Notify("IsBlocked");
                 ErrState = "Пользователь заблокирован";
-                Notify("ErrState");
-
+                Notify("ErrState"); 
             }
             else
             {
-                NavigationService.Instance.Navigate(new ClientViewModel()); 
+                NavigationService.Instance.Navigate(new ClientViewModel());
             }
-
         }
+         
 
-        private void LoginError(string errorInfo)
+        private void ErrorMessage(string errorInfo)
         {
+            IsBlocked = false;
+            Notify("IsBlocked");
             IsError = true;
             Notify("IsError");
             ErrState = errorInfo; 

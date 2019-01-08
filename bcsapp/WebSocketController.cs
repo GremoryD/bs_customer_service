@@ -62,7 +62,7 @@ namespace bcsapp
         public event EventHandler<Handlers.SessionClass> SessionEventHandler;
 
         // Прямые события по получаемым данным не нужны. Все события генерирует обработчик сущности, например, обработчик сессии Handlers.SessionClass
-        public event EventHandler<UserInformationClass> CheckUser;
+        public event EventHandler<String> ServerErr;
         public event EventHandler<LoginClass> LoginDone;
         public event EventHandler<string> LoginFailed;
         #endregion
@@ -155,7 +155,7 @@ namespace bcsapp
                                     Session.LoginProcessing(JsonConvert.DeserializeObject<LoginClass>(InputMessage));
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.user_information:
-                                    CheckUser?.Invoke(this, JsonConvert.DeserializeObject<UserInformationClass>(InputMessage));
+
                                     Session.UserInformationProcessing(JsonConvert.DeserializeObject<UserInformationClass>(InputMessage));
                                     break;
                             }
@@ -165,8 +165,7 @@ namespace bcsapp
                             switch (Message.Command)
                             {
                                 case ServerLib.JTypes.Enums.Commands.login:
-                                    // Убрать вызов событий в обработчик!
-                                    //прилетает в Description Null
+                                    // Убрать вызов событий в обработчик! 
                                     switch (JsonConvert.DeserializeObject<ExceptionClass>(InputMessage).Code)
                                     {
                                         case ServerLib.JTypes.Enums.ErrorCodes.IncorrectLoginOrPassword:
@@ -221,7 +220,11 @@ namespace bcsapp
             {
                 if (OutputQueue.TryDequeue(out string Message))
                 {
-                    WebSocketClient.Send(Message);
+                    try
+                    {
+                        WebSocketClient.Send(Message);
+                    }
+                    catch { ServerErr?.Invoke(this, "Отсутствует подключение к серверу"); }
                 }
                 Thread.Sleep(1);
             }
