@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerLib.JTypes.Server;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,13 @@ namespace bcsapp.Handlers
 {
     public class SessionClass
     {
+        private static SessionClass s_instance;
+        public static SessionClass Instance { get { if (s_instance == null) { s_instance = new SessionClass(); } return s_instance; } }
+
         public ServerLib.JTypes.Server.LoginClass Login = new ServerLib.JTypes.Server.LoginClass();
         public ServerLib.JTypes.Server.UserInformationClass UserInformation = new ServerLib.JTypes.Server.UserInformationClass();
+
+         
 
         public SessionClass()
         {
@@ -30,7 +36,7 @@ namespace bcsapp.Handlers
 
         public void UserInformationProcessing(ServerLib.JTypes.Server.UserInformationClass AUserInformation)
         {
-            if(AUserInformation.Active == ServerLib.JTypes.Enums.UserActive.blocked)
+            if (AUserInformation.Active == ServerLib.JTypes.Enums.UserActive.blocked)
             {
                 Login.UserId = 0;
             }

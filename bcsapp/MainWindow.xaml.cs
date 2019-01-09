@@ -50,9 +50,21 @@ namespace bcsapp
             SendObject(new ServerLib.JTypes.Client.Login()
             {
 
+                UserName = "32123",
+                Password = "123456"
+            });
+        }
+         
+
+        private void LoginBan_Click(object sender, RoutedEventArgs e)
+        {
+            SendObject(new ServerLib.JTypes.Client.Login()
+            {
+
                 UserName = "TestBan",
                 Password = "123456"
             });
+
         }
     }
 }

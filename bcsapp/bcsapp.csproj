@@ -73,6 +73,7 @@
     </ApplicationDefinition>
     <Compile Include="Controls\NavigationService.cs" />
     <Compile Include="Controls\SimpleCommand.cs" />
+    <Compile Include="Models\DataStorage.cs" />
     <Compile Include="ViewModels\ClientViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -157,9 +158,7 @@
   <ItemGroup>
     <Resource Include="Images\loading.gif" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\Blocked.png" />
   </ItemGroup>
