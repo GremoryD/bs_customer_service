@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using bcsapp.Controls;
 using bcsapp.ViewModels;
 using ServerLib.JTypes.Server;
+using bcsapp.Models;
 
 namespace bcsapp
 {
@@ -54,18 +55,6 @@ namespace bcsapp
         /// Признак аутентификации пользователя
         /// </summary>
         public bool IsAuthenticated { get { return Session.Login.UserId > 0; } }
-
-        #region События
-        /// <summary>
-        /// Событие изменения сессии
-        /// </summary>
-        public event EventHandler<Handlers.SessionClass> SessionEventHandler;
-
-        // Прямые события по получаемым данным не нужны. Все события генерирует обработчик сущности, например, обработчик сессии Handlers.SessionClass
-        public event EventHandler<UserInformationClass> CheckUser;
-        public event EventHandler<LoginClass> LoginDone;
-        public event EventHandler<string> LoginFailed;
-        #endregion
 
         Handlers.SessionClass Session;
         private static WebSocketController StaticInstance;
@@ -144,19 +133,16 @@ namespace bcsapp
                 {
                     try
                     {
-                        ServerLib.JTypes.Server.BaseResponseClass Message = JsonConvert.DeserializeObject<ServerLib.JTypes.Server.BaseResponseClass>(InputMessage);
+                        BaseResponseClass Message = JsonConvert.DeserializeObject<BaseResponseClass>(InputMessage);
                         if (Message.State == ServerLib.JTypes.Enums.ResponseState.ok)
                         {
                             switch (Message.Command)
                             {
                                 case ServerLib.JTypes.Enums.Commands.login:
-                                    // Убрать вызов событий в обработчик!
-                                    LoginDone?.Invoke(this, JsonConvert.DeserializeObject<LoginClass>(InputMessage));
-                                    Session.LoginProcessing(JsonConvert.DeserializeObject<LoginClass>(InputMessage));
+                                        LoginHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.user_information:
-                                    CheckUser?.Invoke(this, JsonConvert.DeserializeObject<UserInformationClass>(InputMessage));
-                                    Session.UserInformationProcessing(JsonConvert.DeserializeObject<UserInformationClass>(InputMessage));
+                                        UserInformationHandler(InputMessage);
                                     break;
                             }
                         }
@@ -165,15 +151,13 @@ namespace bcsapp
                             switch (Message.Command)
                             {
                                 case ServerLib.JTypes.Enums.Commands.login:
-                                    // Убрать вызов событий в обработчик!
-                                    //прилетает в Description Null
+                                    // Убрать вызов событий в обработчик! 
                                     switch (JsonConvert.DeserializeObject<ExceptionClass>(InputMessage).Code)
                                     {
                                         case ServerLib.JTypes.Enums.ErrorCodes.IncorrectLoginOrPassword:
-                                            LoginFailed?.Invoke(this, "Неправильный логин или пароль");
+                                                LoginFailedHandler();
                                             break;
-                                        default:
-                                            LoginFailed?.Invoke(this, "Неопознаная ошибка");
+                                        default: 
                                             break;
                                     }
                                     Session.LoginErrorProcessing(JsonConvert.DeserializeObject<ExceptionClass>(InputMessage));
@@ -221,10 +205,50 @@ namespace bcsapp
             {
                 if (OutputQueue.TryDequeue(out string Message))
                 {
-                    WebSocketClient.Send(Message);
+                    try
+                    {
+                        WebSocketClient.Send(Message);
+                    }
+                    catch { ServerErr?.Invoke(this, "Отсутствует подключение к серверу"); }
                 }
                 Thread.Sleep(1);
             }
         }
+
+#region События 
+        //функции вызываемые в LoginViewModel
+        public event EventHandler<String> ServerErr;
+        public event EventHandler<LoginClass> LoginDone;
+        public event EventHandler<string> LoginFailed;
+
+#endregion
+
+
+
+#region Обработчики 
+
+        private void LoginHandler(string InputMessage)
+        { 
+            DataStorage.Instance.Login = JsonConvert.DeserializeObject<LoginClass>(InputMessage);
+            LoginDone?.Invoke(this, JsonConvert.DeserializeObject<LoginClass>(InputMessage));
+        }
+
+        private void UserInformationHandler(string InputMessage)
+        {
+            DataStorage.Instance.UserInformation = JsonConvert.DeserializeObject<UserInformationClass>(InputMessage);
+        }
+
+#endregion
+
+
+#region Обработчики ошибок
+
+        private void LoginFailedHandler()
+        {
+            LoginFailed?.Invoke(this, "Неправильный логин или пароль");
+        }
+         
+#endregion
+
     }
 }

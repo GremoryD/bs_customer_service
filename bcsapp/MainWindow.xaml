@@ -18,7 +18,7 @@
                 <vm:LoginViewModel/>
             </ContentPresenter.Content>
         </ContentPresenter>
-        <Button x:Name="LoginError_Copy" Content="Ban Error" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top" Width="75" Height="29" Click="LoginError_Click"/>
+        <Button x:Name="LoginBan" Content="Ban Error" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top" Width="75" Height="29" Click="LoginBan_Click"  />
 
     </Grid>
 </Window>

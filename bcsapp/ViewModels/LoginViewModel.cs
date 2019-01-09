@@ -1,4 +1,5 @@
 ﻿using bcsapp.Controls;
+using bcsapp.Handlers;
 using bcsapp.ViewModels;
 using CLProject;
 using Newtonsoft.Json;
@@ -21,7 +22,7 @@ namespace bcsapp.ViewModels
         public String LoginInput { get; set; }
         public String PasswordInput { get; set; }
         public String Output { set; get; }
-        public String ErrState { get; set; }
+        public String MessageState { get; set; }
         //отображения загрузки и ошибки
         public Boolean IsWait { get; set; }
         public Boolean IsError { get; set; }
@@ -41,12 +42,12 @@ namespace bcsapp.ViewModels
                 if (LoginInput == null || PasswordInput == null)
                     return false;
 
-                return LoginInput.Length >= 5 && PasswordInput.Length >=6;
+                return LoginInput.Length >= 1 && PasswordInput.Length >=1;
             });
 
-            WebSocketController.Instance.LoginFailed += (_, __) => LoginError(__);
+            WebSocketController.Instance.LoginFailed += (_, __) => ErrorMessage(__);
             WebSocketController.Instance.LoginDone += (_, __) => LoginDone(__);
-            WebSocketController.Instance.CheckUser += (_, __) => CheckUser(__);
+            WebSocketController.Instance.ServerErr += (_, __) => ErrorMessage(__);
         }
 
         private void Notify(string propertyName)
@@ -74,33 +75,49 @@ namespace bcsapp.ViewModels
 
         private void LoginDone(LoginClass AObject)
         {
+            ClearMessage();
             Output = string.Format("{0}Get: {1}\n\r", Output, JsonConvert.SerializeObject(AObject));
-            Notify("Output"); 
-        }
-
-        private void CheckUser(UserInformationClass userInformation)
-        {
-            if(userInformation.Active == ServerLib.JTypes.Enums.UserActive.blocked)
+            Notify("Output");
+            if (AObject.Active == ServerLib.JTypes.Enums.UserActive.blocked)
             {
-                IsBlocked = true;
-                Notify("IsBlocked");
-                ErrState = "Пользователь заблокирован";
-                Notify("ErrState");
-
+                BlockMessage("Пользователь заблокирован");
             }
             else
             {
-                NavigationService.Instance.Navigate(new ClientViewModel()); 
+                NavigationService.Instance.Navigate(new ClientViewModel());
             }
-
         }
 
-        private void LoginError(string errorInfo)
+
+
+        private void ClearMessage()
         {
+            IsBlocked = false;
+            Notify("IsBlocked");
+            IsError = false;
+            Notify("IsError");
+            MessageState = "";
+            Notify("MessageState");
+        }
+
+        private void ErrorMessage(string Message)
+        {
+            IsBlocked = false;
+            Notify("IsBlocked");
             IsError = true;
             Notify("IsError");
-            ErrState = errorInfo; 
-            Notify("ErrState"); 
+            MessageState = Message; 
+            Notify("MessageState"); 
+        }
+
+        private void BlockMessage(string Message)
+        {
+            IsError = false;
+            Notify("IsError");
+            IsBlocked = true;
+            Notify("IsBlocked");
+            MessageState = Message;
+            Notify("MessageState");
         }
     }
 }
