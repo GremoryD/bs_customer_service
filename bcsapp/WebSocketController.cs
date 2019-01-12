@@ -203,13 +203,20 @@ namespace bcsapp
         {
             while (IsStarting)
             {
+                if (WebSocketClient.ReadyState == WebSocketState.Closed)
+                {  ServerErr?.Invoke(this, "Отсутствует подключение к серверу"); ConnectedState?.Invoke(this, "Отсутствует подключение"); }
+
+                if (WebSocketClient.ReadyState == WebSocketState.Open)  ConnectedState?.Invoke(this, "Соеденено");
                 if (OutputQueue.TryDequeue(out string Message))
                 {
                     try
                     {
                         WebSocketClient.Send(Message);
                     }
-                    catch { ServerErr?.Invoke(this, "Отсутствует подключение к серверу"); }
+                    catch {
+                        ServerErr?.Invoke(this, "Отсутствует подключение к серверу");
+                        ConnectedState?.Invoke(this, "Отсутствует подключение");
+                    }
                 }
                 Thread.Sleep(1);
             }
@@ -218,6 +225,8 @@ namespace bcsapp
 #region События 
         //функции вызываемые в LoginViewModel
         public event EventHandler<String> ServerErr;
+        public event EventHandler<String> UpdateUserUI;
+        public event EventHandler<String> ConnectedState;
         public event EventHandler<LoginClass> LoginDone;
         public event EventHandler<string> LoginFailed;
 
@@ -236,6 +245,7 @@ namespace bcsapp
         private void UserInformationHandler(string InputMessage)
         {
             DataStorage.Instance.UserInformation = JsonConvert.DeserializeObject<UserInformationClass>(InputMessage);
+            UpdateUserUI?.Invoke(this, String.Format("{0} {1} {2}", DataStorage.Instance.UserInformation.FirstName, DataStorage.Instance.UserInformation.MidleName, DataStorage.Instance.UserInformation.LastName));
         }
 
 #endregion

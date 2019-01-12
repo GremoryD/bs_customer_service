@@ -9,5 +9,8 @@
     <DataTemplate DataType="{x:Type vm:ClientViewModel}">
         <v:ClientView/>
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:UserViewModel}">
+        <v:UsersView />
+    </DataTemplate>
     
 </ResourceDictionary>
