@@ -41,12 +41,12 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
-            <Button Style="{StaticResource btnMenu}" Content="Menu" Command="{Binding SwitchMenuCommand}"  Tag="/bcsapp;component/Images/Data-List-icon.png" />
-            <Button Grid.Row="1" Style="{StaticResource btnMenu}" Content="Пользователи" />
-            <Button Grid.Row="2" Style="{StaticResource btnMenu}" Content="Клиенты" />
-            <Button Grid.Row="3" Style="{StaticResource btnMenu}" Content="Настроики" />
-            <Button Grid.Row="4" Style="{StaticResource btnMenu}" Content="Вылогиниться" />
+        
+            <Button Style="{StaticResource btnMenu}" Content="Menu" Command="{Binding SwitchMenuCommand}"  Tag="/bcsapp;component/Images/Menu.png" />
+            <Button Grid.Row="1" Style="{StaticResource btnMenu}"  Content="Пользователи" Tag="/bcsapp;component/Images/Users.png" Command="{Binding OpenUsersCommand}"/>
+            <Button Grid.Row="2" Style="{StaticResource btnMenu}" Content="Клиенты" Tag="/bcsapp;component/Images/Clients.png" Command="{Binding OpenClientsCommand}"/>
+            <Button Grid.Row="3" Style="{StaticResource btnMenu}" Content="Настроики" Tag="/bcsapp;component/Images/Settings.png" Command="{Binding OpenSettingsCommand}"/>
+            <Button Grid.Row="4" Style="{StaticResource btnMenu}" Content="Вылогиниться" Tag="/bcsapp;component/Images/Logout.png" Command="{Binding LogOutCommand}"/>
         </Grid>
     </Grid>
 </UserControl>

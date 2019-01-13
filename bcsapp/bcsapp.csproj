@@ -81,14 +81,22 @@
     <Compile Include="Models\Behoviour\MenuBehaviour.cs" />
     <Compile Include="Models\DataStorage.cs" />
     <Compile Include="ViewModels\ClientViewModel.cs" />
+    <Compile Include="ViewModels\CustomersViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="Views\ClientModel.xaml.cs">
       <DependentUpon>ClientView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CustomersView.xaml.cs">
+      <DependentUpon>CustomersView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UsersView.xaml.cs">
       <DependentUpon>UsersView.xaml</DependentUpon>
@@ -124,9 +132,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\CustomersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LoginView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UsersView.xaml">
       <SubType>Designer</SubType>
@@ -175,12 +191,6 @@
     <Resource Include="Images\error.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\loading.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\document-edit-icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Blocked.png" />
   </ItemGroup>
   <ItemGroup>
@@ -190,10 +200,19 @@
     <Resource Include="Images\sign-error-icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Data-List-icon.png" />
+    <Resource Include="Images\Menu.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Healthcare-Groups-icon.png" />
+    <Resource Include="Images\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Clients.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Users.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Logout.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

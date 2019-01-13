@@ -16,6 +16,9 @@ namespace bcsapp.Models
         public UserInformationClass UserInformation { set; get; }
 
 
+        public   void ClearData()
+        {
 
+        }
     }
 }
