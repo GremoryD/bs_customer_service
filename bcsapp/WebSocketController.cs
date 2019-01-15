@@ -8,6 +8,8 @@ using bcsapp.Controls;
 using bcsapp.ViewModels;
 using ServerLib.JTypes.Server;
 using bcsapp.Models;
+using System.Windows;
+using System.Collections.Generic;
 
 namespace bcsapp
 {
@@ -144,6 +146,9 @@ namespace bcsapp
                                 case ServerLib.JTypes.Enums.Commands.user_information:
                                         UserInformationHandler(InputMessage);
                                     break;
+                                case ServerLib.JTypes.Enums.Commands.users:
+                                        UsersListHandler(InputMessage);
+                                    break;
                             }
                         }
                         else if (Message.State == ServerLib.JTypes.Enums.ResponseState.error)
@@ -229,12 +234,13 @@ namespace bcsapp
         public event EventHandler<String> ConnectedState;
         public event EventHandler<LoginClass> LoginDone;
         public event EventHandler<string> LoginFailed;
+        public event EventHandler<List<UserClass>> UpdateUsers;
 
-#endregion
+        #endregion
 
 
 
-#region Обработчики 
+        #region Обработчики 
 
         private void LoginHandler(string InputMessage)
         { 
@@ -248,10 +254,16 @@ namespace bcsapp
             UpdateUserUI?.Invoke(this, String.Format("{0} {1} {2}", DataStorage.Instance.UserInformation.FirstName, DataStorage.Instance.UserInformation.MidleName, DataStorage.Instance.UserInformation.LastName));
         }
 
-#endregion
+        private void UsersListHandler(string InputMessage)
+        { 
+            DataStorage.Instance.UserList = JsonConvert.DeserializeObject<UsersClass>(InputMessage).Users;
+            UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
+        }
+
+        #endregion
 
 
-#region Обработчики ошибок
+        #region Обработчики ошибок
 
         private void LoginFailedHandler()
         {

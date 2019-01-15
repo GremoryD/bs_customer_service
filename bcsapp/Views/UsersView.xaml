@@ -15,7 +15,7 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="50*"/>
                     <RowDefinition Height="2*"/>
-                    <RowDefinition Height="25*"/> 
+                    <RowDefinition Height="25*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" Height="50">
 
@@ -38,6 +38,12 @@
                     <Button Content="&lt;"  Padding="0"  Grid.Row="1"   Grid.Column="1"/>
                 </Grid>
                 <GridSplitter HorizontalAlignment="Stretch"   Margin="0" Grid.Row="2" Width="auto" Background="White" MinHeight="5" MaxHeight="5"/>
+                <Image HorizontalAlignment="Left" Height="45" Margin="5,5,0,5" VerticalAlignment="Top" Width="45" Source="/bcsapp;component/Images/sign-add-icon.png"/>
+                <Image HorizontalAlignment="Left" Height="45" Margin="55,5,0,0" VerticalAlignment="Top" Width="45" Source="/bcsapp;component/Images/pencil-icon.png"/>
+                <Image HorizontalAlignment="Left" Height="45" Margin="105,5,0,0" VerticalAlignment="Top" Width="45" Source="/bcsapp;component/Images/sign-error-icon.png"/>
+                <Grid HorizontalAlignment="Center" Height="45" Margin="155,5,0,0" VerticalAlignment="Top" Width="619" Background="#FFE5D1D1">
+                    <TextBlock Text="Analitic" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
+                </Grid>
 
             </Grid>
         </dx:DXTabItem>

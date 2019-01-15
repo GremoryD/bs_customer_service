@@ -84,7 +84,7 @@ namespace bcsapp.ViewModels
             }
             else
             {
-                NavigationService.Instance.Navigate(new ClientViewModel());
+                 NavigationService.Instance.Navigate(new AplicationViewModel()); 
             }
         }
 

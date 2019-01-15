@@ -14,11 +14,13 @@ namespace bcsapp.Models
 
         public LoginClass Login { set; get; }
         public UserInformationClass UserInformation { set; get; }
+        public List<UserClass> UserList { set; get; } = new List<UserClass>();
+        public List<JobClass> RolesList { set; get; } = new List<JobClass>();
 
-
-        public   void ClearData()
+        public void ClearData()
         {
-
+            Login = null;
+            UserInformation = null;
         }
     }
 }

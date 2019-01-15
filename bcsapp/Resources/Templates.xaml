@@ -19,4 +19,7 @@
         <v:CustomersView/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:AplicationViewModel}">
+        <v:AplicationView/>
+    </DataTemplate>
 </ResourceDictionary>

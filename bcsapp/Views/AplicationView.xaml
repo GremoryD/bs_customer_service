@@ -1,0 +1,108 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:bcsapp.Views"
+             xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" xmlns:dxn="http://schemas.devexpress.com/winfx/2008/xaml/navbar" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" x:Class="bcsapp.Views.AplicationView"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" MinWidth="450" MinHeight="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="31*"/>
+            <ColumnDefinition Width="169*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="74*"/>
+            <RowDefinition Height="351*"/>
+            <RowDefinition Height="24*"/>
+        </Grid.RowDefinitions>
+
+        <dxr:RibbonControl x:Name="ribbonControl" Grid.ColumnSpan="2" RibbonStyle="Office2010" VerticalAlignment="Stretch" >
+            <dxmvvm:Interaction.Behaviors>
+                <dxmvvm:EventToCommand EventName="SelectedPageChanged"  Command="{Binding RibbonCommand}" CommandParameter="{Binding ElementName=ribbonControl}" />
+            </dxmvvm:Interaction.Behaviors>
+            <dxr:RibbonDefaultPageCategory >
+                <dxr:RibbonPage x:Name="UsersRibbonPage" Caption="Пользователи">
+                    <dxr:RibbonPageGroup Caption="Tools"/>
+                </dxr:RibbonPage>
+                <dxr:RibbonPage  x:Name="ClientsRibbonPage"  Caption="Клиенты">
+                    <dxr:RibbonPageGroup Caption="Tools"/>
+                </dxr:RibbonPage>
+                <dxr:RibbonPage  x:Name="SetingsRibbonPage"  Caption="Настроики">
+                    <dxr:RibbonPageGroup Caption="Tools"/>
+                </dxr:RibbonPage>
+            </dxr:RibbonDefaultPageCategory>
+        </dxr:RibbonControl>
+        <dxr:RibbonStatusBarControl Grid.Row="2" Grid.ColumnSpan="2"  >
+            <dxr:RibbonStatusBarControl.RightItems>
+                <dxb:BarButtonItem Content="{Binding ConectedState}"/>
+            </dxr:RibbonStatusBarControl.RightItems>
+            <dxr:RibbonStatusBarControl.LeftItems>
+                <dxb:BarButtonItem Content="{Binding UserName}"/>
+            </dxr:RibbonStatusBarControl.LeftItems>
+
+        </dxr:RibbonStatusBarControl>
+
+        <TabControl HorizontalAlignment="Stretch"  Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2">
+            <TabItem x:Name="UserTabItem" Visibility="Collapsed" IsSelected="{Binding SelectedUsers,FallbackValue=true}">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+                    <dxn:NavBarControl  Grid.Column="0">
+                        <dxn:NavBarGroup x:Name="navBarUsers" Header="Пользователи">
+                            <dxn:NavBarItem x:Name="navBarItemUsers" Content="Пользователи" Command="{Binding UsersGridCommand}"/>
+                            <dxn:NavBarItem x:Name="navBarItemRoles" Content="Роли" Command="{Binding RolesGridCommand}"/>
+                        </dxn:NavBarGroup>
+                    </dxn:NavBarControl>
+
+                    <TabControl Grid.Column="1"  >
+                        <TabItem x:Name="GridItemUsers" Visibility="Collapsed" IsSelected="{Binding UsersGridShow,FallbackValue=true}">
+                            <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableUserClass}"  AutoGenerateColumns="AddNew">
+                                <dxg:GridControl.View>
+                                    <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True" x:Name="gridView" AllowEditing="True" AutoWidth="True"/>
+                                </dxg:GridControl.View>
+                            </dxg:GridControl>
+                        </TabItem>
+                        <TabItem x:Name="GridItemRoles" Visibility="Collapsed"  IsSelected="{Binding RolesGridShow}">
+                            <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableRolesClass}"  AutoGenerateColumns="AddNew"/>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+
+            </TabItem>
+            <TabItem  x:Name="ClientsTabItem" Visibility="Collapsed"  IsSelected="{Binding SelectedClients}" >
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+                    <dxn:NavBarControl HorizontalAlignment="Stretch"   Grid.Column="0">
+                        <dxn:NavBarGroup x:Name="navBarClients" Header="Клиенты">
+                            <dxn:NavBarItem x:Name="navBarItemClients" Content="Клиенты"/>
+                        </dxn:NavBarGroup>
+                    </dxn:NavBarControl>
+
+
+                    <TabControl Grid.Column="1"  >
+                        <TabItem Visibility="Collapsed">
+                            <dxg:GridControl />
+                        </TabItem>
+                        <TabItem Visibility="Collapsed">
+                            <dxg:GridControl />
+                        </TabItem>
+                    </TabControl>
+
+                </Grid>
+            </TabItem>
+            <TabItem  x:Name="Setings" Visibility="Collapsed"  IsSelected="{Binding SelectedSetings}" >
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+
+
+    </Grid>
+</UserControl>
