@@ -1,5 +1,4 @@
-﻿using bcsapp.Controls;
-using bcsapp.Handlers;
+﻿using bcsapp.Controls; 
 using bcsapp.ViewModels;
 using CLProject;
 using Newtonsoft.Json;
@@ -18,6 +17,7 @@ namespace bcsapp.ViewModels
 {
     public class LoginViewModel : IViewModel, INotifyPropertyChanged
     {
+        public bool FullscreenView { get; set; } = false;
         //Вывод данных на форму
         public String LoginInput { get; set; }
         public String PasswordInput { get; set; }

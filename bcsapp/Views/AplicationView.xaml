@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:bcsapp.Views"
              xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" xmlns:dxn="http://schemas.devexpress.com/winfx/2008/xaml/navbar" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
-    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" x:Class="bcsapp.Views.AplicationView"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dxa="http://schemas.devexpress.com/winfx/2008/xaml/accordion" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" x:Class="bcsapp.Views.AplicationView"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" MinWidth="450" MinHeight="800">
     <Grid>
@@ -25,7 +25,11 @@
             </dxmvvm:Interaction.Behaviors>
             <dxr:RibbonDefaultPageCategory >
                 <dxr:RibbonPage x:Name="UsersRibbonPage" Caption="Пользователи">
-                    <dxr:RibbonPageGroup Caption="Tools"/>
+                    <dxr:RibbonPageGroup >
+                        <dxb:BarButtonItem Content="Добавить" Command="{Binding AddButtonCommand}" Glyph="{dx:DXImage Image=Add_32x32.png}" LargeGlyph="{dx:DXImage Image=Add_32x32.png}"/>
+                        <dxb:BarButtonItem Content="Редактировать" Command="{Binding EditButtonCommad}" Glyph="{dx:DXImage Image=EditName_32x32.png}" LargeGlyph="{dx:DXImage Image=EditName_32x32.png}"/>
+                        <dxb:BarButtonItem Content="Удалить" Command="{Binding DeleteButtonCommand}" Glyph="{dx:DXImage Image=Remove_32x32.png}" LargeGlyph="{dx:DXImage Image=Remove_32x32.png}"/>
+                    </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
                 <dxr:RibbonPage  x:Name="ClientsRibbonPage"  Caption="Клиенты">
                     <dxr:RibbonPageGroup Caption="Tools"/>
@@ -35,7 +39,7 @@
                 </dxr:RibbonPage>
             </dxr:RibbonDefaultPageCategory>
         </dxr:RibbonControl>
-        <dxr:RibbonStatusBarControl Grid.Row="2" Grid.ColumnSpan="2"  >
+        <dxr:RibbonStatusBarControl Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,0" VerticalAlignment="Stretch"  >
             <dxr:RibbonStatusBarControl.RightItems>
                 <dxb:BarButtonItem Content="{Binding ConectedState}"/>
             </dxr:RibbonStatusBarControl.RightItems>
@@ -46,7 +50,7 @@
         </dxr:RibbonStatusBarControl>
 
         <TabControl HorizontalAlignment="Stretch"  Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2">
-            <TabItem x:Name="UserTabItem" Visibility="Collapsed" IsSelected="{Binding SelectedUsers,FallbackValue=true}">
+            <TabItem x:Name="UserTabItem" Visibility="Collapsed" IsSelected="{Binding SelectedUsers, FallbackValue=true}">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -60,15 +64,36 @@
                     </dxn:NavBarControl>
 
                     <TabControl Grid.Column="1"  >
-                        <TabItem x:Name="GridItemUsers" Visibility="Collapsed" IsSelected="{Binding UsersGridShow,FallbackValue=true}">
-                            <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableUserClass}"  AutoGenerateColumns="AddNew">
-                                <dxg:GridControl.View>
-                                    <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True" x:Name="gridView" AllowEditing="True" AutoWidth="True"/>
-                                </dxg:GridControl.View>
-                            </dxg:GridControl>
+                        <TabItem x:Name="GridItemUsers" Visibility="Collapsed" IsSelected="{Binding UsersGridShow, FallbackValue=true}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="4*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableUserClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedUserClass, Mode=TwoWay}">
+                                    <dxg:GridControl.View>
+                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True" x:Name="gridView" AllowEditing="True" AutoWidth="True"/>
+                                        
+                                    </dxg:GridControl.View>
+                                </dxg:GridControl>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ListView Grid.Column="0" Margin="5"/>
+                                    <ListView Grid.Column="1" Margin="5"/>
+                                </Grid>
+                            </Grid>
                         </TabItem>
                         <TabItem x:Name="GridItemRoles" Visibility="Collapsed"  IsSelected="{Binding RolesGridShow}">
-                            <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableRolesClass}"  AutoGenerateColumns="AddNew"/>
+                            <Grid>
+                                <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableRolesClass}"  AutoGenerateColumns="AddNew">
+                                    <dxg:GridControl.View>
+                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="True" AutoWidth="True"/>
+                                    </dxg:GridControl.View>
+                                </dxg:GridControl>
+                            </Grid>
                         </TabItem>
                     </TabControl>
                 </Grid>

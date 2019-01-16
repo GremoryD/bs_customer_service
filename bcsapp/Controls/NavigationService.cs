@@ -50,8 +50,12 @@ namespace bcsapp.Controls
             {
                 viewModels.Remove(viewModels.Last());
                 currentWindow.Content = viewModels.Last();
-            });
 
+                if (viewModels.Last().FullscreenView)
+                    currentWindow.WindowState = WindowState.Maximized;
+                else
+                    currentWindow.WindowState = WindowState.Normal;
+            });
         }
 
         public void Navigate(IViewModel model)
@@ -60,8 +64,18 @@ namespace bcsapp.Controls
             {
                 currentWindow.Content = model;
                 viewModels.Add(model);
+
+                if (model.FullscreenView)
+                {
+                    currentWindow.WindowState = WindowState.Maximized;
+                    currentWindow.SizeToContent = SizeToContent.Manual;
+                }
+                else
+                {
+                    currentWindow.WindowState = WindowState.Normal;
+                    currentWindow.SizeToContent = SizeToContent.WidthAndHeight;
+                }
             });
         }
-
     }
 }

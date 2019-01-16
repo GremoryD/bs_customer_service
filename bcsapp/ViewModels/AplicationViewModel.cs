@@ -13,16 +13,26 @@ using System.ComponentModel;
 using ServerLib.JTypes.Server;
 using System.Collections.ObjectModel;
 using bcsapp.Models;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace bcsapp.ViewModels
 {
     public class AplicationViewModel : IViewModel, INotifyPropertyChanged
     {
+        public bool FullscreenView { get; set; } = true;
+
         public ICommand RibbonCommand { set; get; } 
 
 
         public ICommand UsersGridCommand { set; get; }
         public ICommand RolesGridCommand { set; get; }
+
+
+
+        public ICommand AddButtonCommand { set; get; }
+        public ICommand EditButtonCommad { set; get; }
+        public ICommand DeleteButtonCommand { set; get; }
 
         //Ribon Menu Buttons
         public bool SelectedUsers { set; get; } = true;
@@ -41,24 +51,105 @@ namespace bcsapp.ViewModels
 
         //Data Grid
         public ObservableCollection<UserClass> observableUserClass { set; get; } = new ObservableCollection<UserClass>(DataStorage.Instance.UserList);
+        public UserClass SelectedUserClass { set; get; }
         public ObservableCollection<JobClass> observableRolesClass { set; get; } = new ObservableCollection<JobClass>(DataStorage.Instance.RolesList);
 
         public AplicationViewModel()
         {
+            Stopwatch watcher = Stopwatch.StartNew();
+
             RibbonCommand = new SimpleCommand<RibbonControl>(UserRibbon);
             UsersGridCommand = new SimpleCommand(OpenUsersGrid);
             RolesGridCommand = new SimpleCommand(OpenRolesGrid);
+
+            AddButtonCommand = new SimpleCommand(AddButton);
+            EditButtonCommad = new SimpleCommand(EditButton);
+            DeleteButtonCommand = new SimpleCommand(DeleteButton);
+
+
             WebSocketController.Instance.UpdateUserUI += (_, __) => Instance_UpdateUserUI(__);
             WebSocketController.Instance.ConnectedState += (_, __) => Instance_ConnectedState(__);
             WebSocketController.Instance.UpdateUsers += (_, __) => Instance_UpdateUsers(__);
+            WebSocketController.Instance.UpdateJobs += (_, __) => Instance_UpdateJobs(__);
 
-            ServerLib.JTypes.Client.UsersClass usersClass = new ServerLib.JTypes.Client.UsersClass() {Token = DataStorage.Instance.Login.Token };
-            WebSocketController.Instance.OutputQueueAddObject(usersClass);
+            Task.Run(() =>
+            {
+                ServerLib.JTypes.Client.UsersClass usersClass = new ServerLib.JTypes.Client.UsersClass() { Token = DataStorage.Instance.Login.Token };
+                WebSocketController.Instance.OutputQueueAddObject(usersClass);
+                ServerLib.JTypes.Client.JobsClass jobsClass = new ServerLib.JTypes.Client.JobsClass { Token = DataStorage.Instance.Login.Token };
+                WebSocketController.Instance.OutputQueueAddObject(jobsClass);
+            });
+
+            var time = watcher.Elapsed;
+        }
+
+        private void DeleteButton()
+        {
+            if (UsersGridShow && SelectedUserClass!=null)
+            { 
+                if (System.Windows.MessageBox.Show("Удалить пользователя " + SelectedUserClass.FirstName + " " + SelectedUserClass.LastName + "?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                {
+
+                }
+                else
+                {
+
+                }
+
+            }
+            if (RolesGridShow)
+            {
+                if (System.Windows.MessageBox.Show("Удалить Роль " +  "?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                {
+
+                }
+                else
+                {
+
+                }
+
+            }
+
+
+
+        }
+
+        private void EditButton()
+        {
+            if (UsersGridShow && SelectedUserClass != null)
+            {
+                Window window = new Window();
+                window.Title = "Редактировать пользователя";
+                window.Content = new EditUserViewModel();
+                window.SizeToContent = SizeToContent.WidthAndHeight;
+                window.ShowDialog();
+            }
+
+        }
+
+        private void AddButton()
+        {
+            if (UsersGridShow)
+            {
+                Window window = new Window();
+                window.Title = "Новый пользователь";
+                window.Content = new AddUserViewModel();
+                window.SizeToContent = SizeToContent.WidthAndHeight;
+                window.ShowDialog();
+            }
         }
 
         private void Instance_UpdateUsers(List<UserClass> users)
         {
             observableUserClass = new ObservableCollection<UserClass>(users);
+            Notify("observableUserClass");
+
+        }
+
+        private void Instance_UpdateJobs(List<JobClass> jobs)
+        {
+            observableRolesClass = new ObservableCollection<JobClass>(jobs);
+            Notify("observableRolesClass");
         }
 
         private void OpenUsersGrid()

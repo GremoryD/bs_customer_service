@@ -5,21 +5,14 @@
                     xmlns:local="clr-namespace:bcsapp.Resources">
     <DataTemplate DataType="{x:Type vm:LoginViewModel}">
         <v:LoginView></v:LoginView>
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:ClientViewModel}">
-        <v:ClientView/>
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:UserViewModel}">
-        <v:UsersView />
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
-        <v:SettingsView />
     </DataTemplate> 
-    <DataTemplate DataType="{x:Type vm:CustomersViewModel}">
-        <v:CustomersView/>
-    </DataTemplate>
-
     <DataTemplate DataType="{x:Type vm:AplicationViewModel}">
         <v:AplicationView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AddUserViewModel}">
+        <v:AddUserView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:EditUserViewModel}">
+        <v:EditUserView/>
     </DataTemplate>
 </ResourceDictionary>

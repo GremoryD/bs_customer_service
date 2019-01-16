@@ -52,13 +52,7 @@ namespace bcsapp
         /// Выходная очередь сообщений
         /// </summary>
         private ConcurrentQueue<string> OutputQueue = new ConcurrentQueue<string>();
-
-        /// <summary>
-        /// Признак аутентификации пользователя
-        /// </summary>
-        public bool IsAuthenticated { get { return Session.Login.UserId > 0; } }
-
-        Handlers.SessionClass Session;
+         
         private static WebSocketController StaticInstance;
 
         public WebSocketController()
@@ -68,8 +62,7 @@ namespace bcsapp
             WebSocketClient.OnMessage += OnWebSocketMessage;
             ConnectToWebSocketServerThread = new Thread(ConnectToWebSocketServer);
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
-            OutputQueueProcessing = new Thread(OutputQueueProcessingThread);
-            Session = new Handlers.SessionClass();
+            OutputQueueProcessing = new Thread(OutputQueueProcessingThread); 
         }
 
         /// <summary>
@@ -149,14 +142,16 @@ namespace bcsapp
                                 case ServerLib.JTypes.Enums.Commands.users:
                                         UsersListHandler(InputMessage);
                                     break;
+                                case ServerLib.JTypes.Enums.Commands.jobs:
+                                    JobssListHandler(InputMessage);
+                                    break;
                             }
                         }
                         else if (Message.State == ServerLib.JTypes.Enums.ResponseState.error)
                         {
                             switch (Message.Command)
                             {
-                                case ServerLib.JTypes.Enums.Commands.login:
-                                    // Убрать вызов событий в обработчик! 
+                                case ServerLib.JTypes.Enums.Commands.login: 
                                     switch (JsonConvert.DeserializeObject<ExceptionClass>(InputMessage).Code)
                                     {
                                         case ServerLib.JTypes.Enums.ErrorCodes.IncorrectLoginOrPassword:
@@ -165,8 +160,7 @@ namespace bcsapp
                                         default: 
                                             break;
                                     }
-                                    Session.LoginErrorProcessing(JsonConvert.DeserializeObject<ExceptionClass>(InputMessage));
-                                    break;
+                                     break;
                             }
                         }
                         else
@@ -235,7 +229,7 @@ namespace bcsapp
         public event EventHandler<LoginClass> LoginDone;
         public event EventHandler<string> LoginFailed;
         public event EventHandler<List<UserClass>> UpdateUsers;
-
+        public event EventHandler<List<JobClass>> UpdateJobs;
         #endregion
 
 
@@ -258,6 +252,12 @@ namespace bcsapp
         { 
             DataStorage.Instance.UserList = JsonConvert.DeserializeObject<UsersClass>(InputMessage).Users;
             UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
+        }
+
+        private void JobssListHandler(string InputMessage)
+        {
+            DataStorage.Instance.RolesList = JsonConvert.DeserializeObject<JobsClass>(InputMessage).Jobs;
+            UpdateJobs?.Invoke(this, DataStorage.Instance.RolesList);
         }
 
         #endregion

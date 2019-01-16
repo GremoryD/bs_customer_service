@@ -1,0 +1,31 @@
+﻿<UserControl xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"  x:Class="bcsapp.Views.AddUserView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:bcsapp.Views"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             MinWidth="350"
+             MinHeight="300"
+             mc:Ignorable="d" >
+    <Grid Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/> 
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Логин" TextWrapping="Wrap"  TextAlignment="Center" VerticalAlignment="Center"/>
+        <dxe:TextEdit Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding UserLogin}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Пароль" TextWrapping="Wrap"  TextAlignment="Center" VerticalAlignment="Center"/>
+        <dxe:TextEdit Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Text="{Binding UserPassword}"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Фамилия" TextWrapping="Wrap"  TextAlignment="Center" VerticalAlignment="Center"/>
+        <dxe:TextEdit Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Text="{Binding UserSurname}"/>
+        <dx:SimpleButton Grid.Column="0" Grid.Row="3" Content="Cancel" Command="{Binding CancelCommand}"/>
+        <dx:SimpleButton Grid.Column="1" Grid.Row="3" Content="Add"  Command="{Binding AddUserCommand}"/>
+    </Grid>
+</UserControl>

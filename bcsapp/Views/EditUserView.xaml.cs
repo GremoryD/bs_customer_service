@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace bcsapp.Views
 {
     /// <summary>
-    /// Логика взаимодействия для CustomersView.xaml
+    /// Логика взаимодействия для EditUserView.xaml
     /// </summary>
-    public partial class CustomersView : UserControl
+    public partial class EditUserView : UserControl
     {
-        public CustomersView()
+        public EditUserView()
         {
             InitializeComponent();
         }
