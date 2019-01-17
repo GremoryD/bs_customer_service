@@ -249,15 +249,30 @@ namespace bcsapp
         }
 
         private void UsersListHandler(string InputMessage)
-        { 
-            DataStorage.Instance.UserList = JsonConvert.DeserializeObject<UsersClass>(InputMessage).Users;
+        {
+            if (DataStorage.Instance.UserList!=null)
+            {
+                DataStorage.Instance.UserList = JsonConvert.DeserializeObject<UsersClass>(InputMessage).Users;
+            }
+            else
+            { 
+
+            }
             UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
         }
 
         private void JobssListHandler(string InputMessage)
         {
-            DataStorage.Instance.RolesList = JsonConvert.DeserializeObject<JobsClass>(InputMessage).Jobs;
-            UpdateJobs?.Invoke(this, DataStorage.Instance.RolesList);
+            if (DataStorage.Instance.JobList!=null)
+            {
+                DataStorage.Instance.JobList = JsonConvert.DeserializeObject<JobsClass>(InputMessage).Jobs;
+
+            }
+            else
+            {
+
+            }
+            UpdateJobs?.Invoke(this, DataStorage.Instance.JobList);
         }
 
         #endregion

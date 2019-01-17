@@ -21,7 +21,7 @@ namespace bcsapp.ViewModels
     public class AplicationViewModel : IViewModel, INotifyPropertyChanged
     {
         public bool FullscreenView { get; set; } = true;
-
+        public bool UserInterface { set; get; } = true;
         public ICommand RibbonCommand { set; get; } 
 
 
@@ -52,7 +52,7 @@ namespace bcsapp.ViewModels
         //Data Grid
         public ObservableCollection<UserClass> observableUserClass { set; get; } = new ObservableCollection<UserClass>(DataStorage.Instance.UserList);
         public UserClass SelectedUserClass { set; get; }
-        public ObservableCollection<JobClass> observableRolesClass { set; get; } = new ObservableCollection<JobClass>(DataStorage.Instance.RolesList);
+        public ObservableCollection<JobClass> observableJobsClass { set; get; } = new ObservableCollection<JobClass>(DataStorage.Instance.JobList);
 
         public AplicationViewModel()
         {
@@ -120,7 +120,7 @@ namespace bcsapp.ViewModels
             {
                 Window window = new Window();
                 window.Title = "Редактировать пользователя";
-                window.Content = new EditUserViewModel();
+                window.Content = new AddUserViewModel(SelectedUserClass);
                 window.SizeToContent = SizeToContent.WidthAndHeight;
                 window.ShowDialog();
             }
@@ -148,18 +148,22 @@ namespace bcsapp.ViewModels
 
         private void Instance_UpdateJobs(List<JobClass> jobs)
         {
-            observableRolesClass = new ObservableCollection<JobClass>(jobs);
+            observableJobsClass = new ObservableCollection<JobClass>(jobs);
             Notify("observableRolesClass");
         }
 
         private void OpenUsersGrid()
         {
+            UserInterface = true;
+            Notify("UserInterface");
             UsersGridShow = true;
             Notify("UsersGridShow");
         }
 
         private void OpenRolesGrid()
         {
+            UserInterface = false;
+            Notify("UserInterface");
             RolesGridShow = true;
             Notify("RolesGridShow");
         }

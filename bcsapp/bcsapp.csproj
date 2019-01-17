@@ -93,7 +93,6 @@
     <Compile Include="Models\DataStorage.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\AplicationViewModel.cs" />
-    <Compile Include="ViewModels\EditUserViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="Views\AddUserView.xaml.cs">
@@ -101,9 +100,6 @@
     </Compile>
     <Compile Include="Views\AplicationView.xaml.cs">
       <DependentUpon>AplicationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EditUserView.xaml.cs">
-      <DependentUpon>EditUserView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
@@ -139,10 +135,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AplicationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\EditUserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -218,6 +210,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\pencil-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Lock-Unlock-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Lock-Lock-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

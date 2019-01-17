@@ -30,6 +30,10 @@
                         <dxb:BarButtonItem Content="Редактировать" Command="{Binding EditButtonCommad}" Glyph="{dx:DXImage Image=EditName_32x32.png}" LargeGlyph="{dx:DXImage Image=EditName_32x32.png}"/>
                         <dxb:BarButtonItem Content="Удалить" Command="{Binding DeleteButtonCommand}" Glyph="{dx:DXImage Image=Remove_32x32.png}" LargeGlyph="{dx:DXImage Image=Remove_32x32.png}"/>
                     </dxr:RibbonPageGroup>
+                    <dxr:RibbonPageGroup IsVisible="{Binding UserInterface}">
+                        <dxb:BarButtonItem Content="Заблокировать" Glyph="/bcsapp;component/Images/Lock-Lock-icon.png" Command="{Binding BlockCommand}" />
+                        <dxb:BarButtonItem Content="Разблокировать" Glyph="/bcsapp;component/Images/Lock-Unlock-icon.png" Command="{Binding UnBlockButtonCommand}" />
+                    </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
                 <dxr:RibbonPage  x:Name="ClientsRibbonPage"  Caption="Клиенты">
                     <dxr:RibbonPageGroup Caption="Tools"/>
@@ -56,7 +60,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="4*"/>
                     </Grid.ColumnDefinitions>
-                    <dxn:NavBarControl  Grid.Column="0">
+                    <dxn:NavBarControl  Grid.Column="0" Background="White">
                         <dxn:NavBarGroup x:Name="navBarUsers" Header="Пользователи">
                             <dxn:NavBarItem x:Name="navBarItemUsers" Content="Пользователи" Command="{Binding UsersGridCommand}"/>
                             <dxn:NavBarItem x:Name="navBarItemRoles" Content="Роли" Command="{Binding RolesGridCommand}"/>
