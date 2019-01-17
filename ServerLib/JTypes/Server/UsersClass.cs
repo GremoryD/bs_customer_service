@@ -14,9 +14,8 @@ namespace ServerLib.JTypes.Server
         [JsonProperty(PropertyName = "users", Required = Required.Always)]
         public List<UserClass> Users;
 
-        public UsersClass()
+        public UsersClass() : base(Enums.Commands.users)
         {
-            Command = Enums.Commands.users;
             Users = new List<UserClass>();
         }
     }

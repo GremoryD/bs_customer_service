@@ -5,9 +5,6 @@
     /// </summary>
     public class LogoutClass : BaseResponseClass
     {
-        public LogoutClass()
-        {
-            Command = Enums.Commands.logout;
-        }
+        public LogoutClass() : base(Enums.Commands.logout) { }
     }
 }

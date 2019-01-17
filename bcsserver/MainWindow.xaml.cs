@@ -110,7 +110,7 @@ namespace bcsserver
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserInformation", "USR.GET_USER_INFORMATION(:Token, :UserId, :FirstName, :LastName, :MidleName, :Job, :Active, :State, :ErrorText)", "Чтение информации и пользователе");
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Users", "USR.GET_USERS(:Token)", "Чтение списка пользователей");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserAdd", "USR.USER_CREATE(:Token, :Login, :Password, :InFirstName, :InLastName, :InMidleName, :InActive, :JobId, :AccessUserId, :Job, :State, :ErrorText)", "Добавление пользователя");
-            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserEdit", "USR.USER_UPDATE(:Token, :UserId, :Password, :InFirstName, :InLastName, :InMidleName, :InActive, :JobId, :Job, :State, :ErrorText)", "Изменение пользователя");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserEdit", "USR.USER_UPDATE(:Token, :UserId, :InFirstName, :InLastName, :InMidleName, :InActive, :JobId, :Job, :State, :ErrorText)", "Изменение пользователя");
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Jobs", "USR.GET_JOBS(:Token)", "Чтение списка должностей пользователей");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "JobAdd", "USR.JOB_CREATE(:Token, :JobName, :NewId, :State, :ErrorText)", "Добавление должности пользователей");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "JobEdit", "USR.JOB_UPDATE(:Token, :JobName, :JobId, :State, :ErrorText)", "Изменение должности пользователей");

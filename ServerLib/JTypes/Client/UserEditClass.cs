@@ -11,14 +11,8 @@ namespace ServerLib.JTypes.Client
         /// <summary>
         /// Идентификатор пользователя
         /// </summary>
-        [JsonProperty(PropertyName = "id", Required = Required.Always)]
-        public long Id { get; set; }
-
-        /// <summary>
-        /// Пароль
-        /// </summary>
-        [JsonProperty(PropertyName = "password", Required = Required.Always)]
-        public string Password { get; set; } = null;
+        [JsonProperty(PropertyName = "user_id", Required = Required.Always)]
+        public long UserID { get; set; }
 
         /// <summary>
         /// Имя

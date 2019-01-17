@@ -10,7 +10,7 @@ namespace ServerLib.JTypes.Server
         /// Команда объекта выдачи
         /// </summary>
         [JsonProperty("command", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
-        public Enums.Commands Command { get; set; }
+        public Commands Command { get; set; }
 
         /// <summary>
         /// Статус обработки запроса к базе данных
@@ -23,5 +23,12 @@ namespace ServerLib.JTypes.Server
         /// </summary>
         [JsonProperty("description", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public string Description { get; set; } = null;
+
+        public BaseResponseClass(Commands ACommand)
+        {
+            Command = ACommand;
+        }
+
+        public BaseResponseClass() { }
     }
 }

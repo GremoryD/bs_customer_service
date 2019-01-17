@@ -91,7 +91,7 @@ namespace bcsapp.ViewModels
         {
             ServerLib.JTypes.Client.UserEditClass addUser = new ServerLib.JTypes.Client.UserEditClass()
             {
-                Id = user.Id,
+                UserID = user.Id,
                 FirstName = UserName,
                 LastName = UserSurname,
                 MidleName = UserMiddleName,
