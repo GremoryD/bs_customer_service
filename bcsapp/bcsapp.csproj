@@ -172,7 +172,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Class Library Project\CLProject\CLProject.csproj">
+    <ProjectReference Include="..\..\CLProject\CLProject\CLProject.csproj">
       <Project>{6d0bbdfc-621d-4cf6-893f-9a9d1f102104}</Project>
       <Name>CLProject</Name>
     </ProjectReference>

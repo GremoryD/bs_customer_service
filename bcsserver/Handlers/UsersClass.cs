@@ -38,7 +38,7 @@ namespace bcsserver.Handlers
             {
                 ServerLib.JTypes.Server.UserClass User = new ServerLib.JTypes.Server.UserClass
                 {
-                    Id = UsersTable.AsInt64(row, "ID"),
+                    UserID = UsersTable.AsInt64(row, "ID"),
                     Login = UsersTable.AsString(row, "LOGIN"),
                     FirstName = UsersTable.AsString(row, "FIRST_NAME"),
                     LastName = UsersTable.AsString(row, "LAST_NAME"),
@@ -48,19 +48,19 @@ namespace bcsserver.Handlers
                     Active = (UserActive)UsersTable.AsInt32(row, "ACTIVE")
                 };
 
-                if (UsersCollection.TryGetValue(User.Id, out ServerLib.JTypes.Server.UserClass ExistUser))
+                if (UsersCollection.TryGetValue(User.UserID, out ServerLib.JTypes.Server.UserClass ExistUser))
                 {
                     if (ExistUser.Hash != User.Hash)
                     {
                         User.Command = ListCommands.edit;
-                        UsersCollection.TryUpdate(User.Id, User, ExistUser);
+                        UsersCollection.TryUpdate(User.UserID, User, ExistUser);
                         UsersList.Users.Add(User);
                     }
                 }
                 else
                 {
                     User.Command = ListCommands.add;
-                    UsersCollection.TryAdd(User.Id, User);
+                    UsersCollection.TryAdd(User.UserID, User);
                     UsersList.Users.Add(User);
                 }
             }
@@ -71,7 +71,7 @@ namespace bcsserver.Handlers
 
                 foreach (System.Data.DataRow row in UsersTable.Table.Rows)
                 {
-                    if (User.Value.Id == UsersTable.AsInt64(row, "ID"))
+                    if (User.Value.UserID == UsersTable.AsInt64(row, "ID"))
                     {
                         IsExist = true;
                         break;
@@ -82,7 +82,7 @@ namespace bcsserver.Handlers
                 {
                     User.Value.Command = ListCommands.delete;
                     UsersList.Users.Add(User.Value);
-                    UsersCollection.TryRemove(User.Value.Id, out ServerLib.JTypes.Server.UserClass DeletingUser);
+                    UsersCollection.TryRemove(User.Value.UserID, out ServerLib.JTypes.Server.UserClass DeletingUser);
                 }
             }
 

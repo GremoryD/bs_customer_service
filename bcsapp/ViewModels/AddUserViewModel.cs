@@ -52,9 +52,9 @@ namespace bcsapp.ViewModels
             UserSurname = user.LastName;
             UserName = user.FirstName;
             UserMiddleName = user.MidleName;
-            if (observableJobsClass.Where(x => x.Id == user.Id).Count<JobClass>()>0)
+            if (observableJobsClass.Where(x => x.Id == user.UserID).Count<JobClass>()>0)
             {
-                SelectedJob = observableJobsClass.Where(x => x.Id == user.Id).Last<JobClass>();
+                SelectedJob = observableJobsClass.Where(x => x.Id == user.UserID).Last<JobClass>();
 
             }
             EditAddButton = "Изменить";
@@ -91,7 +91,7 @@ namespace bcsapp.ViewModels
         {
             ServerLib.JTypes.Client.UserEditClass addUser = new ServerLib.JTypes.Client.UserEditClass()
             {
-                UserID = user.Id,
+                UserID = user.UserID,
                 FirstName = UserName,
                 LastName = UserSurname,
                 MidleName = UserMiddleName,

@@ -12,8 +12,8 @@ namespace ServerLib.JTypes.Server
         /// <summary>
         /// Идентификатор пользователя
         /// </summary>
-        [JsonProperty(PropertyName = "id", Required = Required.Always)]
-        public long Id { get; set; } = 0;
+        [JsonProperty(PropertyName = "user_id", Required = Required.Always)]
+        public long UserID { get; set; } = 0;
 
         /// <summary>
         /// Логин
@@ -58,7 +58,7 @@ namespace ServerLib.JTypes.Server
         public Enums.UserActive Active { get; set; }
 
         /// <summary>
-        /// Команда, которую необходимо выполнить на стороне клиента с данным пользователем
+        /// Команда, которую необходимо выполнить на стороне клиента с данным объектом
         /// </summary>
         [JsonProperty(PropertyName = "command", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
         public JTypes.Enums.ListCommands Command { get; set; }
@@ -71,7 +71,7 @@ namespace ServerLib.JTypes.Server
         {
             get
             {
-                return Utils.SHA256Base64(Id.ToString() + Login + FirstName + LastName + MidleName + Job + Active.ToString());
+                return Utils.SHA256Base64(UserID.ToString() + Login + FirstName + LastName + MidleName + Job + Active.ToString());
             }
         }
     }

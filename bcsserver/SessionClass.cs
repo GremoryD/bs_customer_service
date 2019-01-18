@@ -185,6 +185,8 @@ namespace bcsserver
                                                 case Commands.job_edit:
                                                     Jobs.Edit(Request);
                                                     break;
+                                                case Commands.users_roles:
+                                                    break;
                                             }
                                         }
                                         else
