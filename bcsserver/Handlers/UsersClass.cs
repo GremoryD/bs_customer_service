@@ -119,7 +119,7 @@ namespace bcsserver.Handlers
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UserAddClass
                     {
-                        Id = Convert.ToInt64(Params.ParameterByName("AccessUserId").Value.ToString()),
+                        UserID = Convert.ToInt64(Params.ParameterByName("AccessUserId").Value.ToString()),
                         Login = Request.Login,
                         FirstName = Request.FirstName,
                         LastName = Request.LastName,
@@ -151,8 +151,7 @@ namespace bcsserver.Handlers
                 ServerLib.JTypes.Client.UserEditClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UserEditClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
-                Params.CreateParameterValue("UserId", Request.Id);
-                Params.CreateParameterValue("Password", Request.Password);
+                Params.CreateParameterValue("UserId", Request.UserID);
                 Params.CreateParameterValue("InFirstName", Request.FirstName);
                 Params.CreateParameterValue("InLastName", Request.LastName);
                 Params.CreateParameterValue("InMidleName", Request.MidleName);
@@ -167,7 +166,7 @@ namespace bcsserver.Handlers
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UserEditClass
                     {
-                        Id = Convert.ToInt64(Params.ParameterByName("UserId").Value.ToString()),
+                        UserID = Convert.ToInt64(Params.ParameterByName("UserId").Value.ToString()),
                         FirstName = Request.FirstName,
                         LastName = Request.LastName,
                         MidleName = Request.MidleName,

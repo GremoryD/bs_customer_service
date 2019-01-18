@@ -14,9 +14,8 @@ namespace ServerLib.JTypes.Server
         [JsonProperty(PropertyName = "jobs", Required = Required.Always)]
         public List<JobClass> Jobs;
 
-        public JobsClass()
+        public JobsClass() : base(Enums.Commands.jobs)
         {
-            Command = Enums.Commands.jobs;
             Jobs = new List<JobClass>();
         }
     }

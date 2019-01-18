@@ -26,9 +26,6 @@ namespace ServerLib.JTypes.Server
         [JsonProperty(PropertyName = "active", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
         public Enums.UserActive Active { get; set; }
 
-        public LoginClass()
-        {
-            Command = Enums.Commands.login;
-        }
+        public LoginClass() : base(Enums.Commands.login) { }
     }
 }

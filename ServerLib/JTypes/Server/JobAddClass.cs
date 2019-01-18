@@ -19,9 +19,6 @@ namespace ServerLib.JTypes.Server
         [JsonProperty(PropertyName = "job_name", Required = Required.Always)]
         public string JobName { get; set; } = null;
 
-        public JobAddClass()
-        {
-            Command = Enums.Commands.job_add;
-        }
+        public JobAddClass() : base(Enums.Commands.job_add) { }
     }
 }
