@@ -12,7 +12,7 @@ namespace ServerLib.JTypes.Client
         /// Команда запроса
         /// </summary>
         [JsonProperty("command", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
-        public Enums.Commands Command { get; set; }
+        public Enums.Commands Command { get; set; } = Enums.Commands.login;
 
         /// <summary>
         /// Логин
@@ -25,10 +25,5 @@ namespace ServerLib.JTypes.Client
         /// </summary>
         [JsonProperty("password", Required = Required.Always)]
         public string Password { get; set; } = null;
-
-        public Login()
-        {
-            Command = Enums.Commands.login;
-        }
     }
 }

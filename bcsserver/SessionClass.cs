@@ -1,8 +1,8 @@
 ﻿using System;
-using CLProject;
-using System.Threading;
 using System.Collections.Concurrent;
+using System.Threading;
 using Newtonsoft.Json;
+using CLProject;
 using ServerLib.JTypes.Server;
 using ServerLib.JTypes.Enums;
 
@@ -46,7 +46,7 @@ namespace bcsserver
         /// <summary>
         /// Признак аутентификации пользователя
         /// </summary>
-        public bool IsAuthenticated { get { return Login.UserId > 0; } }
+        public bool IsAuthenticated { get { return Login.ID > 0; } }
 
         /// <summary>
         /// Поток обработки входной очереди
@@ -84,6 +84,11 @@ namespace bcsserver
         public Handlers.JobsClass Jobs;
 
         /// <summary>
+        /// Обработчик списка ролей пользователей
+        /// </summary>
+        public Handlers.HandlerUsersRolesClass UsersRoles;
+
+        /// <summary>
         /// Конструктор класса сессии пользователя
         /// </summary>
         /// <param name="AWebSocketSessionIDSessionID">Идентификатор сессии WebSocket-сервера</param>
@@ -107,6 +112,7 @@ namespace bcsserver
 
             Users = new Handlers.UsersClass(this);
             Jobs = new Handlers.JobsClass(this);
+            UsersRoles = new Handlers.HandlerUsersRolesClass(this);
 
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
             OutputQueueProcessing = new Thread(OutputQueueProcessingThread);
@@ -171,7 +177,7 @@ namespace bcsserver
                                                     Users.SendData();
                                                     break;
                                                 case Commands.user_add:
-                                                    Users.Add(ARequest: Request);
+                                                    Users.Add(Request);
                                                     break;
                                                 case Commands.user_edit:
                                                     Users.Edit(Request);
@@ -186,6 +192,13 @@ namespace bcsserver
                                                     Jobs.Edit(Request);
                                                     break;
                                                 case Commands.users_roles:
+                                                    UsersRoles.SendData();
+                                                    break;
+                                                case Commands.users_roles_add:
+                                                    UsersRoles.Add(Request);
+                                                    break;
+                                                case Commands.users_roles_edit:
+                                                    UsersRoles.Edit(Request);
                                                     break;
                                             }
                                         }

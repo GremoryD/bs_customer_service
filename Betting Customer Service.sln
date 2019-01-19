@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerLib", "ServerLib\Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bcsapp", "bcsapp\bcsapp.csproj", "{435EFB2C-BCE3-4A7F-96D3-6B7F6A3BE7E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLProject", "..\CLProject\CLProject\CLProject.csproj", "{6D0BBDFC-621D-4CF6-893F-9A9D1F102104}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLProject", "..\Class Library Project\CLProject\CLProject.csproj", "{6D0BBDFC-621D-4CF6-893F-9A9D1F102104}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

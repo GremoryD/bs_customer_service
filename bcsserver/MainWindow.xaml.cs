@@ -103,6 +103,8 @@ namespace bcsserver
             Project.Database.Parameters.CreateParameter("Token", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Ключ доступа");
             Project.Database.Parameters.CreateParameter("State", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Статус завершения SQL-запроса", 20);
             Project.Database.Parameters.CreateParameter("ErrorText", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Текст ошибки выполнения SQL-запроса", 500);
+            Project.Database.Parameters.CreateParameter("Name", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Наименование", 200);
+            Project.Database.Parameters.CreateParameter("Description", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Описание", 200);
 
             Project.Database.Commands.CreateCommand("conn", RequestType.Reader, "ConnectionCheck", "SELECT 1 FROM DUAL", "Проверка соединения с базой данных");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Login", "USR.LOGIN(:WebSocketID, :Login, :Password, :AccessToken, :AccessUserId, :Active)", "Аутентификация пользователя");
@@ -114,6 +116,9 @@ namespace bcsserver
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Jobs", "USR.GET_JOBS(:Token)", "Чтение списка должностей пользователей");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "JobAdd", "USR.JOB_CREATE(:Token, :JobName, :NewId, :State, :ErrorText)", "Добавление должности пользователей");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "JobEdit", "USR.JOB_UPDATE(:Token, :JobName, :JobId, :State, :ErrorText)", "Изменение должности пользователей");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Roles", "USR.GET_ROLES_LIST(:Token)", "Чтение списка ролей пользователей");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "RoleAdd", "USR.USER_ROLES_LIST_ADD(:Token, :Name, :Description, :NewId, :State, :ErrorText)", "Добавление роли пользователей");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "RoleEdit", "USR.USER_ROLES_LIST_WRITE(:Token, :Name, :Description, :InId, :State, :ErrorText)", "Изменение роли пользователей");
 
             DatabaseCheck.Start();
             SetSettingsButtons();

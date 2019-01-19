@@ -5,9 +5,6 @@
     /// </summary>
     public class UsersClass : BaseRequestClass
     {
-        public UsersClass()
-        {
-            Command = Enums.Commands.users;
-        }
+        public UsersClass() : base(Enums.Commands.users) { }
     }
 }

@@ -11,17 +11,14 @@ namespace ServerLib.JTypes.Client
         /// Идетификатор должности
         /// </summary>
         [JsonProperty(PropertyName = "id", Required = Required.Always)]
-        public long Id { get; set; } = 0;
+        public long ID { get; set; } = 0;
 
         /// <summary>
         /// Наименование должности
         /// </summary>
-        [JsonProperty(PropertyName = "job_name", Required = Required.Always)]
-        public string JobName { get; set; } = null;
+        [JsonProperty(PropertyName = "name", Required = Required.Always)]
+        public string Name { get; set; } = null;
 
-        public JobEditClass()
-        {
-            Command = Enums.Commands.job_edit;
-        }
+        public JobEditClass() : base(Enums.Commands.job_edit) { }
     }
 }

@@ -14,19 +14,19 @@ namespace ServerLib.JTypes.Server
         /// Идетификатор должности
         /// </summary>
         [JsonProperty(PropertyName = "id", Required = Required.Always)]
-        public long Id { get; set; } = 0;
+        public long ID { get; set; } = 0;
 
         /// <summary>
         /// Наименование должности
         /// </summary>
-        [JsonProperty(PropertyName = "job_name", Required = Required.Always)]
-        public string JobName { get; set; } = null;
+        [JsonProperty(PropertyName = "name", Required = Required.Always)]
+        public string Name { get; set; } = null;
 
         /// <summary>
         /// Команда, которую необходимо выполнить на стороне клиента с данным объектом
         /// </summary>
         [JsonProperty(PropertyName = "command", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
-        public JTypes.Enums.ListCommands Command { get; set; }
+        public Enums.ListCommands Command { get; set; }
 
         /// <summary>
         /// Hash-код объекта
@@ -36,7 +36,7 @@ namespace ServerLib.JTypes.Server
         {
             get
             {
-                return Utils.SHA256Base64(Id.ToString() + JobName);
+                return Utils.SHA256Base64(ID.ToString() + Name);
             }
         }
     }

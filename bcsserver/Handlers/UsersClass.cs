@@ -38,29 +38,29 @@ namespace bcsserver.Handlers
             {
                 ServerLib.JTypes.Server.UserClass User = new ServerLib.JTypes.Server.UserClass
                 {
-                    UserID = UsersTable.AsInt64(row, "ID"),
+                    ID = UsersTable.AsInt64(row, "ID"),
                     Login = UsersTable.AsString(row, "LOGIN"),
                     FirstName = UsersTable.AsString(row, "FIRST_NAME"),
                     LastName = UsersTable.AsString(row, "LAST_NAME"),
                     MidleName = UsersTable.AsString(row, "MIDLE_NAME"),
-                    JobId = UsersTable.AsInt64(row, "POSITION_ID"),
-                    Job = UsersTable.AsString(row, "POSITION"),
+                    JobID = UsersTable.AsInt64(row, "POSITION_ID"),
+                    JobName = UsersTable.AsString(row, "POSITION"),
                     Active = (UserActive)UsersTable.AsInt32(row, "ACTIVE")
                 };
 
-                if (UsersCollection.TryGetValue(User.UserID, out ServerLib.JTypes.Server.UserClass ExistUser))
+                if (UsersCollection.TryGetValue(User.ID, out ServerLib.JTypes.Server.UserClass ExistUser))
                 {
                     if (ExistUser.Hash != User.Hash)
                     {
                         User.Command = ListCommands.edit;
-                        UsersCollection.TryUpdate(User.UserID, User, ExistUser);
+                        UsersCollection.TryUpdate(User.ID, User, ExistUser);
                         UsersList.Users.Add(User);
                     }
                 }
                 else
                 {
                     User.Command = ListCommands.add;
-                    UsersCollection.TryAdd(User.UserID, User);
+                    UsersCollection.TryAdd(User.ID, User);
                     UsersList.Users.Add(User);
                 }
             }
@@ -71,7 +71,7 @@ namespace bcsserver.Handlers
 
                 foreach (System.Data.DataRow row in UsersTable.Table.Rows)
                 {
-                    if (User.Value.UserID == UsersTable.AsInt64(row, "ID"))
+                    if (User.Value.ID == UsersTable.AsInt64(row, "ID"))
                     {
                         IsExist = true;
                         break;
@@ -82,7 +82,7 @@ namespace bcsserver.Handlers
                 {
                     User.Value.Command = ListCommands.delete;
                     UsersList.Users.Add(User.Value);
-                    UsersCollection.TryRemove(User.Value.UserID, out ServerLib.JTypes.Server.UserClass DeletingUser);
+                    UsersCollection.TryRemove(User.Value.ID, out ServerLib.JTypes.Server.UserClass DeletingUser);
                 }
             }
 
@@ -96,8 +96,9 @@ namespace bcsserver.Handlers
         /// Обработчик добавления пользователя
         /// </summary>
         /// <param name="ARequest">Запрос в формате JSON-объекта</param>
-        public override void AddProcessing(string ARequest)
+        public override bool AddProcessing(string ARequest)
         {
+            bool ProcessingSuccess = false;
             try
             {
                 ServerLib.JTypes.Client.UserAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UserAddClass>(ARequest);
@@ -109,7 +110,7 @@ namespace bcsserver.Handlers
                 Params.CreateParameterValue("InLastName", Request.LastName);
                 Params.CreateParameterValue("InMidleName", Request.MidleName);
                 Params.CreateParameterValue("InActive", Request.Active);
-                Params.CreateParameterValue("JobId", Request.JobId);
+                Params.CreateParameterValue("JobId", Request.JobID);
                 Params.CreateParameterValue("AccessUserId");
                 Params.CreateParameterValue("Job");
                 Params.CreateParameterValue("State");
@@ -119,15 +120,16 @@ namespace bcsserver.Handlers
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UserAddClass
                     {
-                        UserID = Convert.ToInt64(Params.ParameterByName("AccessUserId").Value.ToString()),
+                        ID = Convert.ToInt64(Params.ParameterByName("AccessUserId").Value.ToString()),
                         Login = Request.Login,
                         FirstName = Request.FirstName,
                         LastName = Request.LastName,
                         MidleName = Request.MidleName,
                         Active = Request.Active,
-                        JobId = Request.JobId,
-                        Job = Params.ParameterByName("Job").Value.ToString()
+                        JobID = Request.JobID,
+                        JobName = Params.ParameterByName("Job").Value.ToString()
                     });
+                    ProcessingSuccess = true;
                 }
                 else
                 {
@@ -138,26 +140,28 @@ namespace bcsserver.Handlers
             {
                 UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.user_add, ErrorCodes.FatalError, ex.Message));
             }
+            return ProcessingSuccess;
         }
 
         /// <summary>
         /// Обработчик изменения пользователя
         /// </summary>
         /// <param name="ARequest">Запрос в формате JSON-объекта</param>
-        public override void EditProcessing(string ARequest)
+        public override bool EditProcessing(string ARequest)
         {
+            bool ProcessingSuccess = false;
             try
             {
                 ServerLib.JTypes.Client.UserEditClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UserEditClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
-                Params.CreateParameterValue("UserId", Request.UserID);
+                Params.CreateParameterValue("UserId", Request.ID);
                 Params.CreateParameterValue("InFirstName", Request.FirstName);
                 Params.CreateParameterValue("InLastName", Request.LastName);
                 Params.CreateParameterValue("InMidleName", Request.MidleName);
                 Params.CreateParameterValue("InActive", Request.Active);
                 Params.CreateParameterValue("InActive", Request.Active);
-                Params.CreateParameterValue("JobId", Request.JobId);
+                Params.CreateParameterValue("JobId", Request.JobID);
                 Params.CreateParameterValue("Job");
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
@@ -166,14 +170,15 @@ namespace bcsserver.Handlers
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UserEditClass
                     {
-                        UserID = Convert.ToInt64(Params.ParameterByName("UserId").Value.ToString()),
+                        ID = Convert.ToInt64(Params.ParameterByName("UserId").Value.ToString()),
                         FirstName = Request.FirstName,
                         LastName = Request.LastName,
                         MidleName = Request.MidleName,
                         Active = Request.Active,
-                        JobId = Request.JobId,
-                        Job = Params.ParameterByName("Job").Value.ToString()
+                        JobId = Request.JobID,
+                        JobName = Params.ParameterByName("Job").Value.ToString()
                     });
+                    ProcessingSuccess = true;
                 }
                 else
                 {
@@ -184,6 +189,7 @@ namespace bcsserver.Handlers
             {
                 UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.user_edit, ErrorCodes.FatalError, ex.Message));
             }
+            return ProcessingSuccess;
         }
     }
 }

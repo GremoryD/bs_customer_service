@@ -67,14 +67,17 @@ namespace bcsserver.Handlers
         public virtual void RefreshData() { }
 
         /// <summary>
-        /// Добавление пользователя
+        /// Добавление
         /// </summary>
         /// <param name="ARequest">Запрос в формате JSON-объекта</param>
         public void Add(string ARequest)
         {
             Thread th = new Thread(() =>
             {
-                AddProcessing(ARequest);
+                if (AddProcessing(ARequest))
+                {
+                    SendData();
+                }
             });
             th.Start();
         }
@@ -83,7 +86,10 @@ namespace bcsserver.Handlers
         /// Обработчик добавления
         /// </summary>
         /// <param name="ARequest">Запрос в формате JSON-объекта</param>
-        public virtual void AddProcessing(string ARequest) { }
+        public virtual bool AddProcessing(string ARequest)
+        {
+            return false;
+        }
 
         /// <summary>
         /// Изменение 
@@ -93,7 +99,10 @@ namespace bcsserver.Handlers
         {
             Thread th = new Thread(() =>
             {
-                EditProcessing(ARequest);
+                if(EditProcessing(ARequest))
+                {
+                    SendData();
+                }
             });
             th.Start();
         }
@@ -102,7 +111,10 @@ namespace bcsserver.Handlers
         /// Обработчик изменения
         /// </summary>
         /// <param name="ARequest">Запрос в формате JSON-объекта</param>
-        public virtual void EditProcessing(string ARequest) { }
+        public virtual bool EditProcessing(string ARequest)
+        {
+            return false;
+        }
 
         /// <summary>
         /// Удаление
@@ -112,7 +124,10 @@ namespace bcsserver.Handlers
         {
             Thread th = new Thread(() =>
             {
-                DeleteProcessing(ARequest);
+                if(DeleteProcessing(ARequest))
+                {
+                    SendData();
+                }
             });
             th.Start();
         }
@@ -121,7 +136,10 @@ namespace bcsserver.Handlers
         /// Обработчик удаления
         /// </summary>
         /// <param name="ARequest">Запрос в формате JSON-объекта</param>
-        public virtual void DeleteProcessing(string ARequest) { }
+        public virtual bool DeleteProcessing(string ARequest)
+        {
+            return false;
+        }
 
         /// <summary>
         /// Принудительное чтение из базы данных и отправка данных клиенту

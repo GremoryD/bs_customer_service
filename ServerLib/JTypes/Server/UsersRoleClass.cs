@@ -4,22 +4,22 @@ using CLProject;
 
 namespace ServerLib.JTypes.Server
 {
-    class UsersRoleClass
+    public class UsersRoleClass
     {
         /// <summary>
-        /// Идентификатор роли
+        /// Идентификатор роли пользователей
         /// </summary>
-        [JsonProperty(PropertyName = "role_id", Required = Required.Always)]
-        public long RoleID { get; set; } = 0;
+        [JsonProperty(PropertyName = "id", Required = Required.Always)]
+        public long ID { get; set; } = 0;
 
         /// <summary>
-        /// Наименование роли
+        /// Наименование роли пользователей
         /// </summary>
         [JsonProperty(PropertyName = "name", Required = Required.Always)]
         public string Name { get; set; } = null;
 
         /// <summary>
-        /// Наименование роли
+        /// Описание роли пользователей
         /// </summary>
         [JsonProperty(PropertyName = "description", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public string Description { get; set; } = null;
@@ -38,7 +38,7 @@ namespace ServerLib.JTypes.Server
         {
             get
             {
-                return Utils.SHA256Base64(RoleID.ToString() + Name + Description);
+                return Utils.SHA256Base64(ID.ToString() + Name + Description);
             }
         }
     }

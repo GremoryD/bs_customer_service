@@ -12,8 +12,8 @@ namespace ServerLib.JTypes.Server
         /// <summary>
         /// Идентификатор пользователя
         /// </summary>
-        [JsonProperty(PropertyName = "user_id", Required = Required.Always)]
-        public long UserID { get; set; } = 0;
+        [JsonProperty(PropertyName = "id", Required = Required.Always)]
+        public long ID { get; set; } = 0;
 
         /// <summary>
         /// Логин
@@ -43,13 +43,13 @@ namespace ServerLib.JTypes.Server
         /// Идентификатор должности
         /// </summary>
         [JsonProperty(PropertyName = "job_id", Required = Required.Always)]
-        public long JobId { get; set; }
+        public long JobID { get; set; }
 
         /// <summary>
         /// Наименование должности
         /// </summary>
-        [JsonProperty(PropertyName = "job", Required = Required.Always)]
-        public string Job { get; set; } = null;
+        [JsonProperty(PropertyName = "job_name", Required = Required.Always)]
+        public string JobName { get; set; } = null;
 
         /// <summary>
         /// Признак активности
@@ -71,7 +71,7 @@ namespace ServerLib.JTypes.Server
         {
             get
             {
-                return Utils.SHA256Base64(UserID.ToString() + Login + FirstName + LastName + MidleName + Job + Active.ToString());
+                return Utils.SHA256Base64(ID.ToString() + Login + FirstName + LastName + MidleName + JobName + Active.ToString());
             }
         }
     }

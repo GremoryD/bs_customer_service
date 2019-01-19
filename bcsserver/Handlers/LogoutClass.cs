@@ -41,7 +41,7 @@ namespace bcsserver.Handlers
             Param.CreateParameterValue("Token", ASession);
             Param.CreateParameterValue("State");
             UserSession.Project.Database.Execute("Logout", ref Param);
-            UserSession.Login.UserId = 0;
+            UserSession.Login.ID = 0;
             ServerLib.JTypes.Server.LogoutClass Response = new ServerLib.JTypes.Server.LogoutClass();
             if (Param.ParameterByName("State").Value.ToString() == "ok")
             {
@@ -50,7 +50,7 @@ namespace bcsserver.Handlers
             else
             {
                 Response.State = ServerLib.JTypes.Enums.ResponseState.error;
-                Response.Description = "Active session not found";
+                Response.ErrorText = "Active session not found";
             }
             return Response;
         }

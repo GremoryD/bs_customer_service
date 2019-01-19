@@ -12,11 +12,11 @@ namespace ServerLib.JTypes.Server
         /// Массив ролей пользователей
         /// </summary>
         [JsonProperty(PropertyName = "roles", Required = Required.Always)]
-        public List<UsersRoleClass> Roles;
+        public List<UsersRoleClass> Items { get; set; }
 
         public UsersRolesClass() : base(Enums.Commands.users_roles)
         {
-            Roles = new List<UsersRoleClass>();
+            Items = new List<UsersRoleClass>();
         }
     }
 }

@@ -21,8 +21,8 @@ namespace ServerLib.JTypes.Server
         /// <summary>
         /// Описание ошибки обработки запроса к базе данных
         /// </summary>
-        [JsonProperty("description", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public string Description { get; set; } = null;
+        [JsonProperty("error_text", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+        public string ErrorText { get; set; } = null;
 
         public BaseResponseClass(Commands ACommand)
         {
