@@ -91,10 +91,14 @@
     <Compile Include="Controls\SimpleCommand.cs" />
     <Compile Include="Models\Behoviour\MenuBehaviour.cs" />
     <Compile Include="Models\DataStorage.cs" />
+    <Compile Include="ViewModels\AddJobsViewModel.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\AplicationViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="Views\AddJobsView.xaml.cs">
+      <DependentUpon>AddJobsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AddUserView.xaml.cs">
       <DependentUpon>AddUserView.xaml</DependentUpon>
     </Compile>
@@ -129,6 +133,10 @@
     <Page Include="Resources\Templates.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AddJobsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddUserView.xaml">
       <SubType>Designer</SubType>

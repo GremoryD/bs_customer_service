@@ -11,5 +11,8 @@
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:AddUserViewModel}">
         <v:AddUserView/>
-    </DataTemplate> 
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AddJobsViewModel}">
+        <v:AddJobsView/>
+    </DataTemplate>
 </ResourceDictionary>

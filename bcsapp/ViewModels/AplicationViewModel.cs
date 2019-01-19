@@ -24,9 +24,10 @@ namespace bcsapp.ViewModels
         public bool UserInterface { set; get; } = true;
         public ICommand RibbonCommand { set; get; } 
 
-
+        //Users left menu commands
         public ICommand UsersGridCommand { set; get; }
-        public ICommand RolesGridCommand { set; get; }
+        public ICommand JobsGridCommand { set; get; }
+        public ICommand RolsGridCommand { set; get; }
 
 
 
@@ -46,6 +47,7 @@ namespace bcsapp.ViewModels
 
         //UsersGridData
         public bool UsersGridShow { set; get; } = true;
+        public bool JobsGridShow { set; get; } = false;
         public bool RolesGridShow { set; get; } = false;
 
 
@@ -53,6 +55,7 @@ namespace bcsapp.ViewModels
         public ObservableCollection<UserClass> observableUserClass { set; get; } = new ObservableCollection<UserClass>(DataStorage.Instance.UserList);
         public UserClass SelectedUserClass { set; get; }
         public ObservableCollection<JobClass> observableJobsClass { set; get; } = new ObservableCollection<JobClass>(DataStorage.Instance.JobList);
+        public JobClass SelectedJobsClass { set; get; } 
 
         public AplicationViewModel()
         {
@@ -60,7 +63,8 @@ namespace bcsapp.ViewModels
 
             RibbonCommand = new SimpleCommand<RibbonControl>(UserRibbon);
             UsersGridCommand = new SimpleCommand(OpenUsersGrid);
-            RolesGridCommand = new SimpleCommand(OpenRolesGrid);
+            JobsGridCommand = new SimpleCommand(OpenJobsGrid);
+            RolsGridCommand = new SimpleCommand(OpenRolesGrid);
 
             AddButtonCommand = new SimpleCommand(AddButton);
             EditButtonCommad = new SimpleCommand(EditButton);
@@ -83,6 +87,7 @@ namespace bcsapp.ViewModels
             var time = watcher.Elapsed;
         }
 
+#region Ribonn Buttons
         private void DeleteButton()
         {
             if (UsersGridShow && SelectedUserClass!=null)
@@ -97,9 +102,9 @@ namespace bcsapp.ViewModels
                 }
 
             }
-            if (RolesGridShow)
+            if (JobsGridShow && SelectedJobsClass!=null)
             {
-                if (System.Windows.MessageBox.Show("Удалить Роль " +  "?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                if (System.Windows.MessageBox.Show("Удалить должность " + SelectedJobsClass.JobName  +  "?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
                 {
 
                 }
@@ -108,7 +113,7 @@ namespace bcsapp.ViewModels
 
                 }
 
-            }
+            } 
 
 
 
@@ -121,6 +126,14 @@ namespace bcsapp.ViewModels
                 Window window = new Window();
                 window.Title = "Редактировать пользователя";
                 window.Content = new AddUserViewModel(SelectedUserClass);
+                window.SizeToContent = SizeToContent.WidthAndHeight;
+                window.ShowDialog();
+            }
+            if (JobsGridShow && SelectedJobsClass != null)
+            {
+                Window window = new Window();
+                window.Title = "Новая должность";
+                window.Content = new AddJobsViewModel(SelectedJobsClass);
                 window.SizeToContent = SizeToContent.WidthAndHeight;
                 window.ShowDialog();
             }
@@ -137,8 +150,18 @@ namespace bcsapp.ViewModels
                 window.SizeToContent = SizeToContent.WidthAndHeight;
                 window.ShowDialog();
             }
+            if (JobsGridShow)
+            {
+                Window window = new Window();
+                window.Title = "Новая должность";
+                window.Content = new AddJobsViewModel();
+                window.SizeToContent = SizeToContent.WidthAndHeight;
+                window.ShowDialog();
+            }
         }
+ #endregion
 
+        //обновление данных в таблицах
         private void Instance_UpdateUsers(List<UserClass> users)
         {
             observableUserClass = new ObservableCollection<UserClass>(users);
@@ -149,9 +172,12 @@ namespace bcsapp.ViewModels
         private void Instance_UpdateJobs(List<JobClass> jobs)
         {
             observableJobsClass = new ObservableCollection<JobClass>(jobs);
-            Notify("observableRolesClass");
+            Notify("observableJobsClass");
         }
 
+
+#region Left Menu Functions 
+        //Функции кнопок левого меню
         private void OpenUsersGrid()
         {
             UserInterface = true;
@@ -160,14 +186,27 @@ namespace bcsapp.ViewModels
             Notify("UsersGridShow");
         }
 
+        private void OpenJobsGrid()
+        {
+            UserInterface = false;
+            Notify("UserInterface");
+            JobsGridShow = true;
+            Notify("JobsGridShow");
+        }
+
+
         private void OpenRolesGrid()
         {
             UserInterface = false;
             Notify("UserInterface");
             RolesGridShow = true;
             Notify("RolesGridShow");
+
         }
 
+#endregion
+
+        //вывод состояния соединения и текущего пользователя
         private void Instance_ConnectedState(string value)
         {
             UserName = value;
@@ -180,12 +219,15 @@ namespace bcsapp.ViewModels
             Notify("ConectedState");
         }
 
+
+        //Функция для Нотифая
         public event PropertyChangedEventHandler PropertyChanged;
         private void Notify(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        //Функция переключения рибона
         private void UserRibbon(RibbonControl  ribbonControl)
         {
             if(ribbonControl.SelectedPage.Name == "UsersRibbonPage")

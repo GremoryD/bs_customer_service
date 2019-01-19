@@ -60,15 +60,14 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="4*"/>
                     </Grid.ColumnDefinitions>
-                    <dxn:NavBarControl  Grid.Column="0" Background="White">
-                        <dxn:NavBarGroup x:Name="navBarUsers" Header="Пользователи">
-                            <dxn:NavBarItem x:Name="navBarItemUsers" Content="Пользователи" Command="{Binding UsersGridCommand}"/>
-                            <dxn:NavBarItem x:Name="navBarItemRoles" Content="Роли" Command="{Binding RolesGridCommand}"/>
-                        </dxn:NavBarGroup>
-                    </dxn:NavBarControl>
+                    <dxa:AccordionControl  Grid.Column="0" Background="White"> 
+                            <dxa:AccordionItem  Header="Пользователи" Command="{Binding UsersGridCommand}"/>
+                            <dxa:AccordionItem  Header="Професии" Command="{Binding JobsGridCommand}"/>
+                            <dxa:AccordionItem  Header="Роли"  Command="{Binding RolsGridCommand}"/>
+                    </dxa:AccordionControl>
 
                     <TabControl Grid.Column="1"  >
-                        <TabItem x:Name="GridItemUsers" Visibility="Collapsed" IsSelected="{Binding UsersGridShow, FallbackValue=true}">
+                        <TabItem  Visibility="Collapsed" IsSelected="{Binding UsersGridShow, FallbackValue=true}">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="4*"/>
@@ -90,9 +89,18 @@
                                 </Grid>
                             </Grid>
                         </TabItem>
-                        <TabItem x:Name="GridItemRoles" Visibility="Collapsed"  IsSelected="{Binding RolesGridShow}">
+                        <TabItem   Visibility="Collapsed"  IsSelected="{Binding JobsGridShow}">
                             <Grid>
-                                <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableRolesClass}"  AutoGenerateColumns="AddNew">
+                                <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableJobsClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedJobsClass, Mode=TwoWay}">
+                                    <dxg:GridControl.View>
+                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="True" AutoWidth="True"/>
+                                    </dxg:GridControl.View>
+                                </dxg:GridControl>
+                            </Grid>
+                        </TabItem>
+                        <TabItem  Visibility="Collapsed"  IsSelected="{Binding RolesGridShow}">
+                            <Grid>
+                                <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableJobsClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedJobsClass, Mode=TwoWay}">
                                     <dxg:GridControl.View>
                                         <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="True" AutoWidth="True"/>
                                     </dxg:GridControl.View>
