@@ -17,8 +17,8 @@ namespace ServerLib.JTypes.Server
         /// <summary>
         /// Идентификатор пользователя
         /// </summary>
-        [JsonProperty(PropertyName = "user_id", Required = Required.Always)]
-        public long UserId { get; set; } = 0;
+        [JsonProperty(PropertyName = "id", Required = Required.Always)]
+        public long ID { get; set; } = 0;
 
         /// <summary>
         /// Признак активности пользователя

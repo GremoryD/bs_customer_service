@@ -29,8 +29,8 @@ namespace ServerLib.JTypes.Server
         /// <summary>
         /// Должность
         /// </summary>
-        [JsonProperty(PropertyName = "job", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public string Job { get; set; } = null;
+        [JsonProperty(PropertyName = "job_name", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+        public string JobName { get; set; } = null;
 
         /// <summary>
         /// Признак активности

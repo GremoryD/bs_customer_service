@@ -29,20 +29,20 @@ namespace ServerLib.JTypes.Server
         /// <summary>
         /// Описание ошибки
         /// </summary>
-        [JsonProperty(PropertyName = "description", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
-        public string Description { get; set; } = null;
+        [JsonProperty(PropertyName = "error_text", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+        public string ErrorText { get; set; } = null;
 
         /// <summary>
         /// Создание исключения
         /// </summary>
         /// <param name="ACommand">Команда, в обработке которой произошла ошибка</param>
         /// <param name="ACode">Код ошибки</param>
-        /// <param name="ADescription">Описание ошибки</param>
-        public ExceptionClass(Enums.Commands ACommand, Enums.ErrorCodes ACode, string ADescription = null)
+        /// <param name="AErrorText">Описание ошибки</param>
+        public ExceptionClass(Enums.Commands ACommand, Enums.ErrorCodes ACode, string AErrorText = null)
         {
             Command = ACommand;
             Code = ACode;
-            Description = ADescription;
+            ErrorText = AErrorText;
         }
     }
 }

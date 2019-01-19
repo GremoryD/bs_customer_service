@@ -11,13 +11,13 @@ namespace ServerLib.JTypes.Server
         /// Идетификатор должности
         /// </summary>
         [JsonProperty(PropertyName = "id", Required = Required.Always)]
-        public long Id { get; set; } = 0;
+        public long ID { get; set; } = 0;
 
         /// <summary>
         /// Наименование должности
         /// </summary>
-        [JsonProperty(PropertyName = "job_name", Required = Required.Always)]
-        public string JobName { get; set; } = null;
+        [JsonProperty(PropertyName = "name", Required = Required.Always)]
+        public string Name { get; set; } = null;
 
         public JobAddClass() : base(Enums.Commands.job_add) { }
     }

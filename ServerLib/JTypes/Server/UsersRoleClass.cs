@@ -4,23 +4,25 @@ using CLProject;
 
 namespace ServerLib.JTypes.Server
 {
-    /// <summary>
-    /// Должность в составе списка
-    /// </summary>
-    public class JobClass
+    public class UsersRoleClass
     {
-
         /// <summary>
-        /// Идетификатор должности
+        /// Идентификатор роли пользователей
         /// </summary>
         [JsonProperty(PropertyName = "id", Required = Required.Always)]
         public long ID { get; set; } = 0;
 
         /// <summary>
-        /// Наименование должности
+        /// Наименование роли пользователей
         /// </summary>
         [JsonProperty(PropertyName = "name", Required = Required.Always)]
         public string Name { get; set; } = null;
+
+        /// <summary>
+        /// Описание роли пользователей
+        /// </summary>
+        [JsonProperty(PropertyName = "description", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+        public string Description { get; set; } = null;
 
         /// <summary>
         /// Команда, которую необходимо выполнить на стороне клиента с данным объектом
@@ -36,7 +38,7 @@ namespace ServerLib.JTypes.Server
         {
             get
             {
-                return Utils.SHA256Base64(ID.ToString() + Name);
+                return Utils.SHA256Base64(ID.ToString() + Name + Description);
             }
         }
     }

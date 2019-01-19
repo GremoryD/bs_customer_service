@@ -42,7 +42,7 @@ namespace ServerLib.JTypes.Client
         /// Идентификатор должности
         /// </summary>
         [JsonProperty(PropertyName = "job_id", Required = Required.Always)]
-        public long JobId { get; set; }
+        public long JobID { get; set; }
 
         /// <summary>
         /// Признак активности пользователя
@@ -50,9 +50,6 @@ namespace ServerLib.JTypes.Client
         [JsonProperty(PropertyName = "active", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
         public Enums.UserActive Active { get; set; }
 
-        public UserAddClass()
-        {
-            Command = Enums.Commands.user_add;
-        }
+        public UserAddClass() : base(Enums.Commands.user_add) { }
     }
 }

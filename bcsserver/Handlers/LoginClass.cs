@@ -23,7 +23,7 @@ namespace bcsserver.Handlers
             {
                 ServerLib.JTypes.Client.Login Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.Login>(ARequest);
                 Token = null;
-                UserId = 0;
+                ID = 0;
                 Active = 0;
                 State = ServerLib.JTypes.Enums.ResponseState.error;
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
@@ -40,7 +40,7 @@ namespace bcsserver.Handlers
                 {
                     Token = _Active == 1 ? Params.ParameterByName("AccessToken").Value.ToString() : null;
                     Active = _Active == 1 ? ServerLib.JTypes.Enums.UserActive.activated : ServerLib.JTypes.Enums.UserActive.blocked;
-                    UserId = Active == ServerLib.JTypes.Enums.UserActive.activated ? _UserId : 0;
+                    ID = Active == ServerLib.JTypes.Enums.UserActive.activated ? _UserId : 0;
                     State = ServerLib.JTypes.Enums.ResponseState.ok;
                     UserSession.OutputQueueAddObject(this);
                     UserSession.UserInformation.SendData();

@@ -48,7 +48,7 @@ namespace bcsserver.Handlers
                             IsRunning = true;
                             DatabaseParameterValuesClass Param = new DatabaseParameterValuesClass();
                             Param.CreateParameterValue("Token", UserSession.Login.Token);
-                            Param.CreateParameterValue("UserId", UserSession.Login.UserId);
+                            Param.CreateParameterValue("UserId", UserSession.Login.ID);
                             Param.CreateParameterValue("FirstName");
                             Param.CreateParameterValue("LastName");
                             Param.CreateParameterValue("MidleName");
@@ -63,7 +63,7 @@ namespace bcsserver.Handlers
                                 FirstName = Param.ParameterByName("FirstName").Value.ToString();
                                 LastName = Param.ParameterByName("LastName").Value.ToString();
                                 MidleName = Param.ParameterByName("MidleName").Value.ToString();
-                                Job = Param.ParameterByName("Job").Value.ToString();
+                                JobName = Param.ParameterByName("Job").Value.ToString();
                                 Active = Convert.ToInt32(Param.ParameterByName("Active").Value.ToString()) == 1 ? ServerLib.JTypes.Enums.UserActive.activated : ServerLib.JTypes.Enums.UserActive.blocked;
                                 State = ServerLib.JTypes.Enums.ResponseState.ok;
                                 if(JsonConvert.SerializeObject(this) != OldMessage)

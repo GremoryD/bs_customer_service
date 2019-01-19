@@ -5,9 +5,6 @@
     /// </summary>
     public class JobsClass : BaseRequestClass
     {
-        public JobsClass()
-        {
-            Command = Enums.Commands.jobs;
-        }
+        public JobsClass() : base(Enums.Commands.jobs) { }
     }
 }
