@@ -54,14 +54,14 @@ namespace bcsserver.Handlers
                     {
                         User.Command = ListCommands.edit;
                         UsersCollection.TryUpdate(User.ID, User, ExistUser);
-                        UsersList.Users.Add(User);
+                        UsersList.Items.Add(User);
                     }
                 }
                 else
                 {
                     User.Command = ListCommands.add;
                     UsersCollection.TryAdd(User.ID, User);
-                    UsersList.Users.Add(User);
+                    UsersList.Items.Add(User);
                 }
             }
 
@@ -81,12 +81,12 @@ namespace bcsserver.Handlers
                 if (!IsExist)
                 {
                     User.Value.Command = ListCommands.delete;
-                    UsersList.Users.Add(User.Value);
+                    UsersList.Items.Add(User.Value);
                     UsersCollection.TryRemove(User.Value.ID, out ServerLib.JTypes.Server.UserClass DeletingUser);
                 }
             }
 
-            if (UsersList.Users.Count > 0)
+            if (UsersList.Items.Count > 0)
             {
                 UserSession.OutputQueueAddObject(UsersList);
             }

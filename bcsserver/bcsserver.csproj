@@ -119,6 +119,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Handlers\BaseHandlerClass.cs" />
+    <Compile Include="Handlers\HandlerRolesClass.cs" />
     <Compile Include="Handlers\HandlerUsersRolesClass.cs" />
     <Compile Include="Handlers\JobsClass.cs" />
     <Compile Include="Handlers\LoginClass.cs" />

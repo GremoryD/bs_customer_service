@@ -86,6 +86,11 @@ namespace bcsserver
         /// <summary>
         /// Обработчик списка ролей пользователей
         /// </summary>
+        public Handlers.HandlerRolesClass Roles;
+
+        /// <summary>
+        /// Обработчик списка ролей пользователей
+        /// </summary>
         public Handlers.HandlerUsersRolesClass UsersRoles;
 
         /// <summary>
@@ -112,6 +117,7 @@ namespace bcsserver
 
             Users = new Handlers.UsersClass(this);
             Jobs = new Handlers.JobsClass(this);
+            Roles = new Handlers.HandlerRolesClass(this);
             UsersRoles = new Handlers.HandlerUsersRolesClass(this);
 
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
@@ -192,13 +198,16 @@ namespace bcsserver
                                                     Jobs.Edit(Request);
                                                     break;
                                                 case Commands.roles:
-                                                    UsersRoles.SendData();
+                                                    Roles.SendData();
                                                     break;
                                                 case Commands.roles_add:
-                                                    UsersRoles.Add(Request);
+                                                    Roles.Add(Request);
                                                     break;
                                                 case Commands.roles_edit:
-                                                    UsersRoles.Edit(Request);
+                                                    Roles.Edit(Request);
+                                                    break;
+                                                case Commands.users_roles:
+                                                    UsersRoles.SendData();
                                                     break;
                                             }
                                         }

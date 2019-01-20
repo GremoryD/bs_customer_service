@@ -52,7 +52,7 @@ namespace bcsapp
         /// Выходная очередь сообщений
         /// </summary>
         private ConcurrentQueue<string> OutputQueue = new ConcurrentQueue<string>();
-         
+
         private static WebSocketController StaticInstance;
 
         public WebSocketController()
@@ -62,7 +62,7 @@ namespace bcsapp
             WebSocketClient.OnMessage += OnWebSocketMessage;
             ConnectToWebSocketServerThread = new Thread(ConnectToWebSocketServer);
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
-            OutputQueueProcessing = new Thread(OutputQueueProcessingThread); 
+            OutputQueueProcessing = new Thread(OutputQueueProcessingThread);
         }
 
         /// <summary>
@@ -134,13 +134,13 @@ namespace bcsapp
                             switch (Message.Command)
                             {
                                 case ServerLib.JTypes.Enums.Commands.login:
-                                        LoginHandler(InputMessage);
+                                    LoginHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.user_information:
-                                        UserInformationHandler(InputMessage);
+                                    UserInformationHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.users:
-                                        UsersListHandler(InputMessage);
+                                    UsersListHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.jobs:
                                     JobssListHandler(InputMessage);
@@ -151,16 +151,16 @@ namespace bcsapp
                         {
                             switch (Message.Command)
                             {
-                                case ServerLib.JTypes.Enums.Commands.login: 
+                                case ServerLib.JTypes.Enums.Commands.login:
                                     switch (JsonConvert.DeserializeObject<ExceptionClass>(InputMessage).Code)
                                     {
                                         case ServerLib.JTypes.Enums.ErrorCodes.IncorrectLoginOrPassword:
-                                                LoginFailedHandler();
+                                            LoginFailedHandler();
                                             break;
-                                        default: 
+                                        default:
                                             break;
                                     }
-                                     break;
+                                    break;
                             }
                         }
                         else
@@ -203,16 +203,17 @@ namespace bcsapp
             while (IsStarting)
             {
                 if (WebSocketClient.ReadyState == WebSocketState.Closed)
-                {  ServerErr?.Invoke(this, "Отсутствует подключение к серверу"); ConnectedState?.Invoke(this, "Отсутствует подключение"); }
+                { ServerErr?.Invoke(this, "Отсутствует подключение к серверу"); ConnectedState?.Invoke(this, "Отсутствует подключение"); }
 
-                if (WebSocketClient.ReadyState == WebSocketState.Open)  ConnectedState?.Invoke(this, "Соеденено");
+                if (WebSocketClient.ReadyState == WebSocketState.Open) ConnectedState?.Invoke(this, "Соеденено");
                 if (OutputQueue.TryDequeue(out string Message))
                 {
                     try
                     {
                         WebSocketClient.Send(Message);
                     }
-                    catch {
+                    catch
+                    {
                         ServerErr?.Invoke(this, "Отсутствует подключение к серверу");
                         ConnectedState?.Invoke(this, "Отсутствует подключение");
                     }
@@ -221,8 +222,9 @@ namespace bcsapp
             }
         }
 
-#region События 
-        //функции вызываемые в LoginViewModel
+        #region События 
+
+        // Функции вызываемые в LoginViewModel
         public event EventHandler<String> ServerErr;
         public event EventHandler<String> UpdateUserUI;
         public event EventHandler<String> ConnectedState;
@@ -230,14 +232,13 @@ namespace bcsapp
         public event EventHandler<string> LoginFailed;
         public event EventHandler<List<UserClass>> UpdateUsers;
         public event EventHandler<List<JobClass>> UpdateJobs;
+
         #endregion
-
-
 
         #region Обработчики 
 
         private void LoginHandler(string InputMessage)
-        { 
+        {
             DataStorage.Instance.Login = JsonConvert.DeserializeObject<LoginClass>(InputMessage);
             LoginDone?.Invoke(this, JsonConvert.DeserializeObject<LoginClass>(InputMessage));
         }
@@ -250,12 +251,12 @@ namespace bcsapp
 
         private void UsersListHandler(string InputMessage)
         {
-            if (DataStorage.Instance.UserList!=null)
+            if (DataStorage.Instance.UserList != null)
             {
-                DataStorage.Instance.UserList = JsonConvert.DeserializeObject<UsersClass>(InputMessage).Users;
+                DataStorage.Instance.UserList = JsonConvert.DeserializeObject<UsersClass>(InputMessage).Items;
             }
             else
-            { 
+            {
 
             }
             UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
@@ -263,7 +264,7 @@ namespace bcsapp
 
         private void JobssListHandler(string InputMessage)
         {
-            if (DataStorage.Instance.JobList!=null)
+            if (DataStorage.Instance.JobList != null)
             {
                 DataStorage.Instance.JobList = JsonConvert.DeserializeObject<JobsClass>(InputMessage).Jobs;
 
@@ -277,15 +278,13 @@ namespace bcsapp
 
         #endregion
 
-
         #region Обработчики ошибок
 
         private void LoginFailedHandler()
         {
             LoginFailed?.Invoke(this, "Неправильный логин или пароль");
         }
-         
-#endregion
 
+        #endregion
     }
 }

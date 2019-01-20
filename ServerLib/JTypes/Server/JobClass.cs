@@ -32,12 +32,6 @@ namespace ServerLib.JTypes.Server
         /// Hash-код объекта
         /// </summary>
         [JsonIgnore]
-        public string Hash
-        {
-            get
-            {
-                return Utils.SHA256Base64(ID.ToString() + Name);
-            }
-        }
+        public string Hash => Utils.SHA256Base64(ID.ToString() + Name);
     }
 }
