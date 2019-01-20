@@ -4,7 +4,7 @@ using CLProject;
 
 namespace ServerLib.JTypes.Server
 {
-    public class UsersRoleClass
+    public class RoleClass
     {
         /// <summary>
         /// Идентификатор роли пользователей

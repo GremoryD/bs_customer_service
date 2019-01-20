@@ -191,13 +191,13 @@ namespace bcsserver
                                                 case Commands.job_edit:
                                                     Jobs.Edit(Request);
                                                     break;
-                                                case Commands.users_roles:
+                                                case Commands.roles:
                                                     UsersRoles.SendData();
                                                     break;
-                                                case Commands.users_roles_add:
+                                                case Commands.roles_add:
                                                     UsersRoles.Add(Request);
                                                     break;
-                                                case Commands.users_roles_edit:
+                                                case Commands.roles_edit:
                                                     UsersRoles.Edit(Request);
                                                     break;
                                             }

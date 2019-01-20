@@ -50,12 +50,12 @@
     <Compile Include="JTypes\Client\JobsClass.cs" />
     <Compile Include="JTypes\Client\Login.cs" />
     <Compile Include="JTypes\Client\Logout.cs" />
+    <Compile Include="JTypes\Client\RoleAddClass.cs" />
+    <Compile Include="JTypes\Client\RoleEditClass.cs" />
+    <Compile Include="JTypes\Client\RolesClass.cs" />
     <Compile Include="JTypes\Client\UserAddClass.cs" />
     <Compile Include="JTypes\Client\UserEditClass.cs" />
     <Compile Include="JTypes\Client\UsersClass.cs" />
-    <Compile Include="JTypes\Client\UsersRoleAddClass.cs" />
-    <Compile Include="JTypes\Client\UsersRoleEditClass.cs" />
-    <Compile Include="JTypes\Client\UsersRolesClass.cs" />
     <Compile Include="JTypes\Enums\Commands.cs" />
     <Compile Include="JTypes\Enums\ErrorCodes.cs" />
     <Compile Include="JTypes\Enums\ListCommands.cs" />
@@ -69,15 +69,15 @@
     <Compile Include="JTypes\Server\JobsClass.cs" />
     <Compile Include="JTypes\Server\LoginClass.cs" />
     <Compile Include="JTypes\Server\LogoutClass.cs" />
+    <Compile Include="JTypes\Server\RoleAddClass.cs" />
+    <Compile Include="JTypes\Server\RoleClass.cs" />
+    <Compile Include="JTypes\Server\RoleEditClass.cs" />
+    <Compile Include="JTypes\Server\RolesClass.cs" />
     <Compile Include="JTypes\Server\UserAddClass.cs" />
     <Compile Include="JTypes\Server\UserClass.cs" />
     <Compile Include="JTypes\Server\UserEditClass.cs" />
     <Compile Include="JTypes\Server\UserInformationClass.cs" />
     <Compile Include="JTypes\Server\UsersClass.cs" />
-    <Compile Include="JTypes\Server\UsersRoleAddClass.cs" />
-    <Compile Include="JTypes\Server\UsersRoleClass.cs" />
-    <Compile Include="JTypes\Server\UsersRoleEditClass.cs" />
-    <Compile Include="JTypes\Server\UsersRolesClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

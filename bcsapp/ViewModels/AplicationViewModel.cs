@@ -104,7 +104,7 @@ namespace bcsapp.ViewModels
             }
             if (JobsGridShow && SelectedJobsClass!=null)
             {
-                if (System.Windows.MessageBox.Show("Удалить должность " + SelectedJobsClass.JobName  +  "?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                if (System.Windows.MessageBox.Show("Удалить должность " + SelectedJobsClass.Name  +  "?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
                 {
 
                 }

@@ -58,16 +58,16 @@
         /// <summary>
         /// Список ролей пользователей
         /// </summary>
-        users_roles,                
+        roles,                
         
         /// <summary>
         /// Добавление роли пользователей
         /// </summary>
-        users_roles_add,
+        roles_add,
         
         /// <summary>
         /// Изменение роли пользователей
         /// </summary>
-        users_roles_edit, 
+        roles_edit, 
     }
 }

@@ -11,18 +11,18 @@ namespace bcsserver.Handlers
         /// <summary>
         /// Словарь ролей пользователей
         /// </summary>
-        public ConcurrentDictionary<long, ServerLib.JTypes.Server.UsersRoleClass> ReadCollection;
+        public ConcurrentDictionary<long, ServerLib.JTypes.Server.RoleClass> ReadCollection;
 
         public HandlerUsersRolesClass(UserSessionClass AUserSession) : base(AUserSession)
         {
-            ReadCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.UsersRoleClass>();
+            ReadCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.RoleClass>();
         }
         /// <summary>
         /// Обновление данных
         /// </summary>
         public override void RefreshData()
         {
-            ServerLib.JTypes.Server.UsersRolesClass OutputList = new ServerLib.JTypes.Server.UsersRolesClass();
+            ServerLib.JTypes.Server.RolesClass OutputList = new ServerLib.JTypes.Server.RolesClass();
             DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
             Params.CreateParameterValue("Token", UserSession.Login.Token);
             DatabaseTableClass ReadTable = new DatabaseTableClass
@@ -32,14 +32,14 @@ namespace bcsserver.Handlers
 
             foreach (System.Data.DataRow row in ReadTable.Table.Rows)
             {
-                ServerLib.JTypes.Server.UsersRoleClass Role = new ServerLib.JTypes.Server.UsersRoleClass
+                ServerLib.JTypes.Server.RoleClass Role = new ServerLib.JTypes.Server.RoleClass
                 {
                     ID = ReadTable.AsInt64(row, "ID"),
                     Name = ReadTable.AsString(row, "NAME"),
                     Description = ReadTable.AsString(row, "DESCRIPTION")
                 };
 
-                if (ReadCollection.TryGetValue(Role.ID, out ServerLib.JTypes.Server.UsersRoleClass ExistRole))
+                if (ReadCollection.TryGetValue(Role.ID, out ServerLib.JTypes.Server.RoleClass ExistRole))
                 {
                     if (ExistRole.Hash != Role.Hash)
                     {
@@ -73,7 +73,7 @@ namespace bcsserver.Handlers
                 {
                     Item.Value.Command = ListCommands.delete;
                     OutputList.Items.Add(Item.Value);
-                    ReadCollection.TryRemove(Item.Value.ID, out ServerLib.JTypes.Server.UsersRoleClass DeletingItem);
+                    ReadCollection.TryRemove(Item.Value.ID, out ServerLib.JTypes.Server.RoleClass DeletingItem);
                 }
             }
 
@@ -92,7 +92,7 @@ namespace bcsserver.Handlers
             bool ProcessingSuccess = false;
             try
             {
-                ServerLib.JTypes.Client.UsersRoleAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UsersRoleAddClass>(ARequest);
+                ServerLib.JTypes.Client.RoleAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RoleAddClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
                 Params.CreateParameterValue("Name", Request.Name);
@@ -103,7 +103,7 @@ namespace bcsserver.Handlers
                 UserSession.Project.Database.Execute("RoleAdd", ref Params);
                 if (Params.ParameterByName("State").Value.ToString() == "ok")
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UsersRoleAddClass
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.RoleAddClass
                     {
                         ID = Convert.ToInt64(Params.ParameterByName("NewId").Value.ToString()),
                         Name = Request.Name.Trim(),
@@ -113,12 +113,12 @@ namespace bcsserver.Handlers
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.users_roles_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").Value.ToString()));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").Value.ToString()));
                 }
             }
             catch (Exception ex)
             {
-                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.users_roles_add, ErrorCodes.FatalError, ex.Message));
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_add, ErrorCodes.FatalError, ex.Message));
             }
             return ProcessingSuccess;
         }
@@ -132,7 +132,7 @@ namespace bcsserver.Handlers
             bool ProcessingSuccess = false;
             try
             {
-                ServerLib.JTypes.Client.UsersRoleEditClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UsersRoleEditClass>(ARequest);
+                ServerLib.JTypes.Client.RoleEditClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RoleEditClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
                 Params.CreateParameterValue("Name", Request.Name);
@@ -143,7 +143,7 @@ namespace bcsserver.Handlers
                 UserSession.Project.Database.Execute("RoleEdit", ref Params);
                 if (Params.ParameterByName("State").Value.ToString() == "ok")
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UsersRoleEditClass
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.RoleEditClass
                     {
                         ID = Request.ID,
                         Name = Request.Name.Trim(),
@@ -153,12 +153,12 @@ namespace bcsserver.Handlers
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.users_roles_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").Value.ToString()));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").Value.ToString()));
                 }
             }
             catch (Exception ex)
             {
-                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.users_roles_edit, ErrorCodes.FatalError, ex.Message));
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_edit, ErrorCodes.FatalError, ex.Message));
             }
             return ProcessingSuccess;
         }
