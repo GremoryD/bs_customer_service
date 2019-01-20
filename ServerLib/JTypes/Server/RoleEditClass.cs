@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 
-namespace ServerLib.JTypes.Client
+namespace ServerLib.JTypes.Server
 {
     /// <summary>
-    /// Запрос на изменение роли пользователей
+    /// Структура изменения роли пользователей
     /// </summary>
-    public class UsersRoleEditClass : BaseRequestClass
+    public class RoleEditClass : BaseResponseClass
     {
         /// <summary>
         /// Идетификатор роли пользователей
@@ -25,6 +25,6 @@ namespace ServerLib.JTypes.Client
         [JsonProperty(PropertyName = "description", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public string Description { get; set; } = null;
 
-        public UsersRoleEditClass() : base(Enums.Commands.users_roles_edit) { }
+        public RoleEditClass() : base(Enums.Commands.roles_edit) { }
     }
 }

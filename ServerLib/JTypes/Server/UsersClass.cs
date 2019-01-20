@@ -12,11 +12,11 @@ namespace ServerLib.JTypes.Server
         /// Массив пользователей
         /// </summary>
         [JsonProperty(PropertyName = "users", Required = Required.Always)]
-        public List<UserClass> Users { get; set; }
+        public List<UserClass> Items { get; set; }
 
         public UsersClass() : base(Enums.Commands.users)
         {
-            Users = new List<UserClass>();
+            Items = new List<UserClass>();
         }
     }
 }

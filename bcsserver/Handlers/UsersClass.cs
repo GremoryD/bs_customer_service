@@ -54,14 +54,14 @@ namespace bcsserver.Handlers
                     {
                         User.Command = ListCommands.edit;
                         UsersCollection.TryUpdate(User.ID, User, ExistUser);
-                        UsersList.Users.Add(User);
+                        UsersList.Items.Add(User);
                     }
                 }
                 else
                 {
                     User.Command = ListCommands.add;
                     UsersCollection.TryAdd(User.ID, User);
-                    UsersList.Users.Add(User);
+                    UsersList.Items.Add(User);
                 }
             }
 
@@ -81,12 +81,12 @@ namespace bcsserver.Handlers
                 if (!IsExist)
                 {
                     User.Value.Command = ListCommands.delete;
-                    UsersList.Users.Add(User.Value);
+                    UsersList.Items.Add(User.Value);
                     UsersCollection.TryRemove(User.Value.ID, out ServerLib.JTypes.Server.UserClass DeletingUser);
                 }
             }
 
-            if (UsersList.Users.Count > 0)
+            if (UsersList.Items.Count > 0)
             {
                 UserSession.OutputQueueAddObject(UsersList);
             }
@@ -116,24 +116,23 @@ namespace bcsserver.Handlers
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
                 UserSession.Project.Database.Execute("UserAdd", ref Params);
-                if (Params.ParameterByName("State").Value.ToString() == "ok")
+                if (Params.ParameterByName("State").AsString== "ok")
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UserAddClass
                     {
-                        ID = Convert.ToInt64(Params.ParameterByName("AccessUserId").Value.ToString()),
+                        ID = Params.ParameterByName("AccessUserId").AsInt64,
                         Login = Request.Login,
                         FirstName = Request.FirstName,
                         LastName = Request.LastName,
                         MidleName = Request.MidleName,
                         Active = Request.Active,
                         JobID = Request.JobID,
-                        JobName = Params.ParameterByName("Job").Value.ToString()
-                    });
+                        JobName = Params.ParameterByName("Job").AsString                    });
                     ProcessingSuccess = true;
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.user_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").Value.ToString()));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.user_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
                 }
             }
             catch (Exception ex)
@@ -166,23 +165,22 @@ namespace bcsserver.Handlers
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
                 UserSession.Project.Database.Execute("UserEdit", ref Params);
-                if (Params.ParameterByName("State").Value.ToString() == "ok")
+                if (Params.ParameterByName("State").AsString== "ok")
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UserEditClass
                     {
-                        ID = Convert.ToInt64(Params.ParameterByName("UserId").Value.ToString()),
+                        ID = Request.ID,
                         FirstName = Request.FirstName,
                         LastName = Request.LastName,
                         MidleName = Request.MidleName,
                         Active = Request.Active,
                         JobId = Request.JobID,
-                        JobName = Params.ParameterByName("Job").Value.ToString()
-                    });
+                        JobName = Params.ParameterByName("Job").AsString                    });
                     ProcessingSuccess = true;
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.user_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").Value.ToString()));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.user_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
                 }
             }
             catch (Exception ex)

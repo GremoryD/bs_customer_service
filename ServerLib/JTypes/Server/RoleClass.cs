@@ -4,7 +4,7 @@ using CLProject;
 
 namespace ServerLib.JTypes.Server
 {
-    public class UsersRoleClass
+    public class RoleClass
     {
         /// <summary>
         /// Идентификатор роли пользователей
@@ -34,12 +34,6 @@ namespace ServerLib.JTypes.Server
         /// Hash-код объекта
         /// </summary>
         [JsonIgnore]
-        public string Hash
-        {
-            get
-            {
-                return Utils.SHA256Base64(ID.ToString() + Name + Description);
-            }
-        }
+        public string Hash => Utils.SHA256Base64(ID.ToString() + Name + Description);
     }
 }

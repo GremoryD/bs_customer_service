@@ -86,6 +86,11 @@ namespace bcsserver
         /// <summary>
         /// Обработчик списка ролей пользователей
         /// </summary>
+        public Handlers.HandlerRolesClass Roles;
+
+        /// <summary>
+        /// Обработчик списка ролей пользователей
+        /// </summary>
         public Handlers.HandlerUsersRolesClass UsersRoles;
 
         /// <summary>
@@ -112,6 +117,7 @@ namespace bcsserver
 
             Users = new Handlers.UsersClass(this);
             Jobs = new Handlers.JobsClass(this);
+            Roles = new Handlers.HandlerRolesClass(this);
             UsersRoles = new Handlers.HandlerUsersRolesClass(this);
 
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
@@ -191,14 +197,23 @@ namespace bcsserver
                                                 case Commands.job_edit:
                                                     Jobs.Edit(Request);
                                                     break;
+                                                case Commands.roles:
+                                                    Roles.SendData();
+                                                    break;
+                                                case Commands.roles_add:
+                                                    Roles.Add(Request);
+                                                    break;
+                                                case Commands.roles_edit:
+                                                    Roles.Edit(Request);
+                                                    break;
                                                 case Commands.users_roles:
                                                     UsersRoles.SendData();
                                                     break;
                                                 case Commands.users_roles_add:
                                                     UsersRoles.Add(Request);
                                                     break;
-                                                case Commands.users_roles_edit:
-                                                    UsersRoles.Edit(Request);
+                                                case Commands.users_roles_delete:
+                                                    UsersRoles.Delete(Request);
                                                     break;
                                             }
                                         }

@@ -6,48 +6,46 @@ using ServerLib.JTypes.Enums;
 
 namespace bcsserver.Handlers
 {
-
-    public class HandlerUsersRolesClass : BaseHandlerClass
+    public class HandlerRolesClass : BaseHandlerClass
     {
         /// <summary>
-        /// Список назначенных ролей пользователей
+        /// Общий список ролей пользователей
         /// </summary>
-        public ConcurrentDictionary<long, ServerLib.JTypes.Server.UserRoleClass> ReadCollection;
+        public ConcurrentDictionary<long, ServerLib.JTypes.Server.RoleClass> ReadCollection;
 
-        public HandlerUsersRolesClass(UserSessionClass AUserSession) : base(AUserSession)
+        public HandlerRolesClass(UserSessionClass AUserSession) : base(AUserSession)
         {
-            ReadCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.UserRoleClass>();
+            ReadCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.RoleClass>();
         }
-
+        
         /// <summary>
         /// Обновление данных
         /// </summary>
         public override void RefreshData()
         {
-            ServerLib.JTypes.Server.UsersRolesClass OutputList = new ServerLib.JTypes.Server.UsersRolesClass();
+            ServerLib.JTypes.Server.RolesClass OutputList = new ServerLib.JTypes.Server.RolesClass();
             DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
             Params.CreateParameterValue("Token", UserSession.Login.Token);
             DatabaseTableClass ReadTable = new DatabaseTableClass
             {
-                Table = (System.Data.DataTable)UserSession.Project.Database.Execute("UsersRoles", ref Params)
+                Table = (System.Data.DataTable)UserSession.Project.Database.Execute("Roles", ref Params)
             };
 
             foreach (System.Data.DataRow row in ReadTable.Table.Rows)
             {
-                ServerLib.JTypes.Server.UserRoleClass Item = new ServerLib.JTypes.Server.UserRoleClass
+                ServerLib.JTypes.Server.RoleClass Item = new ServerLib.JTypes.Server.RoleClass
                 {
                     ID = ReadTable.AsInt64(row, "ID"),
-                    UserID = ReadTable.AsInt64(row, "USER_ID"),
-                    RoleID = ReadTable.AsInt64(row, "ROLE_ID"),
-                    RoleName = ReadTable.AsString(row, "ROLE_NAME")
+                    Name = ReadTable.AsString(row, "NAME"),
+                    Description = ReadTable.AsString(row, "DESCRIPTION")
                 };
 
-                if (ReadCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.UserRoleClass ExistItem))
+                if (ReadCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.RoleClass ExistRole))
                 {
-                    if (ExistItem.Hash != Item.Hash)
+                    if (ExistRole.Hash != Item.Hash)
                     {
                         Item.Command = ListCommands.edit;
-                        ReadCollection.TryUpdate(Item.ID, Item, ExistItem);
+                        ReadCollection.TryUpdate(Item.ID, Item, ExistRole);
                         OutputList.Items.Add(Item);
                     }
                 }
@@ -59,7 +57,7 @@ namespace bcsserver.Handlers
                 }
             }
 
-            foreach (System.Collections.Generic.KeyValuePair<long, ServerLib.JTypes.Server.UserRoleClass> Item in ReadCollection)
+            foreach (System.Collections.Generic.KeyValuePair<long, ServerLib.JTypes.Server.RoleClass> Item in ReadCollection)
             {
                 bool IsExist = false;
 
@@ -76,7 +74,7 @@ namespace bcsserver.Handlers
                 {
                     Item.Value.Command = ListCommands.delete;
                     OutputList.Items.Add(Item.Value);
-                    ReadCollection.TryRemove(Item.Value.ID, out ServerLib.JTypes.Server.UserRoleClass DeletingItem);
+                    ReadCollection.TryRemove(Item.Value.ID, out ServerLib.JTypes.Server.RoleClass DeletingItem);
                 }
             }
 
@@ -87,7 +85,7 @@ namespace bcsserver.Handlers
         }
 
         /// <summary>
-        /// Обработчик добавления роли пользователю
+        /// Обработчик добавления роли пользователей
         /// </summary>
         /// <param name="ARequest">Запрос в формате JSON-объекта</param>
         public override bool AddProcessing(string ARequest)
@@ -95,66 +93,73 @@ namespace bcsserver.Handlers
             bool ProcessingSuccess = false;
             try
             {
-                ServerLib.JTypes.Client.UserRoleAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UserRoleAddClass>(ARequest);
+                ServerLib.JTypes.Client.RoleAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RoleAddClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
-                Params.CreateParameterValue("UserID", Request.UserID);
-                Params.CreateParameterValue("RoleID", Request.RoleID);
+                Params.CreateParameterValue("Name", Request.Name.Trim());
+                Params.CreateParameterValue("Description", Request.Description);
                 Params.CreateParameterValue("NewId");
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
-                UserSession.Project.Database.Execute("UsersRolesAdd", ref Params);
+                UserSession.Project.Database.Execute("RoleAdd", ref Params);
                 if (Params.ParameterByName("State").AsString== "ok")
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UserRoleAddClass
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.RoleAddClass
                     {
                         ID = Params.ParameterByName("NewId").AsInt64,
-                        UserID = Request.UserID,
-                        RoleID = Request.RoleID
+                        Name = Request.Name.Trim(),
+                        Description = Request.Description
                     });
                     ProcessingSuccess = true;
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.users_roles_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
                 }
             }
             catch (Exception ex)
             {
-                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.users_roles_add, ErrorCodes.FatalError, ex.Message));
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_add, ErrorCodes.FatalError, ex.Message));
             }
             return ProcessingSuccess;
         }
 
         /// <summary>
-        /// Обработчик удаления роли пользователя
+        /// Обработчик изменения роли пользователей
         /// </summary>
         /// <param name="ARequest">Запрос в формате JSON-объекта</param>
-        public override bool DeleteProcessing(string ARequest)
+        public override bool EditProcessing(string ARequest)
         {
             bool ProcessingSuccess = false;
             try
             {
-                ServerLib.JTypes.Client.UserRoleDeleteClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UserRoleDeleteClass>(ARequest);
+                ServerLib.JTypes.Client.RoleEditClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RoleEditClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
-                Params.CreateParameterValue("RoleID", Request.UserRoleID);
+                Params.CreateParameterValue("Name", Request.Name.Trim());
+                Params.CreateParameterValue("InId", Request.ID);
+                Params.CreateParameterValue("Description", Request.Description);
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
-                UserSession.Project.Database.Execute("UsersRolesDelete", ref Params);
+                UserSession.Project.Database.Execute("RoleEdit", ref Params);
                 if (Params.ParameterByName("State").AsString== "ok")
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UserRoleDeleteClass());
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.RoleEditClass
+                    {
+                        ID = Request.ID,
+                        Name = Request.Name.Trim(),
+                        Description = Request.Description
+                    });
                     ProcessingSuccess = true;
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.users_roles_delete, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
                 }
             }
             catch (Exception ex)
             {
-                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.users_roles_delete, ErrorCodes.FatalError, ex.Message));
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_edit, ErrorCodes.FatalError, ex.Message));
             }
             return ProcessingSuccess;
         }

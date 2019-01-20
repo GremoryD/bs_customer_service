@@ -56,18 +56,33 @@
         job_edit,
         
         /// <summary>
-        /// Список ролей пользователей
+        /// Список всех ролей пользователей
         /// </summary>
-        users_roles,                
+        roles,                
         
         /// <summary>
         /// Добавление роли пользователей
         /// </summary>
-        users_roles_add,
+        roles_add,
         
         /// <summary>
         /// Изменение роли пользователей
         /// </summary>
-        users_roles_edit, 
+        roles_edit,
+
+        /// <summary>
+        /// Список ролей назначенных пользователям
+        /// </summary>
+        users_roles,
+
+        /// <summary>
+        /// Добавление роли пользователю
+        /// </summary>
+        users_roles_add,
+
+        /// <summary>
+        /// Удаление роли у пользователя
+        /// </summary>
+        users_roles_delete
     }
 }

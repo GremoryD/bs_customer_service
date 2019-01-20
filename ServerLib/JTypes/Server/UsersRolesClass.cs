@@ -4,19 +4,19 @@ using System.Collections.Generic;
 namespace ServerLib.JTypes.Server
 {
     /// <summary>
-    /// Список ролей пользователей
+    /// Список назначенных ролей пользователей
     /// </summary>
     public class UsersRolesClass : BaseResponseClass
     {
         /// <summary>
-        /// Массив ролей пользователей
+        /// Массив назначенных ролей пользователей
         /// </summary>
-        [JsonProperty(PropertyName = "roles", Required = Required.Always)]
-        public List<UsersRoleClass> Items { get; set; }
+        [JsonProperty(PropertyName = "users_roles", Required = Required.Always)]
+        public List<UserRoleClass> Items { get; set; }
 
         public UsersRolesClass() : base(Enums.Commands.users_roles)
         {
-            Items = new List<UsersRoleClass>();
+            Items = new List<UserRoleClass>();
         }
     }
 }
