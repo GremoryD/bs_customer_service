@@ -56,6 +56,7 @@
     <Compile Include="JTypes\Client\UserAddClass.cs" />
     <Compile Include="JTypes\Client\UserEditClass.cs" />
     <Compile Include="JTypes\Client\UserRoleAddClass.cs" />
+    <Compile Include="JTypes\Client\UserRoleDeleteClass.cs" />
     <Compile Include="JTypes\Client\UsersClass.cs" />
     <Compile Include="JTypes\Client\UsersRolesClass.cs" />
     <Compile Include="JTypes\Enums\Commands.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="JTypes\Server\UserInformationClass.cs" />
     <Compile Include="JTypes\Server\UserRoleAddClass.cs" />
     <Compile Include="JTypes\Server\UserRoleClass.cs" />
+    <Compile Include="JTypes\Server\UserRoleDeleteClass.cs" />
     <Compile Include="JTypes\Server\UsersClass.cs" />
     <Compile Include="JTypes\Server\UsersRolesClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

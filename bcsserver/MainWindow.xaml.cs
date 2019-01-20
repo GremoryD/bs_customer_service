@@ -131,6 +131,7 @@ namespace bcsserver
             // Роли пользователей
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "UsersRoles", "USR.GET_USERS_ROLES(:Token)", "Чтение списка назанченных ролей пользователей");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UsersRolesAdd", "USR.USERS_ROLES_ADD(:Token, :UserId, :RoleId, :NewId, :State, :ErrorText)", "Добавление роли пользователю");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UsersRolesDelete", "USR.USERS_ROLES_DELETE(:Token, :RoleId, :State, :ErrorText)", "Удаление роли пользователя");
 
             DatabaseCheck.Start();
             SetSettingsButtons();

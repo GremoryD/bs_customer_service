@@ -78,6 +78,11 @@
         /// <summary>
         /// Добавление роли пользователю
         /// </summary>
-        users_roles_add
+        users_roles_add,
+
+        /// <summary>
+        /// Удаление роли у пользователя
+        /// </summary>
+        users_roles_delete
     }
 }

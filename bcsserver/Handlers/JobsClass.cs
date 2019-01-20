@@ -103,18 +103,18 @@ namespace bcsserver.Handlers
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
                 UserSession.Project.Database.Execute("JobAdd", ref Params);
-                if (Params.ParameterByName("State").AsString() == "ok")
+                if (Params.ParameterByName("State").AsString== "ok")
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.JobAddClass
                     {
-                        ID = Params.ParameterByName("NewId").AsInt64(),
+                        ID = Params.ParameterByName("NewId").AsInt64,
                         Name = Request.Name.Trim()
                     });
                     ProcessingSuccess = true;
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.job_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString()));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.job_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
                 }
             }
             catch (Exception ex)
@@ -141,7 +141,7 @@ namespace bcsserver.Handlers
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
                 UserSession.Project.Database.Execute("JobEdit", ref Params);
-                if (Params.ParameterByName("State").AsString() == "ok")
+                if (Params.ParameterByName("State").AsString== "ok")
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.JobEditClass
                     {
@@ -152,7 +152,7 @@ namespace bcsserver.Handlers
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.job_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString()));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.job_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
                 }
             }
             catch (Exception ex)

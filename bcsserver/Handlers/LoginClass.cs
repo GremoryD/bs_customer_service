@@ -34,11 +34,11 @@ namespace bcsserver.Handlers
                 Params.CreateParameterValue("AccessUserId");
                 Params.CreateParameterValue("Active");
                 UserSession.Project.Database.Execute("Login", ref Params);
-                long _UserId = Params.ParameterByName("AccessUserId").AsInt64();
-                int _Active = Params.ParameterByName("Active").AsInt32();
+                long _UserId = Params.ParameterByName("AccessUserId").AsInt64;
+                int _Active = Params.ParameterByName("Active").AsInt32;
                 if (_UserId > 0)
                 {
-                    Token = _Active == 1 ? Params.ParameterByName("AccessToken").AsString() : null;
+                    Token = _Active == 1 ? Params.ParameterByName("AccessToken").AsString: null;
                     Active = _Active == 1 ? ServerLib.JTypes.Enums.UserActive.activated : ServerLib.JTypes.Enums.UserActive.blocked;
                     ID = Active == ServerLib.JTypes.Enums.UserActive.activated ? _UserId : 0;
                     State = ServerLib.JTypes.Enums.ResponseState.ok;
