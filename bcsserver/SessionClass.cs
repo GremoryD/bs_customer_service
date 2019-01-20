@@ -209,6 +209,9 @@ namespace bcsserver
                                                 case Commands.users_roles:
                                                     UsersRoles.SendData();
                                                     break;
+                                                case Commands.users_roles_add:
+                                                    UsersRoles.Add(Request);
+                                                    break;
                                             }
                                         }
                                         else

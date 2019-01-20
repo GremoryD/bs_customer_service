@@ -86,5 +86,45 @@ namespace bcsserver.Handlers
             }
         }
 
+        /// <summary>
+        /// Обработчик добавления роли пользователю
+        /// </summary>
+        /// <param name="ARequest">Запрос в формате JSON-объекта</param>
+        public override bool AddProcessing(string ARequest)
+        {
+            bool ProcessingSuccess = false;
+            try
+            {
+                ServerLib.JTypes.Client.UserRoleAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UserRoleAddClass>(ARequest);
+                DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
+                Params.CreateParameterValue("Token", Request.Token);
+                Params.CreateParameterValue("UserID", Request.UserID);
+                Params.CreateParameterValue("RoleID", Request.RoleID);
+                Params.CreateParameterValue("NewId");
+                Params.CreateParameterValue("State");
+                Params.CreateParameterValue("ErrorText");
+                UserSession.Project.Database.Execute("UsersRolesAdd", ref Params);
+                if (Params.ParameterByName("State").AsString() == "ok")
+                {
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UserRoleAddClass
+                    {
+                        ID = Params.ParameterByName("NewId").AsInt64(),
+                        UserID = Request.UserID,
+                        RoleID = Request.RoleID
+                    });
+                    ProcessingSuccess = true;
+                }
+                else
+                {
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.users_roles_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString()));
+                }
+            }
+            catch (Exception ex)
+            {
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.users_roles_add, ErrorCodes.FatalError, ex.Message));
+            }
+            return ProcessingSuccess;
+        }
+
     }
 }

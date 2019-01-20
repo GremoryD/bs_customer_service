@@ -57,14 +57,14 @@ namespace bcsserver.Handlers
                             Param.CreateParameterValue("State");
                             Param.CreateParameterValue("ErrorText");
                             UserSession.Project.Database.Execute("UserInformation", ref Param);
-                            if(Param.ParameterByName("State").Value.ToString() == "ok")
+                            if(Param.ParameterByName("State").AsString() == "ok")
                             {
                                 string OldMessage = JsonConvert.SerializeObject(this);
-                                FirstName = Param.ParameterByName("FirstName").Value.ToString();
-                                LastName = Param.ParameterByName("LastName").Value.ToString();
-                                MidleName = Param.ParameterByName("MidleName").Value.ToString();
-                                JobName = Param.ParameterByName("Job").Value.ToString();
-                                Active = Convert.ToInt32(Param.ParameterByName("Active").Value.ToString()) == 1 ? ServerLib.JTypes.Enums.UserActive.activated : ServerLib.JTypes.Enums.UserActive.blocked;
+                                FirstName = Param.ParameterByName("FirstName").AsString();
+                                LastName = Param.ParameterByName("LastName").AsString();
+                                MidleName = Param.ParameterByName("MidleName").AsString();
+                                JobName = Param.ParameterByName("Job").AsString();
+                                Active = Param.ParameterByName("Active").AsInt32() == 1 ? ServerLib.JTypes.Enums.UserActive.activated : ServerLib.JTypes.Enums.UserActive.blocked;
                                 State = ServerLib.JTypes.Enums.ResponseState.ok;
                                 if(JsonConvert.SerializeObject(this) != OldMessage)
                                 {

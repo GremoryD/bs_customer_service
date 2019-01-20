@@ -96,17 +96,17 @@ namespace bcsserver.Handlers
                 ServerLib.JTypes.Client.RoleAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RoleAddClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
-                Params.CreateParameterValue("Name", Request.Name);
+                Params.CreateParameterValue("Name", Request.Name.Trim());
                 Params.CreateParameterValue("Description", Request.Description);
                 Params.CreateParameterValue("NewId");
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
                 UserSession.Project.Database.Execute("RoleAdd", ref Params);
-                if (Params.ParameterByName("State").Value.ToString() == "ok")
+                if (Params.ParameterByName("State").AsString() == "ok")
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.RoleAddClass
                     {
-                        ID = Convert.ToInt64(Params.ParameterByName("NewId").Value.ToString()),
+                        ID = Params.ParameterByName("NewId").AsInt64(),
                         Name = Request.Name.Trim(),
                         Description = Request.Description
                     });
@@ -114,7 +114,7 @@ namespace bcsserver.Handlers
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").Value.ToString()));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString()));
                 }
             }
             catch (Exception ex)
@@ -136,13 +136,13 @@ namespace bcsserver.Handlers
                 ServerLib.JTypes.Client.RoleEditClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RoleEditClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
-                Params.CreateParameterValue("Name", Request.Name);
+                Params.CreateParameterValue("Name", Request.Name.Trim());
                 Params.CreateParameterValue("InId", Request.ID);
                 Params.CreateParameterValue("Description", Request.Description);
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
                 UserSession.Project.Database.Execute("RoleEdit", ref Params);
-                if (Params.ParameterByName("State").Value.ToString() == "ok")
+                if (Params.ParameterByName("State").AsString() == "ok")
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.RoleEditClass
                     {
@@ -154,7 +154,7 @@ namespace bcsserver.Handlers
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").Value.ToString()));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString()));
                 }
             }
             catch (Exception ex)

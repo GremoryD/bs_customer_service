@@ -98,6 +98,7 @@ namespace bcsserver
             Project.Database.Parameters.CreateParameter("Job", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Должность пользователя", 200);
             Project.Database.Parameters.CreateParameter("JobName", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Должность пользователя", 200);
             Project.Database.Parameters.CreateParameter("JobId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Идентификатор должности", 20);
+            Project.Database.Parameters.CreateParameter("RoleId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Идентификатор роли", 20);
             Project.Database.Parameters.CreateParameter("Active", System.Data.ParameterDirection.Output, OracleDbType.Decimal, "Признак активности пользователя (1 - активен, 0 - заблокирован)", 20);
             Project.Database.Parameters.CreateParameter("InActive", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Признак активности пользователя (1 - активен, 0 - заблокирован)", 20);
             Project.Database.Parameters.CreateParameter("Token", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Ключ доступа");
@@ -129,6 +130,7 @@ namespace bcsserver
 
             // Роли пользователей
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "UsersRoles", "USR.GET_USERS_ROLES(:Token)", "Чтение списка назанченных ролей пользователей");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UsersRolesAdd", "USR.USERS_ROLES_ADD(:Token, :UserId, :RoleId, :NewId, :State, :ErrorText)", "Добавление роли пользователю");
 
             DatabaseCheck.Start();
             SetSettingsButtons();
@@ -140,14 +142,7 @@ namespace bcsserver
         {
             if (Project.Settings.IssueOnExit)
             {
-                if (System.Windows.MessageBox.Show("Завершить работу\r\nсервера клиентской поддержки?", "Завершение работы", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question) == System.Windows.MessageBoxResult.Yes)
-                {
-                    e.Cancel = false;
-                }
-                else
-                {
-                    e.Cancel = true;
-                }
+                e.Cancel = System.Windows.MessageBox.Show("Завершить работу\r\nсервера клиентской поддержки?", "Завершение работы", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes ? false : true;
             }
             else
             {

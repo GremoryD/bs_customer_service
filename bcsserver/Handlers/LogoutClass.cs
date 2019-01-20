@@ -43,7 +43,7 @@ namespace bcsserver.Handlers
             UserSession.Project.Database.Execute("Logout", ref Param);
             UserSession.Login.ID = 0;
             ServerLib.JTypes.Server.LogoutClass Response = new ServerLib.JTypes.Server.LogoutClass();
-            if (Param.ParameterByName("State").Value.ToString() == "ok")
+            if (Param.ParameterByName("State").AsString() == "ok")
             {
                 Response.State = ServerLib.JTypes.Enums.ResponseState.ok;
             }

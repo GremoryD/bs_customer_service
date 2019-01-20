@@ -73,6 +73,11 @@
         /// <summary>
         /// Список ролей назначенных пользователям
         /// </summary>
-        users_roles
+        users_roles,
+
+        /// <summary>
+        /// Добавление роли пользователю
+        /// </summary>
+        users_roles_add
     }
 }
