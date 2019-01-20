@@ -55,7 +55,10 @@ namespace bcsapp.ViewModels
         public ObservableCollection<UserClass> observableUserClass { set; get; } = new ObservableCollection<UserClass>(DataStorage.Instance.UserList);
         public UserClass SelectedUserClass { set; get; }
         public ObservableCollection<JobClass> observableJobsClass { set; get; } = new ObservableCollection<JobClass>(DataStorage.Instance.JobList);
-        public JobClass SelectedJobsClass { set; get; } 
+        public JobClass SelectedJobsClass { set; get; }
+
+
+        public ObservableCollection<UsersRoleClass> observableUsersRole { set; get; } = new ObservableCollection<UsersRoleClass>(DataStorage.Instance.UsersRoles);
 
         public AplicationViewModel()
         {
@@ -104,7 +107,7 @@ namespace bcsapp.ViewModels
             }
             if (JobsGridShow && SelectedJobsClass!=null)
             {
-                if (System.Windows.MessageBox.Show("Удалить должность " + SelectedJobsClass.JobName  +  "?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                if (System.Windows.MessageBox.Show("Удалить должность " + SelectedJobsClass.Name  +  "?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
                 {
 
                 }

@@ -77,7 +77,7 @@ namespace bcsapp.ViewModels
                 LastName = UserSurname,
                 MidleName = UserMiddleName,
                 Active = ServerLib.JTypes.Enums.UserActive.activated,
-                JobID = SelectedJob.ID,
+                JobID = SelectedJob!=null? SelectedJob.ID:1,
                 Token = DataStorage.Instance.Login.Token
             };
 
@@ -96,7 +96,7 @@ namespace bcsapp.ViewModels
                 LastName = UserSurname,
                 MidleName = UserMiddleName,
                 
-                JobID = SelectedJob.ID,
+                JobID = SelectedJob!=null? SelectedJob.ID:1,
                 Active = user.Active,
                 Token = DataStorage.Instance.Login.Token
             };

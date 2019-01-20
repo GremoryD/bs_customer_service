@@ -84,7 +84,16 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <ListView Grid.Column="0" Margin="5"/>
+                                    <ListView Grid.Column="0" Margin="5" ItemsSource="{Binding observableUsersRole}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate >
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Path=Name}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                        
+                                    </ListView>
                                     <ListView Grid.Column="1" Margin="5"/>
                                 </Grid>
                             </Grid>

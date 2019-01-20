@@ -142,7 +142,22 @@ namespace bcsapp
                                 case ServerLib.JTypes.Enums.Commands.users:
                                         UsersListHandler(InputMessage);
                                     break;
+                                case ServerLib.JTypes.Enums.Commands.user_add:
+                                    UpdateUsersHandler(InputMessage);
+                                    break;
+                                case ServerLib.JTypes.Enums.Commands.user_edit:
+                                    UpdateUsersHandler(InputMessage);
+                                    break;
                                 case ServerLib.JTypes.Enums.Commands.jobs:
+                                    UpdateJobssListHandler(InputMessage);
+                                    break;
+                                case ServerLib.JTypes.Enums.Commands.job_add:
+                                    JobssListHandler(InputMessage);
+                                    break;
+                                case ServerLib.JTypes.Enums.Commands.job_edit:
+                                    JobssListHandler(InputMessage);
+                                    break;
+                                case ServerLib.JTypes.Enums.Commands.users_roles:
                                     JobssListHandler(InputMessage);
                                     break;
                             }
@@ -261,6 +276,29 @@ namespace bcsapp
             UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
         }
 
+
+        private void UpdateUsersHandler(string InputMessage)
+        {
+            if (DataStorage.Instance.UserList != null)
+            { 
+                    if (DataStorage.Instance.UserList.Contains(JsonConvert.DeserializeObject<UserClass>(InputMessage)))
+                    {
+                        UserClass result = DataStorage.Instance.UserList.Find(x => x.ID == JsonConvert.DeserializeObject<UserClass>(InputMessage).ID);
+                        if (result != null)
+                        {
+                            DataStorage.Instance.UserList.RemoveAt(DataStorage.Instance.UserList.IndexOf(result));
+                        }
+                        DataStorage.Instance.UserList.Add(JsonConvert.DeserializeObject<UserClass>(InputMessage));
+                    }  
+            }
+            else
+            {
+
+            }
+
+            UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
+        }
+
         private void JobssListHandler(string InputMessage)
         {
             if (DataStorage.Instance.JobList!=null)
@@ -273,8 +311,21 @@ namespace bcsapp
 
             }
             UpdateJobs?.Invoke(this, DataStorage.Instance.JobList);
-        }
+        } 
+         
+        private void UpdateJobssListHandler(string InputMessage)
+        {
+            if (DataStorage.Instance.JobList != null)
+            {
+                DataStorage.Instance.JobList = JsonConvert.DeserializeObject<JobsClass>(InputMessage).Jobs;
 
+            }
+            else
+            {
+
+            }
+            UpdateJobs?.Invoke(this, DataStorage.Instance.JobList);
+        }
         #endregion
 
 
