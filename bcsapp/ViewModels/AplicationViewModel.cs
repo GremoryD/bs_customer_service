@@ -69,6 +69,8 @@ namespace bcsapp.ViewModels
         public ICommand AddRoleToUserCommand { set; get; }
         public ICommand RemoveRoleToUserCommand { set; get; }
 
+        //roles grid controle
+        public ObservableCollection<AccessRolesData> accessRolesData { set; get; } = new ObservableCollection<AccessRolesData>(DataStorage.Instance.accessRolesData);
 
 
         public ObservableCollection<RoleClass> observableUsersRole { set; get; } = new ObservableCollection<RoleClass>(DataStorage.Instance.UsersRoles);

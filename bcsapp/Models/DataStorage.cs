@@ -23,5 +23,12 @@ namespace bcsapp.Models
             Login = null;
             UserInformation = null;
         }
+
+
+        public List<AccessRolesData> accessRolesData = new List<AccessRolesData>()
+        {
+            new AccessRolesData(){ Name = "Пользователи" , Create = true, Delete= false, Read = true, Edit = true},
+            new AccessRolesData(){ Name = "Пользователи" , Create = true, Delete= true, Read = true, Edit = true}
+        };
     }
 }

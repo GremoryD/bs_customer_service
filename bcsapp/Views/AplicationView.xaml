@@ -122,7 +122,16 @@
                         </TabItem>
                         <TabItem  Visibility="Collapsed"  IsSelected="{Binding RolesGridShow}">
                             <Grid>
-                                <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableRolesClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedRoleClass, Mode=TwoWay}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <dxg:GridControl Grid.Column="0" HorizontalAlignment="Stretch" ItemsSource="{Binding observableRolesClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedRoleClass, Mode=TwoWay}">
+                                    <dxg:GridControl.View>
+                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="True" AutoWidth="True"/>
+                                    </dxg:GridControl.View>
+                                </dxg:GridControl>
+                                <dxg:GridControl Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding accessRolesData}"  AutoGenerateColumns="AddNew"  >
                                     <dxg:GridControl.View>
                                         <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="True" AutoWidth="True"/>
                                     </dxg:GridControl.View>

@@ -89,6 +89,7 @@
     </ApplicationDefinition>
     <Compile Include="Controls\NavigationService.cs" />
     <Compile Include="Controls\SimpleCommand.cs" />
+    <Compile Include="Models\AccessRolesData.cs" />
     <Compile Include="Models\Behoviour\MenuBehaviour.cs" />
     <Compile Include="Models\DataStorage.cs" />
     <Compile Include="ViewModels\AddJobsViewModel.cs" />

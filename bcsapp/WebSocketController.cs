@@ -272,15 +272,25 @@ namespace bcsapp
 
         private void UsersListHandler(string InputMessage)
         {
-            if (DataStorage.Instance.UserList != null)
+            if (DataStorage.Instance.UserList.Count==0)
             {
                 DataStorage.Instance.UserList = JsonConvert.DeserializeObject<UsersClass>(InputMessage).Items;
+                UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
             }
             else
             {
+                //TODO 
+                foreach(UserClass user in JsonConvert.DeserializeObject<UsersClass>(InputMessage).Items)
+                {
+                    foreach (UserClass userData in DataStorage.Instance.UserList)
+                    {
+                        if(user.ID == userData.ID) { DataStorage.Instance.UserList.Remove(userData); DataStorage.Instance.UserList.Add(user); }                        
+                    } 
 
+                } 
+
+                UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
             }
-            UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
         }
 
 
