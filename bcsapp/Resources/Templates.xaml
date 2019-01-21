@@ -15,4 +15,7 @@
     <DataTemplate DataType="{x:Type vm:AddJobsViewModel}">
         <v:AddJobsView/>
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AddRolesViewModel}">
+        <v:AddRolesView/>
+    </DataTemplate>
 </ResourceDictionary>

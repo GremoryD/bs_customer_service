@@ -30,7 +30,7 @@
         <TextBlock Grid.Row="3" Grid.Column="0" Text="Фамилия" TextWrapping="Wrap"  TextAlignment="Center" VerticalAlignment="Center"/>
         <dxe:TextEdit Grid.Row="3" VerticalAlignment="Center" Text="{Binding UserSurname}"  Grid.Column="1" Margin="0.2,10,10.4,10"/>
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Професия" TextWrapping="Wrap"  TextAlignment="Center" VerticalAlignment="Center"/>
-        <dxe:ComboBoxEdit Grid.Row="4" VerticalAlignment="Center" Grid.Column="1" Margin="0.2,10,10.4,10" ItemsSource="{Binding observableJobsClass}" DisplayMember="JobName" SelectedItem="{Binding SelectedJob}"/>
+        <dxe:ComboBoxEdit Grid.Row="4" VerticalAlignment="Center" Grid.Column="1" Margin="0.2,10,10.4,10" ItemsSource="{Binding observableJobsClass}" DisplayMember="Name" SelectedItem="{Binding SelectedJob}"/>
         <dx:SimpleButton Grid.Column="0" Grid.Row="5" Content="Cancel" Margin="10" Command="{Binding CancelCommand}"/>
         <dx:SimpleButton Grid.Column="1" Grid.Row="5" Content="{Binding EditAddButton}" Margin="10"  Command="{Binding AddUserCommand}"/>
     </Grid>

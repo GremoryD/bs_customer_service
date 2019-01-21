@@ -158,7 +158,7 @@ namespace bcsapp
                                     JobssListHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.users_roles:
-                                    JobssListHandler(InputMessage);
+                                    RolesListHandler(InputMessage);
                                     break;
                             }
                         }
@@ -245,8 +245,14 @@ namespace bcsapp
         public event EventHandler<String> ConnectedState;
         public event EventHandler<LoginClass> LoginDone;
         public event EventHandler<string> LoginFailed;
+
         public event EventHandler<List<UserClass>> UpdateUsers;
         public event EventHandler<List<JobClass>> UpdateJobs;
+        public event EventHandler<List<RoleClass>> UpdateRoles;
+
+        public event EventHandler<UserClass> UpdateUser;
+        public event EventHandler<JobClass> UpdateJob;
+        public event EventHandler<RoleClass> UpdateRole;
 
         #endregion
 
@@ -281,23 +287,34 @@ namespace bcsapp
         private void UpdateUsersHandler(string InputMessage)
         {
             if (DataStorage.Instance.UserList != null)
-            { 
-                    if (DataStorage.Instance.UserList.Contains(JsonConvert.DeserializeObject<UserClass>(InputMessage)))
+            {
+               
+                    UserEditClass temp = JsonConvert.DeserializeObject<UserEditClass>(InputMessage);
+                    UserClass user = new UserClass() { ID = temp.ID,
+                                                       Active = temp.Active,
+                                                       FirstName = temp.FirstName,
+                                                       LastName = temp.LastName,
+                                                       MidleName = temp.MidleName,
+                                                       JobID = temp.JobId,
+                                                       JobName = temp.JobName };
+
+                    UserClass result = DataStorage.Instance.UserList.Find(x => x.ID == user.ID);
+                    if (result!=null)
                     {
-                        UserClass result = DataStorage.Instance.UserList.Find(x => x.ID == JsonConvert.DeserializeObject<UserClass>(InputMessage).ID);
                         if (result != null)
                         {
                             DataStorage.Instance.UserList.RemoveAt(DataStorage.Instance.UserList.IndexOf(result));
                         }
-                        DataStorage.Instance.UserList.Add(JsonConvert.DeserializeObject<UserClass>(InputMessage));
-                    }  
+                       
+                    } 
+                    DataStorage.Instance.UserList.Add(user); 
+                   UpdateUser?.Invoke(this, user);
             }
             else
             {
 
             }
 
-            UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
         }
 
         private void JobssListHandler(string InputMessage)
@@ -326,6 +343,35 @@ namespace bcsapp
 
             }
             UpdateJobs?.Invoke(this, DataStorage.Instance.JobList);
+        }
+
+
+        private void RolesListHandler(string InputMessage)
+        {
+            if (DataStorage.Instance.UsersRoles != null)
+            {
+                DataStorage.Instance.UsersRoles = JsonConvert.DeserializeObject<RolesClass>(InputMessage).Items;
+
+            }
+            else
+            {
+
+            }
+            UpdateRoles?.Invoke(this, DataStorage.Instance.UsersRoles);
+        }
+
+        private void UpdateRolesListHandler(string InputMessage)
+        {
+            if (DataStorage.Instance.UsersRoles != null)
+            {
+                DataStorage.Instance.UsersRoles = JsonConvert.DeserializeObject<RolesClass>(InputMessage).Items;
+
+            }
+            else
+            {
+
+            }
+            UpdateRoles?.Invoke(this, DataStorage.Instance.UsersRoles);
         }
         #endregion
 

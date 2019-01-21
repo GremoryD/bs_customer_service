@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace bcsapp.ViewModels
 {
-    public class AddUserViewModel : INotifyPropertyChanged
+    public class AddUserViewModel : IViewModel, INotifyPropertyChanged
     {
         private UserClass user;
 
@@ -36,6 +36,7 @@ namespace bcsapp.ViewModels
 
         public ICommand AddUserCommand { set; get; }
         public ICommand CancelCommand { set; get; }
+        public bool FullscreenView { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public AddUserViewModel()
         {

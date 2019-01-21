@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace bcsapp.ViewModels
 {
@@ -36,7 +37,9 @@ namespace bcsapp.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         public LoginViewModel()
-        { 
+        {
+            var id = System.Threading.Thread.CurrentThread.ManagedThreadId;
+
             LoginCommand = new SimpleCommand(LoginF, (_) =>
             {
                 if (LoginInput == null || PasswordInput == null)
@@ -45,9 +48,9 @@ namespace bcsapp.ViewModels
                 return LoginInput.Length >= 1 && PasswordInput.Length >=1;
             });
 
-            WebSocketController.Instance.LoginFailed += (_, __) => ErrorMessage(__);
-            WebSocketController.Instance.LoginDone += (_, __) => LoginDone(__);
-            WebSocketController.Instance.ServerErr += (_, __) => ErrorMessage(__);
+            WebSocketController.Instance.LoginFailed += (_, __) => Application.Current.Dispatcher.Invoke(() => ErrorMessage(__));
+            WebSocketController.Instance.LoginDone += (_, __) => Application.Current.Dispatcher.Invoke(() => LoginDone(__));
+            WebSocketController.Instance.ServerErr += (_, __) => Application.Current.Dispatcher.Invoke(() => ErrorMessage(__));
         }
 
         private void Notify(string propertyName)
@@ -75,6 +78,7 @@ namespace bcsapp.ViewModels
 
         private void LoginDone(LoginClass AObject)
         {
+            var id = System.Threading.Thread.CurrentThread.ManagedThreadId;
             ClearMessage();
             Output = string.Format("{0}Get: {1}\n\r", Output, JsonConvert.SerializeObject(AObject));
             Notify("Output");

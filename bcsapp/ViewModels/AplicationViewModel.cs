@@ -14,7 +14,6 @@ using ServerLib.JTypes.Server;
 using System.Collections.ObjectModel;
 using bcsapp.Models;
 using System.Diagnostics;
-using System.Windows.Forms;
 
 namespace bcsapp.ViewModels
 {
@@ -35,6 +34,9 @@ namespace bcsapp.ViewModels
         public ICommand EditButtonCommad { set; get; }
         public ICommand DeleteButtonCommand { set; get; }
 
+        //GridUSers
+        public ICommand UserSelectedItemChangedCommand { set; get; }
+
         //Ribon Menu Buttons
         public bool SelectedUsers { set; get; } = true;
         public bool SelectedClients { set; get; } = false;
@@ -52,16 +54,28 @@ namespace bcsapp.ViewModels
 
 
         //Data Grid
-        public ObservableCollection<UserClass> observableUserClass { set; get; } = new ObservableCollection<UserClass>(DataStorage.Instance.UserList);
+        public ObservableCollection<UserClass> observableUserClass {set;get; } =new ObservableCollection<UserClass>(DataStorage.Instance.UserList);
         public UserClass SelectedUserClass { set; get; }
         public ObservableCollection<JobClass> observableJobsClass { set; get; } = new ObservableCollection<JobClass>(DataStorage.Instance.JobList);
         public JobClass SelectedJobsClass { set; get; }
+        public ObservableCollection<RoleClass> observableRolesClass { set; get; } = new ObservableCollection<RoleClass>(DataStorage.Instance.UsersRoles);
+        public RoleClass SelectedRoleClass { set; get; }
 
 
-        public ObservableCollection<UsersRoleClass> observableUsersRole { set; get; } = new ObservableCollection<UsersRoleClass>(DataStorage.Instance.UsersRoles);
+        //roles controle
+        public ObservableCollection<RoleClass> UserUsedRoles { set; get; } = new ObservableCollection<RoleClass>();
+        public ObservableCollection<RoleClass> UserUnusedRoles { set; get; } = new ObservableCollection<RoleClass>();
+
+        public ICommand AddRoleToUserCommand { set; get; }
+        public ICommand RemoveRoleToUserCommand { set; get; }
+
+
+
+        public ObservableCollection<RoleClass> observableUsersRole { set; get; } = new ObservableCollection<RoleClass>(DataStorage.Instance.UsersRoles);
 
         public AplicationViewModel()
         {
+            var id = System.Threading.Thread.CurrentThread.ManagedThreadId;
             Stopwatch watcher = Stopwatch.StartNew();
 
             RibbonCommand = new SimpleCommand<RibbonControl>(UserRibbon);
@@ -73,11 +87,16 @@ namespace bcsapp.ViewModels
             EditButtonCommad = new SimpleCommand(EditButton);
             DeleteButtonCommand = new SimpleCommand(DeleteButton);
 
+            UserSelectedItemChangedCommand = new SimpleCommand(UserSelectedItemChanged);
+            AddRoleToUserCommand = new SimpleCommand<RoleClass>(AddRoleToUser);
+            RemoveRoleToUserCommand = new SimpleCommand<RoleClass>(RemoveRoleToUser);
 
-            WebSocketController.Instance.UpdateUserUI += (_, __) => Instance_UpdateUserUI(__);
-            WebSocketController.Instance.ConnectedState += (_, __) => Instance_ConnectedState(__);
-            WebSocketController.Instance.UpdateUsers += (_, __) => Instance_UpdateUsers(__);
-            WebSocketController.Instance.UpdateJobs += (_, __) => Instance_UpdateJobs(__);
+            WebSocketController.Instance.UpdateUserUI += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUserUI(__));
+            WebSocketController.Instance.ConnectedState +=  (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_ConnectedState(__));
+            WebSocketController.Instance.UpdateUsers += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUsers(__));
+            WebSocketController.Instance.UpdateUser += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUser(__));
+            WebSocketController.Instance.UpdateJobs +=  (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateJobs(__));
+            WebSocketController.Instance.UpdateRoles += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateRoles(__));
 
             Task.Run(() =>
             {
@@ -85,12 +104,33 @@ namespace bcsapp.ViewModels
                 WebSocketController.Instance.OutputQueueAddObject(usersClass);
                 ServerLib.JTypes.Client.JobsClass jobsClass = new ServerLib.JTypes.Client.JobsClass { Token = DataStorage.Instance.Login.Token };
                 WebSocketController.Instance.OutputQueueAddObject(jobsClass);
+                ServerLib.JTypes.Client.RolesClass rolesClass = new ServerLib.JTypes.Client.RolesClass { Token = DataStorage.Instance.Login.Token };
+                WebSocketController.Instance.OutputQueueAddObject(rolesClass);
             });
 
             var time = watcher.Elapsed;
         }
 
-#region Ribonn Buttons
+        private void RemoveRoleToUser(RoleClass obj)
+        {
+            UserUnusedRoles.Remove(obj);
+            UserUsedRoles.Add(obj);
+
+        }
+
+        private void AddRoleToUser(RoleClass obj)
+        {
+            UserUnusedRoles.Add(obj);
+            UserUsedRoles.Remove(obj);
+
+        }
+
+        private void UserSelectedItemChanged()
+        {
+
+        }
+
+        #region Ribonn Buttons
         private void DeleteButton()
         {
             if (UsersGridShow && SelectedUserClass!=null)
@@ -116,7 +156,19 @@ namespace bcsapp.ViewModels
 
                 }
 
-            } 
+            }
+            if (RolesGridShow && SelectedRoleClass != null)
+            {
+                if (System.Windows.MessageBox.Show("Удалить роль " + SelectedRoleClass.Name + "?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                {
+
+                }
+                else
+                {
+
+                }
+
+            }
 
 
 
@@ -126,48 +178,60 @@ namespace bcsapp.ViewModels
         {
             if (UsersGridShow && SelectedUserClass != null)
             {
-                Window window = new Window();
-                window.Title = "Редактировать пользователя";
-                window.Content = new AddUserViewModel(SelectedUserClass);
-                window.SizeToContent = SizeToContent.WidthAndHeight;
-                window.ShowDialog();
+                ShowDialogWin(new AddUserViewModel(SelectedUserClass), "Редактировать пользователя");
             }
             if (JobsGridShow && SelectedJobsClass != null)
             {
-                Window window = new Window();
-                window.Title = "Новая должность";
-                window.Content = new AddJobsViewModel(SelectedJobsClass);
-                window.SizeToContent = SizeToContent.WidthAndHeight;
-                window.ShowDialog();
+                ShowDialogWin(new AddJobsViewModel(SelectedJobsClass), "Новая должность");
+            }
+            if (RolesGridShow && SelectedRoleClass != null)
+            {
+                ShowDialogWin(new AddRolesViewModel(SelectedRoleClass), "Новая должность");
             }
 
-        }
-
+        } 
         private void AddButton()
         {
             if (UsersGridShow)
             {
-                Window window = new Window();
-                window.Title = "Новый пользователь";
-                window.Content = new AddUserViewModel();
-                window.SizeToContent = SizeToContent.WidthAndHeight;
-                window.ShowDialog();
+                ShowDialogWin(new AddUserViewModel(), "Новый пользователь"); 
             }
             if (JobsGridShow)
             {
-                Window window = new Window();
-                window.Title = "Новая должность";
-                window.Content = new AddJobsViewModel();
-                window.SizeToContent = SizeToContent.WidthAndHeight;
-                window.ShowDialog();
+                ShowDialogWin(new AddJobsViewModel(), "Новая должность"); 
             }
+            if (RolesGridShow)
+            {
+                ShowDialogWin(new AddRolesViewModel(), "Новая Роль"); 
+            }
+        }
+
+
+        private void ShowDialogWin(IViewModel viewModel, string title)
+        {
+            Window window = new Window();
+            window.Title = title;
+            window.Content = viewModel;
+            window.SizeToContent = SizeToContent.WidthAndHeight;
+            window.ShowDialog();
         }
  #endregion
 
         //обновление данных в таблицах
         private void Instance_UpdateUsers(List<UserClass> users)
-        {
+        { 
+
             observableUserClass = new ObservableCollection<UserClass>(users);
+            Notify("observableUserClass");
+
+        }
+        private void Instance_UpdateUser(UserClass user)
+        {
+            foreach(UserClass usr in observableUserClass)
+            {
+                if (usr.ID == user.ID) observableUserClass.Remove(usr);
+            }
+            observableUserClass.Add(user);
             Notify("observableUserClass");
 
         }
@@ -178,8 +242,14 @@ namespace bcsapp.ViewModels
             Notify("observableJobsClass");
         }
 
+        private void Instance_UpdateRoles(List<RoleClass> roles)
+        {
+            observableRolesClass = new ObservableCollection<RoleClass>(roles);
+            Notify("observableRolesClass");
+        }
 
-#region Left Menu Functions 
+
+        #region Left Menu Functions 
         //Функции кнопок левого меню
         private void OpenUsersGrid()
         {
