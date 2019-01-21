@@ -1,7 +1,7 @@
 ﻿namespace ServerLib.JTypes.Client
 {
     /// <summary>
-    /// Запрос списка ролей пользователей
+    /// Запрос списка ролей назначенных пользователям
     /// </summary>
     public class UsersRolesClass : BaseRequestClass
     {

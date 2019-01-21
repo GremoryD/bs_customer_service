@@ -16,7 +16,7 @@ namespace ServerLib.JTypes.Server
         /// Статус обработки запроса к базе данных
         /// </summary>
         [JsonProperty("state", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
-        public ResponseState State { get; set; }
+        public ResponseState State { get; set; } = ResponseState.ok;
 
         /// <summary>
         /// Описание ошибки обработки запроса к базе данных

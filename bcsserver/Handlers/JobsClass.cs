@@ -36,36 +36,36 @@ namespace bcsserver.Handlers
 
             foreach (System.Data.DataRow row in JobsTable.Table.Rows)
             {
-                ServerLib.JTypes.Server.JobClass Job = new ServerLib.JTypes.Server.JobClass
+                ServerLib.JTypes.Server.JobClass Item = new ServerLib.JTypes.Server.JobClass
                 {
                     ID = JobsTable.AsInt64(row, "ID"),
                     Name = JobsTable.AsString(row, "JOB_NAME")
                 };
 
-                if (JobsCollection.TryGetValue(Job.ID, out ServerLib.JTypes.Server.JobClass ExistJob))
+                if (JobsCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.JobClass ExistItem))
                 {
-                    if (ExistJob.Hash != Job.Hash)
+                    if (ExistItem.Hash != Item.Hash)
                     {
-                        Job.Command = ListCommands.edit;
-                        JobsCollection.TryUpdate(Job.ID, Job, ExistJob);
-                        JobsList.Jobs.Add(Job);
+                        Item.Command = ListCommands.edit;
+                        JobsCollection.TryUpdate(Item.ID, Item, ExistItem);
+                        JobsList.Jobs.Add(Item);
                     }
                 }
                 else
                 {
-                    Job.Command = ListCommands.add;
-                    JobsCollection.TryAdd(Job.ID, Job);
-                    JobsList.Jobs.Add(Job);
+                    Item.Command = ListCommands.add;
+                    JobsCollection.TryAdd(Item.ID, Item);
+                    JobsList.Jobs.Add(Item);
                 }
             }
 
-            foreach (var User in JobsCollection)
+            foreach (System.Collections.Generic.KeyValuePair<long, ServerLib.JTypes.Server.JobClass> Item in JobsCollection)
             {
                 bool IsExist = false;
 
                 foreach (System.Data.DataRow row in JobsTable.Table.Rows)
                 {
-                    if (User.Value.ID == JobsTable.AsInt64(row, "ID"))
+                    if (Item.Value.ID == JobsTable.AsInt64(row, "ID"))
                     {
                         IsExist = true;
                         break;
@@ -74,9 +74,9 @@ namespace bcsserver.Handlers
 
                 if (!IsExist)
                 {
-                    User.Value.Command = ListCommands.delete;
-                    JobsList.Jobs.Add(User.Value);
-                    JobsCollection.TryRemove(User.Value.ID, out ServerLib.JTypes.Server.JobClass DeletingJob);
+                    Item.Value.Command = ListCommands.delete;
+                    JobsList.Jobs.Add(Item.Value);
+                    JobsCollection.TryRemove(Item.Value.ID, out ServerLib.JTypes.Server.JobClass DeletingItem);
                 }
             }
 
@@ -98,23 +98,23 @@ namespace bcsserver.Handlers
                 ServerLib.JTypes.Client.JobAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.JobAddClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
-                Params.CreateParameterValue("JobName", Request.Name);
+                Params.CreateParameterValue("JobName", Request.Name.Trim());
                 Params.CreateParameterValue("NewId");
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
                 UserSession.Project.Database.Execute("JobAdd", ref Params);
-                if (Params.ParameterByName("State").Value.ToString() == "ok")
+                if (Params.ParameterByName("State").AsString== "ok")
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.JobAddClass
                     {
-                        ID = Convert.ToInt64(Params.ParameterByName("NewId").Value.ToString()),
+                        ID = Params.ParameterByName("NewId").AsInt64,
                         Name = Request.Name.Trim()
                     });
                     ProcessingSuccess = true;
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.job_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").Value.ToString()));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.job_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
                 }
             }
             catch (Exception ex)
@@ -136,12 +136,12 @@ namespace bcsserver.Handlers
                 ServerLib.JTypes.Client.JobEditClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.JobEditClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
-                Params.CreateParameterValue("JobName", Request.Name);
+                Params.CreateParameterValue("JobName", Request.Name.Trim());
                 Params.CreateParameterValue("JobId", Request.ID);
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
                 UserSession.Project.Database.Execute("JobEdit", ref Params);
-                if (Params.ParameterByName("State").Value.ToString() == "ok")
+                if (Params.ParameterByName("State").AsString== "ok")
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.JobEditClass
                     {
@@ -152,7 +152,7 @@ namespace bcsserver.Handlers
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.job_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").Value.ToString()));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.job_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
                 }
             }
             catch (Exception ex)

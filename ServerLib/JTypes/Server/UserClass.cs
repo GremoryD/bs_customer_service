@@ -61,18 +61,12 @@ namespace ServerLib.JTypes.Server
         /// Команда, которую необходимо выполнить на стороне клиента с данным объектом
         /// </summary>
         [JsonProperty(PropertyName = "command", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
-        public JTypes.Enums.ListCommands Command { get; set; }
+        public Enums.ListCommands Command { get; set; }
 
         /// <summary>
         /// Hash-код объекта
         /// </summary>
         [JsonIgnore]
-        public string Hash
-        {
-            get
-            {
-                return Utils.SHA256Base64(ID.ToString() + Login + FirstName + LastName + MidleName + JobName + Active.ToString());
-            }
-        }
+        public string Hash => Utils.SHA256Base64(ID.ToString() + Login + FirstName + LastName + MidleName + JobName + Active.ToString());
     }
 }
