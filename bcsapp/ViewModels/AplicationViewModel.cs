@@ -63,8 +63,17 @@ namespace bcsapp.ViewModels
 
 
         //roles controle
-        public ObservableCollection<RoleClass> UserUsedRoles { set; get; } = new ObservableCollection<RoleClass>();
-        public ObservableCollection<RoleClass> UserUnusedRoles { set; get; } = new ObservableCollection<RoleClass>();
+        public ObservableCollection<RoleClass> UserUsedRoles { set; get; } = new ObservableCollection<RoleClass>()
+        {
+            new RoleClass(){ ID=1, Name = "admin", Description="Admin"},
+            new RoleClass(){ ID=2, Name = "admin1", Description="Admin"},
+            new RoleClass(){ ID=3, Name = "admin2", Description="Admin"},
+        };
+        public ObservableCollection<RoleClass> UserUnusedRoles { set; get; } = new ObservableCollection<RoleClass>() {
+            new RoleClass(){ ID=1, Name = "admin", Description="Admin"},
+            new RoleClass(){ ID=2, Name = "admin1", Description="Admin"},
+            new RoleClass(){ ID=3, Name = "admin2", Description="Admin"},
+        };
 
         public ICommand AddRoleToUserCommand { set; get; }
         public ICommand RemoveRoleToUserCommand { set; get; }
@@ -76,10 +85,7 @@ namespace bcsapp.ViewModels
         public ObservableCollection<RoleClass> observableUsersRole { set; get; } = new ObservableCollection<RoleClass>(DataStorage.Instance.UsersRoles);
 
         public AplicationViewModel()
-        {
-            var id = System.Threading.Thread.CurrentThread.ManagedThreadId;
-            Stopwatch watcher = Stopwatch.StartNew();
-
+        { 
             RibbonCommand = new SimpleCommand<RibbonControl>(UserRibbon);
             UsersGridCommand = new SimpleCommand(OpenUsersGrid);
             JobsGridCommand = new SimpleCommand(OpenJobsGrid);
@@ -109,22 +115,20 @@ namespace bcsapp.ViewModels
                 ServerLib.JTypes.Client.RolesClass rolesClass = new ServerLib.JTypes.Client.RolesClass { Token = DataStorage.Instance.Login.Token };
                 WebSocketController.Instance.OutputQueueAddObject(rolesClass);
             });
-
-            var time = watcher.Elapsed;
+             
         }
 
         private void RemoveRoleToUser(RoleClass obj)
         {
-            UserUnusedRoles.Remove(obj);
-            UserUsedRoles.Add(obj);
+            UserUnusedRoles.Add(obj);
+            UserUsedRoles.Remove(obj);
 
         }
 
         private void AddRoleToUser(RoleClass obj)
-        {
-            UserUnusedRoles.Add(obj);
-            UserUsedRoles.Remove(obj);
-
+        { 
+            UserUnusedRoles.Remove(obj);
+            UserUsedRoles.Add(obj);
         }
 
         private void UserSelectedItemChanged()

@@ -157,6 +157,15 @@ namespace bcsapp
                                 case ServerLib.JTypes.Enums.Commands.job_edit:
                                     JobssListHandler(InputMessage);
                                     break;
+                                case ServerLib.JTypes.Enums.Commands.roles:
+                                    RolesListHandler(InputMessage);
+                                    break;
+                                case ServerLib.JTypes.Enums.Commands.roles_add:
+                                    RolesListHandler(InputMessage);
+                                    break;
+                                case ServerLib.JTypes.Enums.Commands.roles_edit:
+                                    RolesListHandler(InputMessage);
+                                    break;
                                 case ServerLib.JTypes.Enums.Commands.users_roles:
                                     RolesListHandler(InputMessage);
                                     break;
@@ -282,11 +291,7 @@ namespace bcsapp
                 //TODO 
                 foreach(UserClass user in JsonConvert.DeserializeObject<UsersClass>(InputMessage).Items)
                 {
-                    foreach (UserClass userData in DataStorage.Instance.UserList)
-                    {
-                        if(user.ID == userData.ID) { DataStorage.Instance.UserList.Remove(userData); DataStorage.Instance.UserList.Add(user); }                        
-                    } 
-
+                    UpdateUsersHandler(user);
                 } 
 
                 UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
@@ -310,21 +315,36 @@ namespace bcsapp
 
                     UserClass result = DataStorage.Instance.UserList.Find(x => x.ID == user.ID);
                     if (result!=null)
-                    {
-                        if (result != null)
-                        {
-                            DataStorage.Instance.UserList.RemoveAt(DataStorage.Instance.UserList.IndexOf(result));
-                        }
-                       
+                    { 
+                            DataStorage.Instance.UserList.RemoveAt(DataStorage.Instance.UserList.IndexOf(result));                      
                     } 
                     DataStorage.Instance.UserList.Add(user); 
-                   UpdateUser?.Invoke(this, user);
+                    UpdateUser?.Invoke(this, user);
+            }
+            else
+            {
+
+            } 
+        }
+
+
+
+        private void UpdateUsersHandler(UserClass InputUser)
+        {
+            if (DataStorage.Instance.UserList != null)
+            {   
+                UserClass result = DataStorage.Instance.UserList.Find(x => x.ID == InputUser.ID);
+                if (result != null)
+                {
+                    DataStorage.Instance.UserList.RemoveAt(DataStorage.Instance.UserList.IndexOf(result));
+                }
+                DataStorage.Instance.UserList.Add(InputUser);
+                UpdateUser?.Invoke(this, InputUser);
             }
             else
             {
 
             }
-
         }
 
         private void JobssListHandler(string InputMessage)
@@ -358,7 +378,7 @@ namespace bcsapp
 
         private void RolesListHandler(string InputMessage)
         {
-            if (DataStorage.Instance.UsersRoles != null)
+            if (DataStorage.Instance.UsersRoles.Count ==  0)
             {
                 DataStorage.Instance.UsersRoles = JsonConvert.DeserializeObject<RolesClass>(InputMessage).Items;
 

@@ -1,4 +1,4 @@
-﻿using bcsapp.Controls;
+﻿using bcsapp.Controls; 
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,7 +24,12 @@ namespace bcsapp.ViewModels
 
         private void AddJob()
         {
+            ServerLib.JTypes.Client.JobAddClass jobAdd = new ServerLib.JTypes.Client.JobAddClass()
+            {
+                Name = JobName,
+            };
 
+            WebSocketController.Instance.OutputQueueAddObject(jobAdd);
         }
 
         public AddJobsViewModel(ServerLib.JTypes.Server.JobClass job)
@@ -36,7 +41,11 @@ namespace bcsapp.ViewModels
 
         private void EditJob()
         {
-
+            ServerLib.JTypes.Client.JobEditClass jobAdd = new ServerLib.JTypes.Client.JobEditClass()
+            {
+                Name = JobName,
+            }; 
+            WebSocketController.Instance.OutputQueueAddObject(jobAdd); 
         }
 
         //Функция для Нотифая

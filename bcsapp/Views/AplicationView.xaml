@@ -74,6 +74,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableUserClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedUserClass, Mode=TwoWay}" >
+                                     
                                     <dxmvvm:Interaction.Behaviors>
                                         <dxmvvm:EventToCommand EventName="SelectedItemChanged" Command="{Binding UserSelectedItemChangedCommand}" />
                                     </dxmvvm:Interaction.Behaviors>
@@ -88,11 +89,19 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <ListView Grid.Column="0" Margin="5" ItemsSource="{Binding  UserUnusedRoles}">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="HorizontalContentAlignment" Value="Right" />
+                                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
                                         <ListView.ItemTemplate>
                                             <DataTemplate >
-                                                <StackPanel>
-                                                    <TextBlock Text="{Binding Path=Name}" />
-                                                    <dx:SimpleButton Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=DataContext.AddRoleToUserCommand}" CommandParameter="{Binding}"></dx:SimpleButton>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  FlowDirection="LeftToRight" >
+                                                    <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" Margin="0" FontSize="20"  />
+                                                    <Button Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=DataContext.AddRoleToUserCommand}" CommandParameter="{Binding}" Foreground="{x:Null}" BorderBrush="{x:Null}" Background="{x:Null}">
+                                                        <Image Source="{dx:DXImage Image=Add_32x32.png}"></Image>
+                                                    </Button>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
@@ -101,9 +110,11 @@
                                     <ListView Grid.Column="1" Margin="5" ItemsSource="{Binding UserUsedRoles}">
                                         <ListView.ItemTemplate>
                                             <DataTemplate >
-                                                <StackPanel>
-                                                    <TextBlock Text="{Binding Path=Name}" />
-                                                    <dx:SimpleButton Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=DataContext.RemoveRoleToUserCommand}" CommandParameter="{Binding}"></dx:SimpleButton>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                                    <Button Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=DataContext.RemoveRoleToUserCommand}" CommandParameter="{Binding}" Foreground="{x:Null}" BorderBrush="{x:Null}" Background="{x:Null}">
+                                                        <Image Source="{dx:DXImage Image=Remove_32x32.png}"></Image>
+                                                    </Button>
+                                                    <TextBlock Text="{Binding Path=Name}"  VerticalAlignment="Center" Margin="0" FontSize="20" />
                                                 </StackPanel>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
@@ -111,7 +122,7 @@
                                 </Grid>
                             </Grid>
                         </TabItem>
-                        <TabItem   Visibility="Collapsed"  IsSelected="{Binding JobsGridShow}">
+                        <TabItem   Visibility="Collapsed"  IsSelected="{Binding JobsGridShow}" >
                             <Grid>
                                 <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableJobsClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedJobsClass, Mode=TwoWay}">
                                     <dxg:GridControl.View>

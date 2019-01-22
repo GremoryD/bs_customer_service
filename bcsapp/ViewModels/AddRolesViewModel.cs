@@ -3,6 +3,7 @@ using bcsapp.Models;
 using ServerLib.JTypes.Server;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,12 @@ namespace bcsapp.ViewModels
         public String RoleDescription { set; get; }
         public String EditAddButton { set; get; }
         public ICommand AddRoleCommand { set; get; }
+
+
+
+        //roles controle
+        public ObservableCollection<AccessRolesData> accessRolesData { set; get; } = new ObservableCollection<AccessRolesData>(DataStorage.Instance.accessRolesData);
+
 
         public AddRolesViewModel()
         {
@@ -48,7 +55,7 @@ namespace bcsapp.ViewModels
 
         }
 
-        public bool FullscreenView { get; set; }
+        public bool FullscreenView { get; set; } = false;
 
         //Функция для Нотифая
         public event PropertyChangedEventHandler PropertyChanged;
