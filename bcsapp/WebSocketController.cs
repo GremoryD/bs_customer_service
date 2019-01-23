@@ -161,10 +161,10 @@ namespace bcsapp
                                     RolesListHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.roles_add:
-                                    RolesListHandler(InputMessage);
+                                    UpdateRoleHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.roles_edit:
-                                    RolesListHandler(InputMessage);
+                                    UpdateRoleHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.users_roles:
                                     RolesListHandler(InputMessage);
@@ -320,10 +320,6 @@ namespace bcsapp
                     } 
                     DataStorage.Instance.UserList.Add(user); 
                     UpdateUser?.Invoke(this, user);
-            }
-            else
-            {
-
             } 
         }
 
@@ -378,31 +374,70 @@ namespace bcsapp
 
         private void RolesListHandler(string InputMessage)
         {
-            if (DataStorage.Instance.UsersRoles.Count ==  0)
+            if (DataStorage.Instance.RoleList.Count ==  0)
             {
-                DataStorage.Instance.UsersRoles = JsonConvert.DeserializeObject<RolesClass>(InputMessage).Items;
+                DataStorage.Instance.RoleList = JsonConvert.DeserializeObject<RolesClass>(InputMessage).Items;
 
             }
             else
             {
+                //TODO 
+                foreach (RoleClass role in JsonConvert.DeserializeObject<RolesClass>(InputMessage).Items)
+                {
+                    UpdateRoleHandler(role);
+                } 
 
             }
-            UpdateRoles?.Invoke(this, DataStorage.Instance.UsersRoles);
+            UpdateRoles?.Invoke(this, DataStorage.Instance.RoleList);
         }
 
-        private void UpdateRolesListHandler(string InputMessage)
+        private void UpdateRoleHandler(string InputMessage)
         {
-            if (DataStorage.Instance.UsersRoles != null)
+            if (DataStorage.Instance.RoleList != null)
             {
-                DataStorage.Instance.UsersRoles = JsonConvert.DeserializeObject<RolesClass>(InputMessage).Items;
 
+                RoleEditClass temp = JsonConvert.DeserializeObject<RoleEditClass>(InputMessage);
+                RoleClass role = new RoleClass()
+                {
+                     ID = temp.ID,
+                     Name = temp.Name,
+                     Description = temp.Description 
+                    
+                    
+                };
+
+                RoleClass result = DataStorage.Instance.RoleList.Find(x => x.ID == role.ID);
+                if (result != null)
+                {
+                    DataStorage.Instance.RoleList.RemoveAt(DataStorage.Instance.RoleList.IndexOf(result));
+                }
+                DataStorage.Instance.RoleList.Add(role);
+                UpdateRole?.Invoke(this, role);
+            } 
+        }
+
+
+
+        private void UpdateRoleHandler(RoleClass InputRole)
+        {
+            if (DataStorage.Instance.RoleList != null)
+            {
+
+                RoleClass result = DataStorage.Instance.RoleList.Find(x => x.ID == InputRole.ID);
+                if (result != null)
+                {
+                    DataStorage.Instance.RoleList.RemoveAt(DataStorage.Instance.RoleList.IndexOf(result));
+                }
+                DataStorage.Instance.RoleList.Add(InputRole);
+                UpdateRole?.Invoke(this, InputRole);
             }
             else
             {
 
             }
-            UpdateRoles?.Invoke(this, DataStorage.Instance.UsersRoles);
         }
+
+
         #endregion
 
         #region Обработчики ошибок

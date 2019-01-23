@@ -105,6 +105,7 @@ namespace bcsapp.ViewModels
             WebSocketController.Instance.UpdateUser += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUser(__));
             WebSocketController.Instance.UpdateJobs +=  (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateJobs(__));
             WebSocketController.Instance.UpdateRoles += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateRoles(__));
+            WebSocketController.Instance.UpdateRole += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateRole(__));
 
             Task.Run(() =>
             {
@@ -252,6 +253,19 @@ namespace bcsapp.ViewModels
         {
             observableRolesClass = new ObservableCollection<RoleClass>(roles);
             Notify("observableRolesClass");
+        }
+
+
+
+        private void Instance_UpdateRole(RoleClass roles)
+        {
+            foreach (RoleClass role in observableRolesClass)
+            {
+                if (role.ID == roles.ID) observableRolesClass.Remove(role);
+            }
+            observableRolesClass.Add(roles);
+            Notify("observableRolesClass");
+
         }
 
 

@@ -16,6 +16,7 @@ namespace bcsapp.Models
         public UserInformationClass UserInformation { set; get; }
         public List<UserClass> UserList { set; get; } = new List<UserClass>();
         public List<JobClass> JobList { set; get; } = new List<JobClass>();
+        public List<RoleClass> RoleList { set; get; } = new List<RoleClass>();
         public List<RoleClass> UsersRoles{ set; get; } = new List<RoleClass>();
 
         public void ClearData()

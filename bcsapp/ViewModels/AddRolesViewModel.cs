@@ -19,7 +19,7 @@ namespace bcsapp.ViewModels
         public String EditAddButton { set; get; }
         public ICommand AddRoleCommand { set; get; }
 
-
+        private long  roleID { set; get; }
 
         //roles controle
         public ObservableCollection<AccessRolesData> accessRolesData { set; get; } = new ObservableCollection<AccessRolesData>(DataStorage.Instance.accessRolesData);
@@ -34,16 +34,19 @@ namespace bcsapp.ViewModels
         private void AddRole()
         {
 
-            ServerLib.JTypes.Client.RoleAddClass rolesClass = new ServerLib.JTypes.Client.RoleAddClass { Token = DataStorage.Instance.Login.Token,
-                                                                                                         Name = RoleName,
-                                                                                                         Description = RoleDescription
-                                                                                                        };
+            ServerLib.JTypes.Client.RoleAddClass rolesClass = new ServerLib.JTypes.Client.RoleAddClass
+            {
+                Token = DataStorage.Instance.Login.Token,
+                Name = RoleName,
+                Description = RoleDescription
+            };
             WebSocketController.Instance.OutputQueueAddObject(rolesClass);
 
         }
 
         public AddRolesViewModel(RoleClass roleClass)
         {
+            roleID = roleClass.ID;
             EditAddButton = "Редактировать";
             RoleName = roleClass.Name;
             RoleDescription = roleClass.Description;
@@ -52,8 +55,17 @@ namespace bcsapp.ViewModels
 
         private void EditRole()
         {
+            ServerLib.JTypes.Client.RoleEditClass rolesClass = new ServerLib.JTypes.Client.RoleEditClass
+            {
+                Token = DataStorage.Instance.Login.Token,
+                Name = RoleName,
+                ID = roleID,
+                Description = RoleDescription
+            };
+            WebSocketController.Instance.OutputQueueAddObject(rolesClass);
 
         }
+
 
         public bool FullscreenView { get; set; } = false;
 

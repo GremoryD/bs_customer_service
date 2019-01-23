@@ -74,13 +74,24 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableUserClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedUserClass, Mode=TwoWay}" >
-                                     
+                                    <dxg:GridColumn FieldName="ID" Visible="False"/>
+                                    <dxg:GridColumn FieldName="Login" Visible="True"/>
+                                    <dxg:GridColumn FieldName="FirstName" Visible="True"/>
+                                    <dxg:GridColumn FieldName="LastName" Visible="True"/>
+                                    <dxg:GridColumn FieldName="MidleName" Visible="True"/>
+                                    <dxg:GridColumn FieldName="JobName" Visible="True"/>
+                                    <dxg:GridColumn FieldName="Active" Visible="True"/>
+                                    <dxg:GridColumn FieldName="JobID" Visible="False"/>
+                                    <dxg:GridColumn FieldName="Command" Visible="False"/>
+                                    <dxg:GridColumn FieldName="Hash" Visible="False"/>
                                     <dxmvvm:Interaction.Behaviors>
                                         <dxmvvm:EventToCommand EventName="SelectedItemChanged" Command="{Binding UserSelectedItemChangedCommand}" />
                                     </dxmvvm:Interaction.Behaviors>
                                     <dxg:GridControl.View>
-                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True" x:Name="gridView" AllowEditing="True" AutoWidth="True"/>
-                                        
+                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True" x:Name="gridView" AllowEditing="False" AutoWidth="True">
+                                             
+                                        </dxg:TableView>
+
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
                                 <Grid Grid.Row="1">
@@ -135,14 +146,21 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <dxg:GridControl Grid.Column="0" HorizontalAlignment="Stretch" ItemsSource="{Binding observableRolesClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedRoleClass, Mode=TwoWay}">
+                                    <dxg:GridColumn FieldName="ID" Visible="False"/>
+                                    <dxg:GridColumn FieldName="Name" Visible="True"/>
+                                    <dxg:GridColumn FieldName="Description" Visible="True"/>
+                                    <dxg:GridColumn FieldName="Command" Visible="False"/>
+                                    <dxg:GridColumn FieldName="Hash" Visible="False"/>
                                     <dxg:GridControl.View>
-                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="True" AutoWidth="True"/>
+                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="False" AutoWidth="True"/>
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
-                                <dxg:GridControl Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding accessRolesData}"  AutoGenerateColumns="AddNew"  >
+                                <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="5" ResizeDirection="Columns"></GridSplitter>
+                                <dxg:GridControl Grid.Column="2" HorizontalAlignment="Stretch" ItemsSource="{Binding accessRolesData}"  AutoGenerateColumns="AddNew"  >
                                     <dxg:GridControl.View>
                                         <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="True" AutoWidth="True"/>
                                     </dxg:GridControl.View>
