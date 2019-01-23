@@ -97,6 +97,8 @@ namespace bcsapp.ViewModels
             WebSocketController.Instance.UpdateJobs +=  (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateJobs(__));
             WebSocketController.Instance.UpdateRoles += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateRoles(__));
             WebSocketController.Instance.UpdateRole += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateRole(__));
+            WebSocketController.Instance.UpdateUserRoles += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUserRoles(__));
+            WebSocketController.Instance.UpdateUserRole += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUserRole(__));
 
             Task.Run(() =>
             {
@@ -120,26 +122,24 @@ namespace bcsapp.ViewModels
             {
                 if(userRoleClass.UserID  == SelectedUserClass.ID)
                 {
-                    UserUsedRoles.Add(DataStorage.Instance.RoleList.Find(x => x.ID == userRoleClass.ID));
+                    UserUsedRoles.Add(DataStorage.Instance.RoleList.Find(x => x.ID == userRoleClass.RoleID));
                     Notify("UserUsedRoles");
                 }
             }
             UserUnusedRoles = new ObservableCollection<RoleClass>(DataStorage.Instance.RoleList);
             UserUnusedRoles.Except(UserUsedRoles).ToList();
-            Notify("UserUnusedRoles");
-
+            Notify("UserUnusedRoles"); 
         }
 
         private void RemoveRoleToUser(RoleClass obj)
         {
-            UserUnusedRoles.Add(obj);
-            UserUsedRoles.Remove(obj); 
             ServerLib.JTypes.Client.UserRoleDeleteClass removeRoleUser = new ServerLib.JTypes.Client.UserRoleDeleteClass()
             {
                 UserRoleID = DataStorage.Instance.UsersRolesList.Find(x => x.RoleID == obj.ID).ID,
                 Token = DataStorage.Instance.Login.Token
-            };
-
+            }; 
+            UserUnusedRoles.Add(obj);
+            UserUsedRoles.Remove(obj);
             WebSocketController.Instance.OutputQueueAddObject(removeRoleUser);
         }
 
@@ -153,9 +153,18 @@ namespace bcsapp.ViewModels
                 RoleID = obj.ID,
                 UserID = SelectedUserClass.ID,
                 Token = DataStorage.Instance.Login.Token
-            };
-
+            }; 
             WebSocketController.Instance.OutputQueueAddObject(addRoleUser);
+        }  
+
+        private void Instance_UpdateUserRole(UserRoleClass userRoleClass)
+        {
+              
+        }
+
+        private void Instance_UpdateUserRoles(List<UserRoleClass> userRoles)
+        {
+             
         }
 
 

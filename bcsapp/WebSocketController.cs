@@ -467,6 +467,9 @@ namespace bcsapp
 
         private void UpdateUserRoleHandler(string InputMessage)
         {
+
+
+
             if (DataStorage.Instance.RoleList != null)
             {
 
