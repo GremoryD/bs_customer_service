@@ -17,13 +17,14 @@ namespace bcsapp.Models
         public List<UserClass> UserList { set; get; } = new List<UserClass>();
         public List<JobClass> JobList { set; get; } = new List<JobClass>();
         public List<RoleClass> RoleList { set; get; } = new List<RoleClass>();
-        public List<RoleClass> UsersRoles{ set; get; } = new List<RoleClass>();
+        public List<UserRoleClass> UsersRolesList{ set; get; } = new List<UserRoleClass>();
 
         public void ClearData()
         {
             Login = null;
             UserInformation = null;
-        }
+        } 
+
 
 
         public List<AccessRolesData> accessRolesData = new List<AccessRolesData>()

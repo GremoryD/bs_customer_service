@@ -167,7 +167,13 @@ namespace bcsapp
                                     UpdateRoleHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.users_roles:
-                                    RolesListHandler(InputMessage);
+                                    RolesUsersListHandler(InputMessage);
+                                    break;
+                                case ServerLib.JTypes.Enums.Commands.users_roles_add:
+                                    UpdateUserRoleHandler(InputMessage);
+                                    break;
+                                case ServerLib.JTypes.Enums.Commands.users_roles_delete:
+                                    UpdateUserRoleHandler(InputMessage);
                                     break;
                             }
                         }
@@ -255,30 +261,34 @@ namespace bcsapp
         public event EventHandler<LoginClass> LoginDone;
         public event EventHandler<string> LoginFailed;
 
+        //функция для инициализации списков
         public event EventHandler<List<UserClass>> UpdateUsers;
         public event EventHandler<List<JobClass>> UpdateJobs;
         public event EventHandler<List<RoleClass>> UpdateRoles;
-
+        public event EventHandler<List<UserRoleClass>> UpdateUserRoles;
+        //функции вызываемые при обновление одиночного елемента
         public event EventHandler<UserClass> UpdateUser;
         public event EventHandler<JobClass> UpdateJob;
         public event EventHandler<RoleClass> UpdateRole;
-
+        public event EventHandler<UserRoleClass> UpdateUserRole; 
         #endregion
 
         #region Обработчики 
 
+        //функция логина
         private void LoginHandler(string InputMessage)
         {
             DataStorage.Instance.Login = JsonConvert.DeserializeObject<LoginClass>(InputMessage);
             LoginDone?.Invoke(this, JsonConvert.DeserializeObject<LoginClass>(InputMessage));
         }
-
+        //функция получения информации текущего пользователя
         private void UserInformationHandler(string InputMessage)
         {
             DataStorage.Instance.UserInformation = JsonConvert.DeserializeObject<UserInformationClass>(InputMessage);
             UpdateUserUI?.Invoke(this, String.Format("{0} {1} {2}", DataStorage.Instance.UserInformation.FirstName, DataStorage.Instance.UserInformation.MidleName, DataStorage.Instance.UserInformation.LastName));
         }
 
+        //Функции для работы с пользователями
         private void UsersListHandler(string InputMessage)
         {
             if (DataStorage.Instance.UserList.Count==0)
@@ -297,7 +307,6 @@ namespace bcsapp
                 UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
             }
         }
-
 
         private void UpdateUsersHandler(string InputMessage)
         {
@@ -323,8 +332,6 @@ namespace bcsapp
             } 
         }
 
-
-
         private void UpdateUsersHandler(UserClass InputUser)
         {
             if (DataStorage.Instance.UserList != null)
@@ -343,6 +350,7 @@ namespace bcsapp
             }
         }
 
+        //функции для работы с професиями
         private void JobssListHandler(string InputMessage)
         {
             if (DataStorage.Instance.JobList != null)
@@ -372,6 +380,7 @@ namespace bcsapp
         }
 
 
+        //Функции для работы с ролями
         private void RolesListHandler(string InputMessage)
         {
             if (DataStorage.Instance.RoleList.Count ==  0)
@@ -416,8 +425,6 @@ namespace bcsapp
             } 
         }
 
-
-
         private void UpdateRoleHandler(RoleClass InputRole)
         {
             if (DataStorage.Instance.RoleList != null)
@@ -436,6 +443,79 @@ namespace bcsapp
 
             }
         }
+
+        //функция получения ролей пользователей 
+        private void RolesUsersListHandler(string InputMessage)
+        {
+            if (DataStorage.Instance.UsersRolesList.Count == 0)
+            {
+                DataStorage.Instance.UsersRolesList = JsonConvert.DeserializeObject<UsersRolesClass>(InputMessage).Items;
+
+            }
+            else
+            {
+                //TODO 
+                foreach (UserRoleClass roleUser in JsonConvert.DeserializeObject<UsersRolesClass>(InputMessage).Items)
+                {
+                    UpdateUserRoleHandler(roleUser);
+                }
+
+            }
+            UpdateUserRoles?.Invoke(this, DataStorage.Instance.UsersRolesList);
+
+        }
+
+        private void UpdateUserRoleHandler(string InputMessage)
+        {
+            if (DataStorage.Instance.RoleList != null)
+            {
+
+                UserRoleAddClass temp = JsonConvert.DeserializeObject<UserRoleAddClass>(InputMessage);
+                UserRoleClass role = new UserRoleClass()
+                {
+                    ID = temp.ID,
+                    RoleID = temp.RoleID,
+                    UserID = temp.UserID,
+                    RoleName = DataStorage.Instance.RoleList.Find(x => x.ID == temp.RoleID).Name
+                };
+
+                UserRoleClass result = DataStorage.Instance.UsersRolesList.Find(x => x.ID == role.ID);
+                if (result != null)
+                {
+                    DataStorage.Instance.UsersRolesList.RemoveAt(DataStorage.Instance.UsersRolesList.IndexOf(result));
+                }
+                DataStorage.Instance.UsersRolesList.Add(role);
+                UpdateUserRole?.Invoke(this, role);
+            }
+        }
+
+        private void UpdateUserRoleHandler(UserRoleClass InputRole)
+        {
+            if (DataStorage.Instance.RoleList != null)
+            {
+
+                UserRoleClass role = new UserRoleClass()
+                {
+                    ID = InputRole.ID,
+                    RoleID = InputRole.RoleID,
+                    UserID = InputRole.UserID,
+                    RoleName = DataStorage.Instance.RoleList.Find(x => x.ID == InputRole.RoleID).Name 
+                };
+
+                UserRoleClass result = DataStorage.Instance.UsersRolesList.Find(x => x.ID == role.ID);
+                if (result != null)
+                {
+                    DataStorage.Instance.UsersRolesList.RemoveAt(DataStorage.Instance.UsersRolesList.IndexOf(result));
+                }
+                DataStorage.Instance.UsersRolesList.Add(role);
+                UpdateUserRole?.Invoke(this, role);
+            }
+            else
+            {
+
+            }
+        }
+
 
 
         #endregion

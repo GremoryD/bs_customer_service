@@ -58,22 +58,13 @@ namespace bcsapp.ViewModels
         public UserClass SelectedUserClass { set; get; }
         public ObservableCollection<JobClass> observableJobsClass { set; get; } = new ObservableCollection<JobClass>(DataStorage.Instance.JobList);
         public JobClass SelectedJobsClass { set; get; }
-        public ObservableCollection<RoleClass> observableRolesClass { set; get; } = new ObservableCollection<RoleClass>(DataStorage.Instance.UsersRoles);
+        public ObservableCollection<RoleClass> observableRolesClass { set; get; } = new ObservableCollection<RoleClass>(DataStorage.Instance.RoleList);
         public RoleClass SelectedRoleClass { set; get; }
 
 
         //roles controle
-        public ObservableCollection<RoleClass> UserUsedRoles { set; get; } = new ObservableCollection<RoleClass>()
-        {
-            new RoleClass(){ ID=1, Name = "admin", Description="Admin"},
-            new RoleClass(){ ID=2, Name = "admin1", Description="Admin"},
-            new RoleClass(){ ID=3, Name = "admin2", Description="Admin"},
-        };
-        public ObservableCollection<RoleClass> UserUnusedRoles { set; get; } = new ObservableCollection<RoleClass>() {
-            new RoleClass(){ ID=1, Name = "admin", Description="Admin"},
-            new RoleClass(){ ID=2, Name = "admin1", Description="Admin"},
-            new RoleClass(){ ID=3, Name = "admin2", Description="Admin"},
-        };
+        public ObservableCollection<RoleClass> UserUsedRoles { set; get; } = new ObservableCollection<RoleClass>();
+        public ObservableCollection<RoleClass> UserUnusedRoles { set; get; } = new ObservableCollection<RoleClass>();
 
         public ICommand AddRoleToUserCommand { set; get; }
         public ICommand RemoveRoleToUserCommand { set; get; }
@@ -82,7 +73,7 @@ namespace bcsapp.ViewModels
         public ObservableCollection<AccessRolesData> accessRolesData { set; get; } = new ObservableCollection<AccessRolesData>(DataStorage.Instance.accessRolesData);
 
 
-        public ObservableCollection<RoleClass> observableUsersRole { set; get; } = new ObservableCollection<RoleClass>(DataStorage.Instance.UsersRoles);
+        public ObservableCollection<RoleClass> observableUsersRole { set; get; } = new ObservableCollection<RoleClass>(DataStorage.Instance.RoleList);
 
         public AplicationViewModel()
         { 
@@ -115,27 +106,58 @@ namespace bcsapp.ViewModels
                 WebSocketController.Instance.OutputQueueAddObject(jobsClass);
                 ServerLib.JTypes.Client.RolesClass rolesClass = new ServerLib.JTypes.Client.RolesClass { Token = DataStorage.Instance.Login.Token };
                 WebSocketController.Instance.OutputQueueAddObject(rolesClass);
+                ServerLib.JTypes.Client.UsersRolesClass usersRolesClass = new ServerLib.JTypes.Client.UsersRolesClass { Token = DataStorage.Instance.Login.Token };
+                WebSocketController.Instance.OutputQueueAddObject(usersRolesClass);
             });
              
+        }
+
+
+        private void UserSelectedItemChanged()
+        {
+            UserUsedRoles.Clear();
+            foreach(UserRoleClass userRoleClass in DataStorage.Instance.UsersRolesList)
+            {
+                if(userRoleClass.UserID  == SelectedUserClass.ID)
+                {
+                    UserUsedRoles.Add(DataStorage.Instance.RoleList.Find(x => x.ID == userRoleClass.ID));
+                    Notify("UserUsedRoles");
+                }
+            }
+            UserUnusedRoles = new ObservableCollection<RoleClass>(DataStorage.Instance.RoleList);
+            UserUnusedRoles.Except(UserUsedRoles).ToList();
+            Notify("UserUnusedRoles");
+
         }
 
         private void RemoveRoleToUser(RoleClass obj)
         {
             UserUnusedRoles.Add(obj);
-            UserUsedRoles.Remove(obj);
+            UserUsedRoles.Remove(obj); 
+            ServerLib.JTypes.Client.UserRoleDeleteClass removeRoleUser = new ServerLib.JTypes.Client.UserRoleDeleteClass()
+            {
+                UserRoleID = DataStorage.Instance.UsersRolesList.Find(x => x.RoleID == obj.ID).ID,
+                Token = DataStorage.Instance.Login.Token
+            };
 
+            WebSocketController.Instance.OutputQueueAddObject(removeRoleUser);
         }
 
         private void AddRoleToUser(RoleClass obj)
         { 
             UserUnusedRoles.Remove(obj);
             UserUsedRoles.Add(obj);
+
+            ServerLib.JTypes.Client.UserRoleAddClass addRoleUser = new ServerLib.JTypes.Client.UserRoleAddClass()
+            {
+                RoleID = obj.ID,
+                UserID = SelectedUserClass.ID,
+                Token = DataStorage.Instance.Login.Token
+            };
+
+            WebSocketController.Instance.OutputQueueAddObject(addRoleUser);
         }
 
-        private void UserSelectedItemChanged()
-        {
-
-        }
 
         #region Ribonn Buttons
         private void DeleteButton()
