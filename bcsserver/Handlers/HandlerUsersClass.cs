@@ -9,16 +9,16 @@ namespace bcsserver.Handlers
     /// <summary>
     /// Пользователи
     /// </summary>
-    public class UsersClass : BaseHandlerClass
+    public class HandlerUsersClass : HandlerBaseClass
     {
         /// <summary>
         /// Словарь пользователей
         /// </summary>
-        private ConcurrentDictionary<long, ServerLib.JTypes.Server.UserClass> UsersCollection;
+        private ConcurrentDictionary<long, ServerLib.JTypes.Server.UserClass> ReadCollection;
 
-        public UsersClass(UserSessionClass AUserSession) : base(AUserSession)
+        public HandlerUsersClass(UserSessionClass AUserSession) : base(AUserSession)
         {
-            UsersCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.UserClass>();
+            ReadCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.UserClass>();
         }
 
         /// <summary>
@@ -26,52 +26,52 @@ namespace bcsserver.Handlers
         /// </summary>
         public override void RefreshData()
         {
-            ServerLib.JTypes.Server.UsersClass UsersList = new ServerLib.JTypes.Server.UsersClass();
+            ServerLib.JTypes.Server.UsersClass OutputList = new ServerLib.JTypes.Server.UsersClass();
             DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
             Params.CreateParameterValue("Token", UserSession.Login.Token);
-            DatabaseTableClass UsersTable = new DatabaseTableClass
+            DatabaseTableClass ReadTable = new DatabaseTableClass
             {
                 Table = (System.Data.DataTable)UserSession.Project.Database.Execute("Users", ref Params)
             };
 
-            foreach (System.Data.DataRow row in UsersTable.Table.Rows)
+            foreach (System.Data.DataRow row in ReadTable.Table.Rows)
             {
-                ServerLib.JTypes.Server.UserClass User = new ServerLib.JTypes.Server.UserClass
+                ServerLib.JTypes.Server.UserClass Item = new ServerLib.JTypes.Server.UserClass
                 {
-                    ID = UsersTable.AsInt64(row, "ID"),
-                    Login = UsersTable.AsString(row, "LOGIN"),
-                    FirstName = UsersTable.AsString(row, "FIRST_NAME"),
-                    LastName = UsersTable.AsString(row, "LAST_NAME"),
-                    MidleName = UsersTable.AsString(row, "MIDLE_NAME"),
-                    JobID = UsersTable.AsInt64(row, "POSITION_ID"),
-                    JobName = UsersTable.AsString(row, "POSITION"),
-                    Active = (UserActive)UsersTable.AsInt32(row, "ACTIVE")
+                    ID = ReadTable.AsInt64(row, "ID"),
+                    Login = ReadTable.AsString(row, "LOGIN"),
+                    FirstName = ReadTable.AsString(row, "FIRST_NAME"),
+                    LastName = ReadTable.AsString(row, "LAST_NAME"),
+                    MidleName = ReadTable.AsString(row, "MIDLE_NAME"),
+                    JobID = ReadTable.AsInt64(row, "POSITION_ID"),
+                    JobName = ReadTable.AsString(row, "POSITION"),
+                    Active = (UserActive)ReadTable.AsInt32(row, "ACTIVE")
                 };
 
-                if (UsersCollection.TryGetValue(User.ID, out ServerLib.JTypes.Server.UserClass ExistUser))
+                if (ReadCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.UserClass ExistItem))
                 {
-                    if (ExistUser.Hash != User.Hash)
+                    if (ExistItem.Hash != Item.Hash)
                     {
-                        User.Command = ListCommands.edit;
-                        UsersCollection.TryUpdate(User.ID, User, ExistUser);
-                        UsersList.Items.Add(User);
+                        Item.Command = ListCommands.edit;
+                        ReadCollection.TryUpdate(Item.ID, Item, ExistItem);
+                        OutputList.Items.Add(Item);
                     }
                 }
                 else
                 {
-                    User.Command = ListCommands.add;
-                    UsersCollection.TryAdd(User.ID, User);
-                    UsersList.Items.Add(User);
+                    Item.Command = ListCommands.add;
+                    ReadCollection.TryAdd(Item.ID, Item);
+                    OutputList.Items.Add(Item);
                 }
             }
 
-            foreach (var User in UsersCollection)
+            foreach (System.Collections.Generic.KeyValuePair<long, ServerLib.JTypes.Server.UserClass> Item in ReadCollection)
             {
                 bool IsExist = false;
 
-                foreach (System.Data.DataRow row in UsersTable.Table.Rows)
+                foreach (System.Data.DataRow row in ReadTable.Table.Rows)
                 {
-                    if (User.Value.ID == UsersTable.AsInt64(row, "ID"))
+                    if (Item.Value.ID == ReadTable.AsInt64(row, "ID"))
                     {
                         IsExist = true;
                         break;
@@ -80,15 +80,15 @@ namespace bcsserver.Handlers
 
                 if (!IsExist)
                 {
-                    User.Value.Command = ListCommands.delete;
-                    UsersList.Items.Add(User.Value);
-                    UsersCollection.TryRemove(User.Value.ID, out ServerLib.JTypes.Server.UserClass DeletingUser);
+                    Item.Value.Command = ListCommands.delete;
+                    OutputList.Items.Add(Item.Value);
+                    ReadCollection.TryRemove(Item.Value.ID, out ServerLib.JTypes.Server.UserClass DeletingUser);
                 }
             }
 
-            if (UsersList.Items.Count > 0)
+            if (OutputList.Items.Count > 0)
             {
-                UserSession.OutputQueueAddObject(UsersList);
+                UserSession.OutputQueueAddObject(OutputList);
             }
         }
 
@@ -116,7 +116,7 @@ namespace bcsserver.Handlers
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
                 UserSession.Project.Database.Execute("UserAdd", ref Params);
-                if (Params.ParameterByName("State").AsString== "ok")
+                if (Params.ParameterByName("State").AsString == "ok")
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UserAddClass
                     {
@@ -127,7 +127,8 @@ namespace bcsserver.Handlers
                         MidleName = Request.MidleName,
                         Active = Request.Active,
                         JobID = Request.JobID,
-                        JobName = Params.ParameterByName("Job").AsString                    });
+                        JobName = Params.ParameterByName("Job").AsString
+                    });
                     ProcessingSuccess = true;
                 }
                 else
@@ -165,7 +166,7 @@ namespace bcsserver.Handlers
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
                 UserSession.Project.Database.Execute("UserEdit", ref Params);
-                if (Params.ParameterByName("State").AsString== "ok")
+                if (Params.ParameterByName("State").AsString == "ok")
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UserEditClass
                     {
@@ -175,7 +176,8 @@ namespace bcsserver.Handlers
                         MidleName = Request.MidleName,
                         Active = Request.Active,
                         JobId = Request.JobID,
-                        JobName = Params.ParameterByName("Job").AsString                    });
+                        JobName = Params.ParameterByName("Job").AsString
+                    });
                     ProcessingSuccess = true;
                 }
                 else

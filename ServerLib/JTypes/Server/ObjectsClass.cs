@@ -1,12 +1,22 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServerLib.JTypes.Server
 {
-    class ObjectsClass
+    /// <summary>
+    /// Список объектов системы
+    /// </summary>
+    public class ObjectsClass : BaseResponseClass
     {
+        /// <summary>
+        /// Массив должностей пользователей
+        /// </summary>
+        [JsonProperty(PropertyName = "objects", Required = Required.Always)]
+        public List<ObjectClass> Items;
+
+        public ObjectsClass() : base(Enums.Commands.objects)
+        {
+            Items = new List<ObjectClass>();
+        }
     }
 }

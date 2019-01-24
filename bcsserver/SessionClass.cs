@@ -76,12 +76,12 @@ namespace bcsserver
         /// <summary>
         /// Обработчик списка пользователей
         /// </summary>
-        public Handlers.UsersClass Users;
+        public Handlers.HandlerUsersClass Users;
 
         /// <summary>
         /// Обработчик списка должностей пользователей
         /// </summary>
-        public Handlers.JobsClass Jobs;
+        public Handlers.HandlerJobsClass Jobs;
 
         /// <summary>
         /// Обработчик списка ролей пользователей
@@ -92,6 +92,11 @@ namespace bcsserver
         /// Обработчик списка ролей пользователей
         /// </summary>
         public Handlers.HandlerUsersRolesClass UsersRoles;
+
+        /// <summary>
+        /// Обработчик списка объектов системы
+        /// </summary>
+        public Handlers.HandlerObjectsClass Objects;
 
         /// <summary>
         /// Конструктор класса сессии пользователя
@@ -115,10 +120,11 @@ namespace bcsserver
             UserInformation = new Handlers.UserInformationClass();
             UserInformation.SetUserSession(this);
 
-            Users = new Handlers.UsersClass(this);
-            Jobs = new Handlers.JobsClass(this);
+            Users = new Handlers.HandlerUsersClass(this);
+            Jobs = new Handlers.HandlerJobsClass(this);
             Roles = new Handlers.HandlerRolesClass(this);
             UsersRoles = new Handlers.HandlerUsersRolesClass(this);
+            Objects = new Handlers.HandlerObjectsClass(this);
 
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
             OutputQueueProcessing = new Thread(OutputQueueProcessingThread);
@@ -214,6 +220,9 @@ namespace bcsserver
                                                     break;
                                                 case Commands.users_roles_delete:
                                                     UsersRoles.Delete(Request);
+                                                    break;
+                                                case Commands.objects:
+                                                    Objects.SendData();
                                                     break;
                                             }
                                         }
