@@ -83,6 +83,11 @@
         /// <summary>
         /// Удаление роли у пользователя
         /// </summary>
-        users_roles_delete
+        users_roles_delete,
+
+        /// <summary>
+        /// Список объектов
+        /// </summary>
+        objects
     }
 }

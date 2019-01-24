@@ -7,14 +7,8 @@ namespace ServerLib.JTypes.Server
     /// <summary>
     /// Пользователь в составе списка
     /// </summary>
-    public class UserClass
+    public class UserClass : BaseItemClass
     {
-        /// <summary>
-        /// Идентификатор пользователя
-        /// </summary>
-        [JsonProperty(PropertyName = "id", Required = Required.Always)]
-        public long ID { get; set; } = 0;
-
         /// <summary>
         /// Логин
         /// </summary>
@@ -56,12 +50,6 @@ namespace ServerLib.JTypes.Server
         /// </summary>
         [JsonProperty(PropertyName = "active", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
         public Enums.UserActive Active { get; set; }
-
-        /// <summary>
-        /// Команда, которую необходимо выполнить на стороне клиента с данным объектом
-        /// </summary>
-        [JsonProperty(PropertyName = "command", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
-        public Enums.ListCommands Command { get; set; }
 
         /// <summary>
         /// Hash-код объекта
