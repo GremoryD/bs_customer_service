@@ -63,10 +63,12 @@ namespace bcsapp.ViewModels
             CancelCommand = new SimpleCommand(Cancel);
         }
 
+
         private void Cancel()
-        { 
-            
+        {
+            NavigationService.Instance.CloseDialogWin();
         }
+
 
         private void AddUser()
         {
@@ -84,6 +86,7 @@ namespace bcsapp.ViewModels
 
             WebSocketController.Instance.OutputQueueAddObject(addUser);
 
+            Cancel();
         }
 
 
@@ -95,15 +98,14 @@ namespace bcsapp.ViewModels
                 ID = user.ID,
                 FirstName = UserName,
                 LastName = UserSurname,
-                MidleName = UserMiddleName,
-                
+                MidleName = UserMiddleName, 
                 JobID = SelectedJob!=null? SelectedJob.ID:1,
                 Active = user.Active,
                 Token = DataStorage.Instance.Login.Token
             };
 
             WebSocketController.Instance.OutputQueueAddObject(addUser);
-
+            Cancel();
         }
     }
 }

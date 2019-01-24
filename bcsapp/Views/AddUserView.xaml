@@ -20,6 +20,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Логин" TextWrapping="Wrap"  TextAlignment="Center" VerticalAlignment="Center"/>
         <dxe:TextEdit Grid.Row="0" VerticalAlignment="Center" Text="{Binding UserLogin}"   Grid.Column="1" Margin="0.2,10,10.4,10"/>
@@ -31,7 +32,9 @@
         <dxe:TextEdit Grid.Row="3" VerticalAlignment="Center" Text="{Binding UserSurname}"  Grid.Column="1" Margin="0.2,10,10.4,10"/>
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Професия" TextWrapping="Wrap"  TextAlignment="Center" VerticalAlignment="Center"/>
         <dxe:ComboBoxEdit Grid.Row="4" VerticalAlignment="Center" Grid.Column="1" Margin="0.2,10,10.4,10" ItemsSource="{Binding observableJobsClass}" DisplayMember="Name" SelectedItem="{Binding SelectedJob}"/>
-        <dx:SimpleButton Grid.Column="0" Grid.Row="5" Content="Cancel" Margin="10" Command="{Binding CancelCommand}"/>
-        <dx:SimpleButton Grid.Column="1" Grid.Row="5" Content="{Binding EditAddButton}" Margin="10"  Command="{Binding AddUserCommand}"/>
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Отчество" TextWrapping="Wrap"  TextAlignment="Center" VerticalAlignment="Center"/>
+        <dxe:TextEdit Grid.Row="5" VerticalAlignment="Center" Text="{Binding UserMiddleName}"  Grid.Column="1" Margin="0.2,10,10.4,10"/>
+        <dx:SimpleButton Grid.Column="0" Grid.Row="6" Content="Cancel" Margin="10" Command="{Binding CancelCommand}"/>
+        <dx:SimpleButton Grid.Column="1" Grid.Row="6" Content="{Binding EditAddButton}" Margin="10"  Command="{Binding AddUserCommand}"/>
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
-﻿using bcsapp.Controls; 
+﻿using bcsapp.Controls;
+using bcsapp.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,12 +15,14 @@ namespace bcsapp.ViewModels
         public String JobName { set; get; }
         public String EditAddButton { set; get; }
         public ICommand AddJobCommand { set; get; }
+        public ICommand CancelCommand { set; get; }
         public bool FullscreenView { get ; set; }
 
         public AddJobsViewModel()
         {
             AddJobCommand = new SimpleCommand(AddJob);
             EditAddButton = "Добавить";
+            CancelCommand = new SimpleCommand(Cancel);
         }
 
         private void AddJob()
@@ -27,9 +30,11 @@ namespace bcsapp.ViewModels
             ServerLib.JTypes.Client.JobAddClass jobAdd = new ServerLib.JTypes.Client.JobAddClass()
             {
                 Name = JobName,
+                Token = DataStorage.Instance.Login.Token
             };
 
             WebSocketController.Instance.OutputQueueAddObject(jobAdd);
+            Cancel();
         }
 
         public AddJobsViewModel(ServerLib.JTypes.Server.JobClass job)
@@ -37,6 +42,7 @@ namespace bcsapp.ViewModels
             JobName = job.Name;
             AddJobCommand = new SimpleCommand(EditJob);
             EditAddButton = "Редактировать";
+            CancelCommand = new SimpleCommand(Cancel);
         }
 
         private void EditJob()
@@ -44,8 +50,16 @@ namespace bcsapp.ViewModels
             ServerLib.JTypes.Client.JobEditClass jobAdd = new ServerLib.JTypes.Client.JobEditClass()
             {
                 Name = JobName,
-            }; 
-            WebSocketController.Instance.OutputQueueAddObject(jobAdd); 
+                Token = DataStorage.Instance.Login.Token
+        }; 
+            WebSocketController.Instance.OutputQueueAddObject(jobAdd);
+            Cancel();
+        }
+
+
+        private void Cancel()
+        {
+            NavigationService.Instance.CloseDialogWin();
         }
 
         //Функция для Нотифая

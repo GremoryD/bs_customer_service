@@ -62,7 +62,7 @@
                     </Grid.ColumnDefinitions>
                     <dxa:AccordionControl  Grid.Column="0" Background="White"> 
                             <dxa:AccordionItem  Header="Пользователи" Command="{Binding UsersGridCommand}"/>
-                            <dxa:AccordionItem  Header="Професии" Command="{Binding JobsGridCommand}"/>
+                            <dxa:AccordionItem  Header="Должности" Command="{Binding JobsGridCommand}"/>
                             <dxa:AccordionItem  Header="Роли"  Command="{Binding RolsGridCommand}"/>
                     </dxa:AccordionControl>
 

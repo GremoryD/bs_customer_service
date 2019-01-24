@@ -77,5 +77,21 @@ namespace bcsapp.Controls
                 }
             });
         }
+
+        Window window;
+        public void ShowDialogWin(IViewModel viewModel, string title)
+        {
+            window = new Window();
+            window.Title = title;
+            window.ShowInTaskbar = false;
+            window.Content = viewModel;
+            window.SizeToContent = SizeToContent.WidthAndHeight;
+            window.ShowDialog();
+        }
+
+        public void CloseDialogWin()
+        {
+            window.Close();
+        }
     }
 }

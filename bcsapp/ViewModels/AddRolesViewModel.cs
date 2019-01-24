@@ -18,7 +18,7 @@ namespace bcsapp.ViewModels
         public String RoleDescription { set; get; }
         public String EditAddButton { set; get; }
         public ICommand AddRoleCommand { set; get; }
-
+        public ICommand CancelCommand { set; get; }
         private long  roleID { set; get; }
 
         //roles controle
@@ -29,6 +29,12 @@ namespace bcsapp.ViewModels
         {
             EditAddButton = "Добавить";
             AddRoleCommand = new SimpleCommand(AddRole);
+            CancelCommand = new SimpleCommand(Cancel);
+        }
+
+        private void Cancel()
+        {
+            NavigationService.Instance.CloseDialogWin();
         }
 
         private void AddRole()
@@ -51,6 +57,7 @@ namespace bcsapp.ViewModels
             RoleName = roleClass.Name;
             RoleDescription = roleClass.Description;
             AddRoleCommand = new SimpleCommand(EditRole);
+            CancelCommand = new SimpleCommand(Cancel);
         }
 
         private void EditRole()

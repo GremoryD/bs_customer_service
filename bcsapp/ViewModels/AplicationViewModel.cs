@@ -95,6 +95,7 @@ namespace bcsapp.ViewModels
             WebSocketController.Instance.UpdateUsers += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUsers(__));
             WebSocketController.Instance.UpdateUser += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUser(__));
             WebSocketController.Instance.UpdateJobs +=  (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateJobs(__));
+            WebSocketController.Instance.UpdateJob += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateJob(__));
             WebSocketController.Instance.UpdateRoles += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateRoles(__));
             WebSocketController.Instance.UpdateRole += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateRole(__));
             WebSocketController.Instance.UpdateUserRoles += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUserRoles(__));
@@ -120,7 +121,7 @@ namespace bcsapp.ViewModels
             UserUsedRoles.Clear();
             foreach(UserRoleClass userRoleClass in DataStorage.Instance.UsersRolesList)
             {
-                if(userRoleClass.UserID  == SelectedUserClass.ID)
+                if(SelectedUserClass != null && userRoleClass.UserID  == SelectedUserClass.ID)
                 {
                     UserUsedRoles.Add(DataStorage.Instance.RoleList.Find(x => x.ID == userRoleClass.RoleID));
                     Notify("UserUsedRoles");
@@ -216,15 +217,15 @@ namespace bcsapp.ViewModels
         {
             if (UsersGridShow && SelectedUserClass != null)
             {
-                ShowDialogWin(new AddUserViewModel(SelectedUserClass), "Редактировать пользователя");
+                NavigationService.Instance.ShowDialogWin(new AddUserViewModel(SelectedUserClass), "Редактировать пользователя");
             }
             if (JobsGridShow && SelectedJobsClass != null)
             {
-                ShowDialogWin(new AddJobsViewModel(SelectedJobsClass), "Новая должность");
+                NavigationService.Instance.ShowDialogWin(new AddJobsViewModel(SelectedJobsClass), "Новая должность");
             }
             if (RolesGridShow && SelectedRoleClass != null)
             {
-                ShowDialogWin(new AddRolesViewModel(SelectedRoleClass), "Новая должность");
+                NavigationService.Instance.ShowDialogWin(new AddRolesViewModel(SelectedRoleClass), "Новая должность");
             }
 
         } 
@@ -232,27 +233,19 @@ namespace bcsapp.ViewModels
         {
             if (UsersGridShow)
             {
-                ShowDialogWin(new AddUserViewModel(), "Новый пользователь"); 
+                NavigationService.Instance.ShowDialogWin(new AddUserViewModel(), "Новый пользователь"); 
             }
             if (JobsGridShow)
             {
-                ShowDialogWin(new AddJobsViewModel(), "Новая должность"); 
+                NavigationService.Instance.ShowDialogWin(new AddJobsViewModel(), "Новая должность"); 
             }
             if (RolesGridShow)
             {
-                ShowDialogWin(new AddRolesViewModel(), "Новая Роль"); 
+               NavigationService.Instance.ShowDialogWin(new AddRolesViewModel(), "Новая Роль"); 
             }
         }
 
 
-        private void ShowDialogWin(IViewModel viewModel, string title)
-        {
-            Window window = new Window();
-            window.Title = title;
-            window.Content = viewModel;
-            window.SizeToContent = SizeToContent.WidthAndHeight;
-            window.ShowDialog();
-        }
  #endregion
 
         //обновление данных в таблицах
@@ -265,16 +258,19 @@ namespace bcsapp.ViewModels
         }
         private void Instance_UpdateUser(UserClass user)
         {
-            foreach(UserClass usr in observableUserClass)
-            {
-                if (usr.ID == user.ID) observableUserClass.Remove(usr);
-            }
+            //observableUserClass.Remove(observableUserClass.Where(x => x.ID == user.ID).First());
             observableUserClass.Add(user);
             Notify("observableUserClass");
 
         }
+        private void Instance_UpdateJob(JobClass jobClass)
+        {
+            observableJobsClass = new ObservableCollection<JobClass>(DataStorage.Instance.JobList);
+            Notify("observableJobsClass"); 
+        }
 
-        private void Instance_UpdateJobs(List<JobClass> jobs)
+
+    private void Instance_UpdateJobs(List<JobClass> jobs)
         {
             observableJobsClass = new ObservableCollection<JobClass>(jobs);
             Notify("observableJobsClass");
@@ -290,10 +286,8 @@ namespace bcsapp.ViewModels
 
         private void Instance_UpdateRole(RoleClass roles)
         {
-            foreach (RoleClass role in observableRolesClass)
-            {
-                if (role.ID == roles.ID) observableRolesClass.Remove(role);
-            }
+
+           // observableRolesClass.Remove(observableRolesClass.Where(x => x.ID == roles.ID).First());
             observableRolesClass.Add(roles);
             Notify("observableRolesClass");
 

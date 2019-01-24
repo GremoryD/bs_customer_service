@@ -149,13 +149,13 @@ namespace bcsapp
                                     UpdateUsersHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.jobs:
-                                    UpdateJobssListHandler(InputMessage);
+                                    JobssListHandler(InputMessage); 
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.job_add:
-                                    JobssListHandler(InputMessage);
+                                    UpdateJobssListHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.job_edit:
-                                    JobssListHandler(InputMessage);
+                                    UpdateJobssListHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.roles:
                                     RolesListHandler(InputMessage);
@@ -170,10 +170,10 @@ namespace bcsapp
                                     RolesUsersListHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.users_roles_add:
-                                    UpdateUserRoleHandler(InputMessage);
+                                    UpdateUserRoleAddHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.users_roles_delete:
-                                    UpdateUserRoleHandler(InputMessage);
+                                    UpdateUserRoleDeleteHandler(InputMessage);
                                     break;
                             }
                         }
@@ -360,24 +360,64 @@ namespace bcsapp
             }
             else
             {
+                //TODO 
+                foreach (JobClass job in JsonConvert.DeserializeObject<JobsClass>(InputMessage).Jobs)
+                {
+                    UpdateJobssListHandler(job);
+                }
 
+                UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
             }
             UpdateJobs?.Invoke(this, DataStorage.Instance.JobList);
         } 
          
         private void UpdateJobssListHandler(string InputMessage)
         {
-            if (DataStorage.Instance.JobList != null)
-            {
-                DataStorage.Instance.JobList = JsonConvert.DeserializeObject<JobsClass>(InputMessage).Jobs;
-
-            }
-            else
+            if (DataStorage.Instance.UserList != null)
             {
 
+                JobAddClass temp = JsonConvert.DeserializeObject<JobAddClass>(InputMessage);
+                JobClass jobAdd = new JobClass()
+                {
+                    ID = temp.ID,
+                    Name = temp.Name
+                };
+
+                JobClass result = DataStorage.Instance.JobList.Find(x => x.ID == jobAdd.ID);
+                if (result != null)
+                {
+                    DataStorage.Instance.JobList.RemoveAt(DataStorage.Instance.JobList.IndexOf(result));
+                }
+                DataStorage.Instance.JobList.Add(jobAdd);
+                UpdateJob?.Invoke(this, jobAdd);
             }
-            UpdateJobs?.Invoke(this, DataStorage.Instance.JobList);
+            
         }
+
+
+
+        private void UpdateJobssListHandler(JobClass InputMessage)
+        {
+            if (DataStorage.Instance.UserList != null)
+            {
+                 
+                JobClass jobAdd = new JobClass()
+                {
+                    ID = InputMessage.ID,
+                    Name = InputMessage.Name
+                };
+
+                JobClass result = DataStorage.Instance.JobList.Find(x => x.ID == jobAdd.ID);
+                if (result != null)
+                {
+                    DataStorage.Instance.JobList.RemoveAt(DataStorage.Instance.JobList.IndexOf(result));
+                }
+                DataStorage.Instance.JobList.Add(jobAdd);
+                UpdateJob?.Invoke(this, jobAdd);
+            }
+
+        }
+
 
 
         //Функции для работы с ролями
@@ -465,11 +505,8 @@ namespace bcsapp
 
         }
 
-        private void UpdateUserRoleHandler(string InputMessage)
-        {
-
-
-
+        private void UpdateUserRoleAddHandler(string InputMessage)
+        { 
             if (DataStorage.Instance.RoleList != null)
             {
 
@@ -489,6 +526,16 @@ namespace bcsapp
                 }
                 DataStorage.Instance.UsersRolesList.Add(role);
                 UpdateUserRole?.Invoke(this, role);
+            }
+        }
+
+        private void UpdateUserRoleDeleteHandler(string InputMessage)
+        { 
+            if (DataStorage.Instance.RoleList != null)
+            {
+
+                UserRoleDeleteClass temp = JsonConvert.DeserializeObject<UserRoleDeleteClass>(InputMessage);
+                 
             }
         }
 
