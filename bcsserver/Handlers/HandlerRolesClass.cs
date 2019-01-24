@@ -6,7 +6,7 @@ using ServerLib.JTypes.Enums;
 
 namespace bcsserver.Handlers
 {
-    public class HandlerRolesClass : BaseHandlerClass
+    public class HandlerRolesClass : HandlerBaseClass
     {
         /// <summary>
         /// Общий список ролей пользователей

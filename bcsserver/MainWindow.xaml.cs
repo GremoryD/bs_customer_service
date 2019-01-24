@@ -1,22 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using System.Windows.Threading;
-using Oracle.ManagedDataAccess.Types;
 using Oracle.ManagedDataAccess.Client;
 using CLProject;
 
@@ -132,6 +119,9 @@ namespace bcsserver
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "UsersRoles", "USR.GET_USERS_ROLES(:Token)", "Чтение списка назанченных ролей пользователей");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UsersRolesAdd", "USR.USERS_ROLES_ADD(:Token, :UserId, :RoleId, :NewId, :State, :ErrorText)", "Добавление роли пользователю");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UsersRolesDelete", "USR.USERS_ROLES_DELETE(:Token, :RoleId, :State, :ErrorText)", "Удаление роли пользователя");
+
+            // Объекты системы
+            Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Objects", "USR.GET_OBJECTS(:Token)", "Чтение списка объектов системы");
 
             DatabaseCheck.Start();
             SetSettingsButtons();

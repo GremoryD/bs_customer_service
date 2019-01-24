@@ -6,7 +6,7 @@ namespace bcsserver.Handlers
     /// <summary>
     /// Базовый обработчик
     /// </summary>
-    public class BaseHandlerClass
+    public class HandlerBaseClass
     {
         /// <summary>
         /// Сессия пользователя
@@ -23,7 +23,7 @@ namespace bcsserver.Handlers
         /// </summary>
         public bool RefreshDataIsRunning = false;
 
-        public BaseHandlerClass(UserSessionClass AUserSession)
+        public HandlerBaseClass(UserSessionClass AUserSession)
         {
             UserSession = AUserSession;
             RefreshDataTimer = new Timer(RefreshDataProcessing, null, Timeout.Infinite, Timeout.Infinite);

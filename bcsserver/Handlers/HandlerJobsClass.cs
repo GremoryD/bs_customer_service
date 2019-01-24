@@ -9,14 +9,14 @@ namespace bcsserver.Handlers
     /// <summary>
     /// Должности пользователей
     /// </summary>
-    public class JobsClass : BaseHandlerClass
+    public class HandlerJobsClass : HandlerBaseClass
     {
         /// <summary>
         /// Словарь должностей пользователей
         /// </summary>
         private readonly ConcurrentDictionary<long, ServerLib.JTypes.Server.JobClass> JobsCollection;
 
-        public JobsClass(UserSessionClass AUserSession) : base(AUserSession)
+        public HandlerJobsClass(UserSessionClass AUserSession) : base(AUserSession)
         {
             JobsCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.JobClass>();
         }
@@ -26,20 +26,20 @@ namespace bcsserver.Handlers
         /// </summary>
         public override void RefreshData()
         {
-            ServerLib.JTypes.Server.JobsClass JobsList = new ServerLib.JTypes.Server.JobsClass();
+            ServerLib.JTypes.Server.JobsClass OutputList = new ServerLib.JTypes.Server.JobsClass();
             DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
             Params.CreateParameterValue("Token", UserSession.Login.Token);
-            DatabaseTableClass JobsTable = new DatabaseTableClass
+            DatabaseTableClass ReadTable = new DatabaseTableClass
             {
                 Table = (System.Data.DataTable)UserSession.Project.Database.Execute("Jobs", ref Params)
             };
 
-            foreach (System.Data.DataRow row in JobsTable.Table.Rows)
+            foreach (System.Data.DataRow row in ReadTable.Table.Rows)
             {
                 ServerLib.JTypes.Server.JobClass Item = new ServerLib.JTypes.Server.JobClass
                 {
-                    ID = JobsTable.AsInt64(row, "ID"),
-                    Name = JobsTable.AsString(row, "JOB_NAME")
+                    ID = ReadTable.AsInt64(row, "ID"),
+                    Name = ReadTable.AsString(row, "JOB_NAME")
                 };
 
                 if (JobsCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.JobClass ExistItem))
@@ -48,14 +48,14 @@ namespace bcsserver.Handlers
                     {
                         Item.Command = ListCommands.edit;
                         JobsCollection.TryUpdate(Item.ID, Item, ExistItem);
-                        JobsList.Jobs.Add(Item);
+                        OutputList.Jobs.Add(Item);
                     }
                 }
                 else
                 {
                     Item.Command = ListCommands.add;
                     JobsCollection.TryAdd(Item.ID, Item);
-                    JobsList.Jobs.Add(Item);
+                    OutputList.Jobs.Add(Item);
                 }
             }
 
@@ -63,9 +63,9 @@ namespace bcsserver.Handlers
             {
                 bool IsExist = false;
 
-                foreach (System.Data.DataRow row in JobsTable.Table.Rows)
+                foreach (System.Data.DataRow row in ReadTable.Table.Rows)
                 {
-                    if (Item.Value.ID == JobsTable.AsInt64(row, "ID"))
+                    if (Item.Value.ID == ReadTable.AsInt64(row, "ID"))
                     {
                         IsExist = true;
                         break;
@@ -75,14 +75,14 @@ namespace bcsserver.Handlers
                 if (!IsExist)
                 {
                     Item.Value.Command = ListCommands.delete;
-                    JobsList.Jobs.Add(Item.Value);
+                    OutputList.Jobs.Add(Item.Value);
                     JobsCollection.TryRemove(Item.Value.ID, out ServerLib.JTypes.Server.JobClass DeletingItem);
                 }
             }
 
-            if (JobsList.Jobs.Count > 0)
+            if (OutputList.Jobs.Count > 0)
             {
-                UserSession.OutputQueueAddObject(JobsList);
+                UserSession.OutputQueueAddObject(OutputList);
             }
         }
 

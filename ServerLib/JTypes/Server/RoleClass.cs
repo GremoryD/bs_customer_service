@@ -1,17 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using CLProject;
 
 namespace ServerLib.JTypes.Server
 {
-    public class RoleClass
+    public class RoleClass : BaseItemClass
     {
-        /// <summary>
-        /// Идентификатор роли пользователей
-        /// </summary>
-        [JsonProperty(PropertyName = "id", Required = Required.Always)]
-        public long ID { get; set; } = 0;
-
         /// <summary>
         /// Наименование роли пользователей
         /// </summary>
@@ -23,12 +16,6 @@ namespace ServerLib.JTypes.Server
         /// </summary>
         [JsonProperty(PropertyName = "description", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public string Description { get; set; } = null;
-
-        /// <summary>
-        /// Команда, которую необходимо выполнить на стороне клиента с данным объектом
-        /// </summary>
-        [JsonProperty(PropertyName = "command", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
-        public Enums.ListCommands Command { get; set; }
 
         /// <summary>
         /// Hash-код объекта
