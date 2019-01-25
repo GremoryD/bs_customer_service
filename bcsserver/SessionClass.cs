@@ -224,6 +224,8 @@ namespace bcsserver
                                                 case Commands.objects:
                                                     Objects.SendData();
                                                     break;
+                                                case Commands.roles_objects_access_rights:
+                                                    break;
                                             }
                                         }
                                         else

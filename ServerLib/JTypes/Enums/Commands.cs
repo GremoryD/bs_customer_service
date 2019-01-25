@@ -88,6 +88,11 @@
         /// <summary>
         /// Список объектов
         /// </summary>
-        objects
+        objects,
+
+        /// <summary>
+        /// Список прав доступа ролей к объектам системы
+        /// </summary>
+        roles_objects_access_rights
     }
 }
