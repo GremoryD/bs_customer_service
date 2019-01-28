@@ -63,6 +63,7 @@
     <Compile Include="JTypes\Enums\Commands.cs" />
     <Compile Include="JTypes\Enums\ErrorCodes.cs" />
     <Compile Include="JTypes\Enums\ListCommands.cs" />
+    <Compile Include="JTypes\Enums\Operations.cs" />
     <Compile Include="JTypes\Enums\ResponseState.cs" />
     <Compile Include="JTypes\Enums\UserActive.cs" />
     <Compile Include="JTypes\Server\BaseItemClass.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="JTypes\Server\RoleAddClass.cs" />
     <Compile Include="JTypes\Server\RoleClass.cs" />
     <Compile Include="JTypes\Server\RoleEditClass.cs" />
+    <Compile Include="JTypes\Server\RoleObjectClass.cs" />
     <Compile Include="JTypes\Server\RolesClass.cs" />
     <Compile Include="JTypes\Server\UserAddClass.cs" />
     <Compile Include="JTypes\Server\UserClass.cs" />
