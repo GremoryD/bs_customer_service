@@ -9,13 +9,13 @@ namespace bcsserver.Handlers
     public class HandlerRolesObjectsClass : HandlerBaseClass
     {
         /// <summary>
-        /// Словарь должностей пользователей
+        /// Список разрешений ролей пользователей
         /// </summary>
-        private readonly ConcurrentDictionary<long, ServerLib.JTypes.Server.JobClass> JobsCollection;
+        private readonly ConcurrentDictionary<long, ServerLib.JTypes.Server.JobClass> ReadCollection;
 
         public HandlerRolesObjectsClass(UserSessionClass AUserSession) : base(AUserSession)
         {
-            JobsCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.JobClass>();
+            ReadCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.JobClass>();
         }
     }
 }
