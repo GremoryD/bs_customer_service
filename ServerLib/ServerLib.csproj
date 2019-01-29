@@ -54,6 +54,7 @@
     <Compile Include="JTypes\Client\RoleAddClass.cs" />
     <Compile Include="JTypes\Client\RoleEditClass.cs" />
     <Compile Include="JTypes\Client\RolesClass.cs" />
+    <Compile Include="JTypes\Client\RolesObjectsClass.cs" />
     <Compile Include="JTypes\Client\UserAddClass.cs" />
     <Compile Include="JTypes\Client\UserEditClass.cs" />
     <Compile Include="JTypes\Client\UserRoleAddClass.cs" />
