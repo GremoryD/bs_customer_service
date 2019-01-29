@@ -21,13 +21,13 @@ namespace ServerLib.JTypes.Server
         /// <summary>
         /// Доступная операция над объектом
         /// </summary>
-        [JsonProperty(PropertyName = "operation", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
-        public Enums.Operations Operation { get; set; }
+        [JsonProperty(PropertyName = "object_operation", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
+        public Enums.Operations ObjectOperation { get; set; }
 
         /// <summary>
         /// Hash-код объекта
         /// </summary>
         [JsonIgnore]
-        public string Hash => Utils.SHA256Base64(ID.ToString() + RoleID.ToString() + ObjectID.ToString() + Operation.ToString());
+        public string Hash => Utils.SHA256Base64(ID.ToString() + RoleID.ToString() + ObjectID.ToString() + ObjectOperation.ToString());
     }
 }

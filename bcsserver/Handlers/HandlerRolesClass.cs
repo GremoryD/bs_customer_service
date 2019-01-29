@@ -40,12 +40,12 @@ namespace bcsserver.Handlers
                     Description = ReadTable.AsString(row, "DESCRIPTION")
                 };
 
-                if (ReadCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.RoleClass ExistRole))
+                if (ReadCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.RoleClass ExistItem))
                 {
-                    if (ExistRole.Hash != Item.Hash)
+                    if (ExistItem.Hash != Item.Hash)
                     {
                         Item.Command = ListCommands.edit;
-                        ReadCollection.TryUpdate(Item.ID, Item, ExistRole);
+                        ReadCollection.TryUpdate(Item.ID, Item, ExistItem);
                         OutputList.Items.Add(Item);
                     }
                 }

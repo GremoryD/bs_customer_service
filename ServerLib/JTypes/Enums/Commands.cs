@@ -93,6 +93,6 @@
         /// <summary>
         /// Список прав доступа ролей к объектам системы
         /// </summary>
-        roles_objects_access_rights
+        roles_objects
     }
 }

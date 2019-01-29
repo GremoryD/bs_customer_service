@@ -99,6 +99,11 @@ namespace bcsserver
         public Handlers.HandlerObjectsClass Objects;
 
         /// <summary>
+        /// Обработчик списка прав доступа ролей пользователей к объектам системы
+        /// </summary>
+        public Handlers.HandlerRolesObjectsClass RolesObjects;
+
+        /// <summary>
         /// Конструктор класса сессии пользователя
         /// </summary>
         /// <param name="AWebSocketSessionIDSessionID">Идентификатор сессии WebSocket-сервера</param>
@@ -125,6 +130,7 @@ namespace bcsserver
             Roles = new Handlers.HandlerRolesClass(this);
             UsersRoles = new Handlers.HandlerUsersRolesClass(this);
             Objects = new Handlers.HandlerObjectsClass(this);
+            RolesObjects = new Handlers.HandlerRolesObjectsClass(this);
 
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
             OutputQueueProcessing = new Thread(OutputQueueProcessingThread);
@@ -224,7 +230,8 @@ namespace bcsserver
                                                 case Commands.objects:
                                                     Objects.SendData();
                                                     break;
-                                                case Commands.roles_objects_access_rights:
+                                                case Commands.roles_objects:
+                                                    RolesObjects.SendData();
                                                     break;
                                             }
                                         }

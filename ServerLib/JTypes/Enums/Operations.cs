@@ -6,6 +6,11 @@
     public enum Operations
     {
         /// <summary>
+        /// Нет операции
+        /// </summary>
+        none,
+
+        /// <summary>
         /// Чтение
         /// </summary>
         read,

@@ -82,6 +82,7 @@
     <Compile Include="JTypes\Server\RoleEditClass.cs" />
     <Compile Include="JTypes\Server\RoleObjectClass.cs" />
     <Compile Include="JTypes\Server\RolesClass.cs" />
+    <Compile Include="JTypes\Server\RolesObjectsClass.cs" />
     <Compile Include="JTypes\Server\UserAddClass.cs" />
     <Compile Include="JTypes\Server\UserClass.cs" />
     <Compile Include="JTypes\Server\UserEditClass.cs" />

@@ -123,6 +123,9 @@ namespace bcsserver
             // Объекты системы
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Objects", "USR.GET_OBJECTS(:Token)", "Чтение списка объектов системы");
 
+            // Права доступа ролей пользователей к объектам системы
+            Project.Database.Commands.CreateCommand("conn", RequestType.Table, "RolesObjects", "USR.GET_ROLES_ACCESS_RIGTHS(:Token)", "Чтение списка прав доступа ролей пользователей к объектам системы");
+
             DatabaseCheck.Start();
             SetSettingsButtons();
 
