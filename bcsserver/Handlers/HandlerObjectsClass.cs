@@ -9,11 +9,11 @@ namespace bcsserver.Handlers
         /// <summary>
         /// Обработчик списка объектов системы
         /// </summary>
-        public ConcurrentDictionary<long, ServerLib.JTypes.Server.ObjectClass> ReadCollection;
+        public ConcurrentDictionary<long, ServerLib.JTypes.Server.ResponseObjectClass> ReadCollection;
 
         public HandlerObjectsClass(UserSessionClass AUserSession) : base(AUserSession)
         {
-            ReadCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.ObjectClass>();
+            ReadCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.ResponseObjectClass>();
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace bcsserver.Handlers
         /// </summary>
         public override void RefreshData()
         {
-            ServerLib.JTypes.Server.ObjectsClass OutputList = new ServerLib.JTypes.Server.ObjectsClass();
+            ServerLib.JTypes.Server.ResponseObjectsClass OutputList = new ServerLib.JTypes.Server.ResponseObjectsClass();
             DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
             Params.CreateParameterValue("Token", UserSession.Login.Token);
             DatabaseTableClass ReadTable = new DatabaseTableClass
@@ -31,7 +31,7 @@ namespace bcsserver.Handlers
 
             foreach (System.Data.DataRow row in ReadTable.Table.Rows)
             {
-                ServerLib.JTypes.Server.ObjectClass Item = new ServerLib.JTypes.Server.ObjectClass
+                ServerLib.JTypes.Server.ResponseObjectClass Item = new ServerLib.JTypes.Server.ResponseObjectClass
                 {
                     ID = ReadTable.AsInt64(row, "ID"),
                     Name = ReadTable.AsString(row, "NAME"),
@@ -42,24 +42,24 @@ namespace bcsserver.Handlers
                     OperationDelete = ReadTable.AsInt64(row, "OPERATION_DELETE") == 1
                 };
 
-                if (ReadCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.ObjectClass ExistItem))
+                if (ReadCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.ResponseObjectClass ExistItem))
                 {
                     if (ExistItem.Hash != Item.Hash)
                     {
-                        Item.Command = ListCommands.edit;
+                        Item.Command = ItemCommands.edit;
                         ReadCollection.TryUpdate(Item.ID, Item, ExistItem);
                         OutputList.Items.Add(Item);
                     }
                 }
                 else
                 {
-                    Item.Command = ListCommands.add;
+                    Item.Command = ItemCommands.add;
                     ReadCollection.TryAdd(Item.ID, Item);
                     OutputList.Items.Add(Item);
                 }
             }
 
-            foreach (System.Collections.Generic.KeyValuePair<long, ServerLib.JTypes.Server.ObjectClass> Item in ReadCollection)
+            foreach (System.Collections.Generic.KeyValuePair<long, ServerLib.JTypes.Server.ResponseObjectClass> Item in ReadCollection)
             {
                 bool IsExist = false;
 
@@ -74,9 +74,9 @@ namespace bcsserver.Handlers
 
                 if (!IsExist)
                 {
-                    Item.Value.Command = ListCommands.delete;
+                    Item.Value.Command = ItemCommands.delete;
                     OutputList.Items.Add(Item.Value);
-                    ReadCollection.TryRemove(Item.Value.ID, out ServerLib.JTypes.Server.ObjectClass DeletingItem);
+                    ReadCollection.TryRemove(Item.Value.ID, out ServerLib.JTypes.Server.ResponseObjectClass DeletingItem);
                 }
             }
 

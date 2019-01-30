@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace bcsserver.Handlers
 {
-    public class LoginClass : ServerLib.JTypes.Server.LoginClass
+    public class LoginClass : ServerLib.JTypes.Server.ResponseLoginClass
     {
         private UserSessionClass UserSession;
 
@@ -21,7 +21,7 @@ namespace bcsserver.Handlers
         {
             try
             {
-                ServerLib.JTypes.Client.Login Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.Login>(ARequest);
+                ServerLib.JTypes.Client.RequestLoginClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RequestLoginClass>(ARequest);
                 Token = null;
                 ID = 0;
                 Active = 0;
@@ -47,12 +47,12 @@ namespace bcsserver.Handlers
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(ServerLib.JTypes.Enums.Commands.login, ServerLib.JTypes.Enums.ErrorCodes.IncorrectLoginOrPassword));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(ServerLib.JTypes.Enums.Commands.login, ServerLib.JTypes.Enums.ErrorCodes.IncorrectLoginOrPassword));
                 }
             }
             catch (Exception ex)
             {
-                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(ServerLib.JTypes.Enums.Commands.login, ServerLib.JTypes.Enums.ErrorCodes.FatalError, ex.Message));
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(ServerLib.JTypes.Enums.Commands.login, ServerLib.JTypes.Enums.ErrorCodes.FatalError, ex.Message));
             }
         }
     }

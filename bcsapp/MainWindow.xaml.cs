@@ -33,7 +33,7 @@ namespace bcsapp
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            SendObject(new ServerLib.JTypes.Client.Login()
+            SendObject(new ServerLib.JTypes.Client.RequestLoginClass()
             { 
                 UserName = "admin",
                 Password = "123456"
@@ -47,7 +47,7 @@ namespace bcsapp
 
         private void LoginError_Click(object sender, RoutedEventArgs e)
         {
-            SendObject(new ServerLib.JTypes.Client.Login()
+            SendObject(new ServerLib.JTypes.Client.RequestLoginClass()
             {
 
                 UserName = "32123",
@@ -58,7 +58,7 @@ namespace bcsapp
 
         private void LoginBan_Click(object sender, RoutedEventArgs e)
         {
-            SendObject(new ServerLib.JTypes.Client.Login()
+            SendObject(new ServerLib.JTypes.Client.RequestLoginClass()
             {
 
                 UserName = "TestBan",

@@ -168,7 +168,7 @@ namespace bcsserver
                         }
                         catch
                         {
-                            OutputQueueAddObject(new ExceptionClass(Commands.none, ErrorCodes.NotJSONObject));
+                            OutputQueueAddObject(new ResponseExceptionClass(Commands.none, ErrorCodes.NotJSONObject));
                         }
                         if (CommandStr.Length > 0)
                         {
@@ -237,12 +237,12 @@ namespace bcsserver
                                         }
                                         else
                                         {
-                                            OutputQueueAddObject(new ExceptionClass(Command, ErrorCodes.NotAuthenticated));
+                                            OutputQueueAddObject(new ResponseExceptionClass(Command, ErrorCodes.NotAuthenticated));
                                         }
                                     }
                                     else
                                     {
-                                        OutputQueueAddObject(new ExceptionClass(Command, ErrorCodes.IncorrectToken));
+                                        OutputQueueAddObject(new ResponseExceptionClass(Command, ErrorCodes.IncorrectToken));
                                     }
                                 }
                             }

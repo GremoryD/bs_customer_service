@@ -54,17 +54,17 @@ namespace bcsapp.ViewModels
 
 
         //Data Grid
-        public ObservableCollection<UserClass> observableUserClass {set;get; } =new ObservableCollection<UserClass>(DataStorage.Instance.UserList);
-        public UserClass SelectedUserClass { set; get; }
-        public ObservableCollection<JobClass> observableJobsClass { set; get; } = new ObservableCollection<JobClass>(DataStorage.Instance.JobList);
-        public JobClass SelectedJobsClass { set; get; }
-        public ObservableCollection<RoleClass> observableRolesClass { set; get; } = new ObservableCollection<RoleClass>(DataStorage.Instance.RoleList);
-        public RoleClass SelectedRoleClass { set; get; }
+        public ObservableCollection<ResponseUserClass> observableUserClass {set;get; } =new ObservableCollection<ResponseUserClass>(DataStorage.Instance.UserList);
+        public ResponseUserClass SelectedUserClass { set; get; }
+        public ObservableCollection<ResponseJobClass> observableJobsClass { set; get; } = new ObservableCollection<ResponseJobClass>(DataStorage.Instance.JobList);
+        public ResponseJobClass SelectedJobsClass { set; get; }
+        public ObservableCollection<ResponseRoleClass> observableRolesClass { set; get; } = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList);
+        public ResponseRoleClass SelectedRoleClass { set; get; }
 
 
         //roles controle
-        public ObservableCollection<RoleClass> UserUsedRoles { set; get; } = new ObservableCollection<RoleClass>();
-        public ObservableCollection<RoleClass> UserUnusedRoles { set; get; } = new ObservableCollection<RoleClass>();
+        public ObservableCollection<ResponseRoleClass> UserUsedRoles { set; get; } = new ObservableCollection<ResponseRoleClass>();
+        public ObservableCollection<ResponseRoleClass> UserUnusedRoles { set; get; } = new ObservableCollection<ResponseRoleClass>();
 
         public ICommand AddRoleToUserCommand { set; get; }
         public ICommand RemoveRoleToUserCommand { set; get; }
@@ -73,7 +73,7 @@ namespace bcsapp.ViewModels
         public ObservableCollection<AccessRolesData> accessRolesData { set; get; } = new ObservableCollection<AccessRolesData>(DataStorage.Instance.accessRolesData);
 
 
-        public ObservableCollection<RoleClass> observableUsersRole { set; get; } = new ObservableCollection<RoleClass>(DataStorage.Instance.RoleList);
+        public ObservableCollection<ResponseRoleClass> observableUsersRole { set; get; } = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList);
 
         public AplicationViewModel()
         { 
@@ -87,8 +87,8 @@ namespace bcsapp.ViewModels
             DeleteButtonCommand = new SimpleCommand(DeleteButton);
 
             UserSelectedItemChangedCommand = new SimpleCommand(UserSelectedItemChanged);
-            AddRoleToUserCommand = new SimpleCommand<RoleClass>(AddRoleToUser);
-            RemoveRoleToUserCommand = new SimpleCommand<RoleClass>(RemoveRoleToUser);
+            AddRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(AddRoleToUser);
+            RemoveRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(RemoveRoleToUser);
 
             WebSocketController.Instance.UpdateUserUI += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUserUI(__));
             WebSocketController.Instance.ConnectedState +=  (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_ConnectedState(__));
@@ -103,13 +103,13 @@ namespace bcsapp.ViewModels
 
             Task.Run(() =>
             {
-                ServerLib.JTypes.Client.UsersClass usersClass = new ServerLib.JTypes.Client.UsersClass() { Token = DataStorage.Instance.Login.Token };
+                ServerLib.JTypes.Client.RequestUsersClass usersClass = new ServerLib.JTypes.Client.RequestUsersClass() { Token = DataStorage.Instance.Login.Token };
                 WebSocketController.Instance.OutputQueueAddObject(usersClass);
-                ServerLib.JTypes.Client.JobsClass jobsClass = new ServerLib.JTypes.Client.JobsClass { Token = DataStorage.Instance.Login.Token };
+                ServerLib.JTypes.Client.RequestJobsClass jobsClass = new ServerLib.JTypes.Client.RequestJobsClass { Token = DataStorage.Instance.Login.Token };
                 WebSocketController.Instance.OutputQueueAddObject(jobsClass);
-                ServerLib.JTypes.Client.RolesClass rolesClass = new ServerLib.JTypes.Client.RolesClass { Token = DataStorage.Instance.Login.Token };
+                ServerLib.JTypes.Client.RequestRolesClass rolesClass = new ServerLib.JTypes.Client.RequestRolesClass { Token = DataStorage.Instance.Login.Token };
                 WebSocketController.Instance.OutputQueueAddObject(rolesClass);
-                ServerLib.JTypes.Client.UsersRolesClass usersRolesClass = new ServerLib.JTypes.Client.UsersRolesClass { Token = DataStorage.Instance.Login.Token };
+                ServerLib.JTypes.Client.RequestUsersRolesClass usersRolesClass = new ServerLib.JTypes.Client.RequestUsersRolesClass { Token = DataStorage.Instance.Login.Token };
                 WebSocketController.Instance.OutputQueueAddObject(usersRolesClass);
             });
              
@@ -119,7 +119,7 @@ namespace bcsapp.ViewModels
         private void UserSelectedItemChanged()
         {
             UserUsedRoles.Clear();
-            foreach(UserRoleClass userRoleClass in DataStorage.Instance.UsersRolesList)
+            foreach(ResponseUserRoleClass userRoleClass in DataStorage.Instance.UsersRolesList)
             {
                 if(SelectedUserClass != null && userRoleClass.UserID  == SelectedUserClass.ID)
                 {
@@ -127,14 +127,14 @@ namespace bcsapp.ViewModels
                     Notify("UserUsedRoles");
                 }
             }
-            UserUnusedRoles = new ObservableCollection<RoleClass>(DataStorage.Instance.RoleList);
+            UserUnusedRoles = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList);
             UserUnusedRoles.Except(UserUsedRoles).ToList();
             Notify("UserUnusedRoles"); 
         }
 
-        private void RemoveRoleToUser(RoleClass obj)
+        private void RemoveRoleToUser(ResponseRoleClass obj)
         {
-            ServerLib.JTypes.Client.UserRoleDeleteClass removeRoleUser = new ServerLib.JTypes.Client.UserRoleDeleteClass()
+            ServerLib.JTypes.Client.RequestUserRoleDeleteClass removeRoleUser = new ServerLib.JTypes.Client.RequestUserRoleDeleteClass()
             {
                 UserRoleID = DataStorage.Instance.UsersRolesList.Find(x => x.RoleID == obj.ID).ID,
                 Token = DataStorage.Instance.Login.Token
@@ -144,12 +144,12 @@ namespace bcsapp.ViewModels
             WebSocketController.Instance.OutputQueueAddObject(removeRoleUser);
         }
 
-        private void AddRoleToUser(RoleClass obj)
+        private void AddRoleToUser(ResponseRoleClass obj)
         { 
             UserUnusedRoles.Remove(obj);
             UserUsedRoles.Add(obj);
 
-            ServerLib.JTypes.Client.UserRoleAddClass addRoleUser = new ServerLib.JTypes.Client.UserRoleAddClass()
+            ServerLib.JTypes.Client.RequestUserRoleAddClass addRoleUser = new ServerLib.JTypes.Client.RequestUserRoleAddClass()
             {
                 RoleID = obj.ID,
                 UserID = SelectedUserClass.ID,
@@ -158,12 +158,12 @@ namespace bcsapp.ViewModels
             WebSocketController.Instance.OutputQueueAddObject(addRoleUser);
         }  
 
-        private void Instance_UpdateUserRole(UserRoleClass userRoleClass)
+        private void Instance_UpdateUserRole(ResponseUserRoleClass userRoleClass)
         {
               
         }
 
-        private void Instance_UpdateUserRoles(List<UserRoleClass> userRoles)
+        private void Instance_UpdateUserRoles(List<ResponseUserRoleClass> userRoles)
         {
              
         }
@@ -249,42 +249,42 @@ namespace bcsapp.ViewModels
  #endregion
 
         //обновление данных в таблицах
-        private void Instance_UpdateUsers(List<UserClass> users)
+        private void Instance_UpdateUsers(List<ResponseUserClass> users)
         { 
 
-            observableUserClass = new ObservableCollection<UserClass>(users);
+            observableUserClass = new ObservableCollection<ResponseUserClass>(users);
             Notify("observableUserClass");
 
         }
-        private void Instance_UpdateUser(UserClass user)
+        private void Instance_UpdateUser(ResponseUserClass user)
         {
             //observableUserClass.Remove(observableUserClass.Where(x => x.ID == user.ID).First());
             observableUserClass.Add(user);
             Notify("observableUserClass");
 
         }
-        private void Instance_UpdateJob(JobClass jobClass)
+        private void Instance_UpdateJob(ResponseJobClass jobClass)
         {
-            observableJobsClass = new ObservableCollection<JobClass>(DataStorage.Instance.JobList);
+            observableJobsClass = new ObservableCollection<ResponseJobClass>(DataStorage.Instance.JobList);
             Notify("observableJobsClass"); 
         }
 
 
-    private void Instance_UpdateJobs(List<JobClass> jobs)
+    private void Instance_UpdateJobs(List<ResponseJobClass> jobs)
         {
-            observableJobsClass = new ObservableCollection<JobClass>(jobs);
+            observableJobsClass = new ObservableCollection<ResponseJobClass>(jobs);
             Notify("observableJobsClass");
         }
 
-        private void Instance_UpdateRoles(List<RoleClass> roles)
+        private void Instance_UpdateRoles(List<ResponseRoleClass> roles)
         {
-            observableRolesClass = new ObservableCollection<RoleClass>(roles);
+            observableRolesClass = new ObservableCollection<ResponseRoleClass>(roles);
             Notify("observableRolesClass");
         }
 
 
 
-        private void Instance_UpdateRole(RoleClass roles)
+        private void Instance_UpdateRole(ResponseRoleClass roles)
         {
 
            // observableRolesClass.Remove(observableRolesClass.Where(x => x.ID == roles.ID).First());

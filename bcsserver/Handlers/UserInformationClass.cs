@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace bcsserver.Handlers
 {
-    public class UserInformationClass : ServerLib.JTypes.Server.UserInformationClass
+    public class UserInformationClass : ServerLib.JTypes.Server.ResponseUserInformationClass
     {
         private UserSessionClass UserSession;
 

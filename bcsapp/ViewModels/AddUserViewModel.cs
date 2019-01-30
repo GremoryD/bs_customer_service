@@ -15,7 +15,7 @@ namespace bcsapp.ViewModels
 {
     public class AddUserViewModel : IViewModel, INotifyPropertyChanged
     {
-        private UserClass user;
+        private ResponseUserClass user;
 
         public String UserLogin { set; get; }
         public String UserPassword { set; get; }
@@ -24,8 +24,8 @@ namespace bcsapp.ViewModels
         public String UserMiddleName { set; get; }
         public String EditAddButton { set; get; }
 
-        public ObservableCollection<JobClass> observableJobsClass { set; get; } = new ObservableCollection<JobClass>(DataStorage.Instance.JobList);
-        public JobClass SelectedJob { set; get; }
+        public ObservableCollection<ResponseJobClass> observableJobsClass { set; get; } = new ObservableCollection<ResponseJobClass>(DataStorage.Instance.JobList);
+        public ResponseJobClass SelectedJob { set; get; }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -45,7 +45,7 @@ namespace bcsapp.ViewModels
             CancelCommand = new SimpleCommand(Cancel);
         }
 
-        public AddUserViewModel(UserClass user)
+        public AddUserViewModel(ResponseUserClass user)
         {
             this.user = user;
             UserLogin = user.Login;
@@ -53,9 +53,9 @@ namespace bcsapp.ViewModels
             UserSurname = user.LastName;
             UserName = user.FirstName;
             UserMiddleName = user.MidleName;
-            if (observableJobsClass.Where(x => x.ID == user.ID).Count<JobClass>()>0)
+            if (observableJobsClass.Where(x => x.ID == user.ID).Count<ResponseJobClass>()>0)
             {
-                SelectedJob = observableJobsClass.Where(x => x.ID == user.ID).Last<JobClass>();
+                SelectedJob = observableJobsClass.Where(x => x.ID == user.ID).Last<ResponseJobClass>();
 
             }
             EditAddButton = "Изменить";
@@ -72,7 +72,7 @@ namespace bcsapp.ViewModels
 
         private void AddUser()
         {
-            ServerLib.JTypes.Client.UserAddClass addUser = new ServerLib.JTypes.Client.UserAddClass()
+            ServerLib.JTypes.Client.RequestUserAddClass addUser = new ServerLib.JTypes.Client.RequestUserAddClass()
             {
                 Login = UserLogin,
                 Password = UserPassword,
@@ -93,7 +93,7 @@ namespace bcsapp.ViewModels
 
         private void EditUser()
         {
-            ServerLib.JTypes.Client.UserEditClass addUser = new ServerLib.JTypes.Client.UserEditClass()
+            ServerLib.JTypes.Client.RequestUserEditClass addUser = new ServerLib.JTypes.Client.RequestUserEditClass()
             {
                 ID = user.ID,
                 FirstName = UserName,

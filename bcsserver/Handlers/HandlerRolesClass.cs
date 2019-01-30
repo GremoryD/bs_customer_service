@@ -11,11 +11,11 @@ namespace bcsserver.Handlers
         /// <summary>
         /// Общий список ролей пользователей
         /// </summary>
-        public ConcurrentDictionary<long, ServerLib.JTypes.Server.RoleClass> ReadCollection;
+        public ConcurrentDictionary<long, ServerLib.JTypes.Server.ResponseRoleClass> ReadCollection;
 
         public HandlerRolesClass(UserSessionClass AUserSession) : base(AUserSession)
         {
-            ReadCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.RoleClass>();
+            ReadCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.ResponseRoleClass>();
         }
         
         /// <summary>
@@ -23,7 +23,7 @@ namespace bcsserver.Handlers
         /// </summary>
         public override void RefreshData()
         {
-            ServerLib.JTypes.Server.RolesClass OutputList = new ServerLib.JTypes.Server.RolesClass();
+            ServerLib.JTypes.Server.ResponseRolesClass OutputList = new ServerLib.JTypes.Server.ResponseRolesClass();
             DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
             Params.CreateParameterValue("Token", UserSession.Login.Token);
             DatabaseTableClass ReadTable = new DatabaseTableClass
@@ -33,31 +33,31 @@ namespace bcsserver.Handlers
 
             foreach (System.Data.DataRow row in ReadTable.Table.Rows)
             {
-                ServerLib.JTypes.Server.RoleClass Item = new ServerLib.JTypes.Server.RoleClass
+                ServerLib.JTypes.Server.ResponseRoleClass Item = new ServerLib.JTypes.Server.ResponseRoleClass
                 {
                     ID = ReadTable.AsInt64(row, "ID"),
                     Name = ReadTable.AsString(row, "NAME"),
                     Description = ReadTable.AsString(row, "DESCRIPTION")
                 };
 
-                if (ReadCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.RoleClass ExistItem))
+                if (ReadCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.ResponseRoleClass ExistItem))
                 {
                     if (ExistItem.Hash != Item.Hash)
                     {
-                        Item.Command = ListCommands.edit;
+                        Item.Command = ItemCommands.edit;
                         ReadCollection.TryUpdate(Item.ID, Item, ExistItem);
                         OutputList.Items.Add(Item);
                     }
                 }
                 else
                 {
-                    Item.Command = ListCommands.add;
+                    Item.Command = ItemCommands.add;
                     ReadCollection.TryAdd(Item.ID, Item);
                     OutputList.Items.Add(Item);
                 }
             }
 
-            foreach (System.Collections.Generic.KeyValuePair<long, ServerLib.JTypes.Server.RoleClass> Item in ReadCollection)
+            foreach (System.Collections.Generic.KeyValuePair<long, ServerLib.JTypes.Server.ResponseRoleClass> Item in ReadCollection)
             {
                 bool IsExist = false;
 
@@ -72,9 +72,9 @@ namespace bcsserver.Handlers
 
                 if (!IsExist)
                 {
-                    Item.Value.Command = ListCommands.delete;
+                    Item.Value.Command = ItemCommands.delete;
                     OutputList.Items.Add(Item.Value);
-                    ReadCollection.TryRemove(Item.Value.ID, out ServerLib.JTypes.Server.RoleClass DeletingItem);
+                    ReadCollection.TryRemove(Item.Value.ID, out ServerLib.JTypes.Server.ResponseRoleClass DeletingItem);
                 }
             }
 
@@ -93,7 +93,7 @@ namespace bcsserver.Handlers
             bool ProcessingSuccess = false;
             try
             {
-                ServerLib.JTypes.Client.RoleAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RoleAddClass>(ARequest);
+                ServerLib.JTypes.Client.RequestRoleAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RequestRoleAddClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
                 Params.CreateParameterValue("Name", Request.Name.Trim());
@@ -104,7 +104,7 @@ namespace bcsserver.Handlers
                 UserSession.Project.Database.Execute("RoleAdd", ref Params);
                 if (Params.ParameterByName("State").AsString== "ok")
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.RoleAddClass
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseRoleAddClass
                     {
                         ID = Params.ParameterByName("NewId").AsInt64,
                         Name = Request.Name.Trim(),
@@ -114,12 +114,12 @@ namespace bcsserver.Handlers
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.roles_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
                 }
             }
             catch (Exception ex)
             {
-                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_add, ErrorCodes.FatalError, ex.Message));
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.roles_add, ErrorCodes.FatalError, ex.Message));
             }
             return ProcessingSuccess;
         }
@@ -133,7 +133,7 @@ namespace bcsserver.Handlers
             bool ProcessingSuccess = false;
             try
             {
-                ServerLib.JTypes.Client.RoleEditClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RoleEditClass>(ARequest);
+                ServerLib.JTypes.Client.RequestRoleEditClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RequestRoleEditClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
                 Params.CreateParameterValue("Name", Request.Name.Trim());
@@ -144,7 +144,7 @@ namespace bcsserver.Handlers
                 UserSession.Project.Database.Execute("RoleEdit", ref Params);
                 if (Params.ParameterByName("State").AsString== "ok")
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.RoleEditClass
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseRoleEditClass
                     {
                         ID = Request.ID,
                         Name = Request.Name.Trim(),
@@ -154,12 +154,12 @@ namespace bcsserver.Handlers
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.roles_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
                 }
             }
             catch (Exception ex)
             {
-                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.roles_edit, ErrorCodes.FatalError, ex.Message));
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.roles_edit, ErrorCodes.FatalError, ex.Message));
             }
             return ProcessingSuccess;
         }
