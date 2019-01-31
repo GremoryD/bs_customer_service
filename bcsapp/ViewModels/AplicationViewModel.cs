@@ -137,8 +137,9 @@ namespace bcsapp.ViewModels
             ServerLib.JTypes.Client.UserRoleDeleteClass removeRoleUser = new ServerLib.JTypes.Client.UserRoleDeleteClass()
             {
                 UserRoleID = DataStorage.Instance.UsersRolesList.Find(x => x.RoleID == obj.ID).ID,
-                Token = DataStorage.Instance.Login.Token
-            }; 
+                Token = DataStorage.Instance.Login.Token 
+            };
+            DataStorage.Instance.UsersRolesList.Find(x => x.RoleID == obj.ID && SelectedUserClass.ID== x.UserID); 
             UserUnusedRoles.Add(obj);
             UserUsedRoles.Remove(obj);
             WebSocketController.Instance.OutputQueueAddObject(removeRoleUser);

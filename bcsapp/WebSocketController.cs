@@ -294,6 +294,7 @@ namespace bcsapp
             if (DataStorage.Instance.UserList.Count==0)
             {
                 DataStorage.Instance.UserList = JsonConvert.DeserializeObject<UsersClass>(InputMessage).Items;
+                DataStorage.Instance.UserList.Remove(DataStorage.Instance.UserList.Find(x => x.ID == DataStorage.Instance.Login.ID));
                 UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
             }
             else
@@ -360,7 +361,6 @@ namespace bcsapp
             }
             else
             {
-                //TODO 
                 foreach (JobClass job in JsonConvert.DeserializeObject<JobsClass>(InputMessage).Jobs)
                 {
                     UpdateJobssListHandler(job);
