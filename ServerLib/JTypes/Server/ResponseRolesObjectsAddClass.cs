@@ -1,11 +1,19 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using CLProject;
 
 namespace ServerLib.JTypes.Server
 {
-    public class ResponseRoleObjectClass : ResponseBaseItemClass
+    /// <summary>
+    /// Структура добавленного разрешения роли пользователей на операцию над объектом системы
+    /// </summary>
+    public class ResponseRolesObjectsAddClass : ResponseBaseClass
     {
+        /// <summary>
+        /// Идетификатор разрешения роли пользователей на операцию над объектом системы
+        /// </summary>
+        [JsonProperty(PropertyName = "id", Required = Required.Always)]
+        public long ID { get; set; } = 0;
+
         /// <summary>
         /// Идентификатор роли пользователей
         /// </summary>
@@ -23,11 +31,5 @@ namespace ServerLib.JTypes.Server
         /// </summary>
         [JsonProperty(PropertyName = "object_operation", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
         public Enums.ObjectOperations ObjectOperation { get; set; }
-
-        /// <summary>
-        /// Hash-код объекта
-        /// </summary>
-        [JsonIgnore]
-        public string Hash => Utils.SHA256Base64(ID.ToString() + RoleID.ToString() + ObjectID.ToString() + ObjectOperation.ToString());
     }
 }

@@ -233,6 +233,9 @@ namespace bcsserver
                                                 case Commands.roles_objects:
                                                     RolesObjects.SendData();
                                                     break;
+                                                case Commands.roles_objects_add:
+                                                    RolesObjects.Add(Request);
+                                                    break;
                                             }
                                         }
                                         else

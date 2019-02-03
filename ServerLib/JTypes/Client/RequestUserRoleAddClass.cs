@@ -11,7 +11,7 @@ namespace ServerLib.JTypes.Client
         public long UserID { get; set; }
 
         /// <summary>
-        /// Идентификатор роли
+        /// Идентификатор роли пользователей
         /// </summary>
         [JsonProperty(PropertyName = "role_id", Required = Required.Always)]
         public long RoleID { get; set; }

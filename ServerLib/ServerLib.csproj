@@ -54,6 +54,7 @@
     <Compile Include="JTypes\Client\RequestRoleAddClass.cs" />
     <Compile Include="JTypes\Client\RequestRoleEditClass.cs" />
     <Compile Include="JTypes\Client\RequestRolesClass.cs" />
+    <Compile Include="JTypes\Client\RequestRolesObjectsAddClass.cs" />
     <Compile Include="JTypes\Client\RequestRolesObjectsClass.cs" />
     <Compile Include="JTypes\Client\RequestUserAddClass.cs" />
     <Compile Include="JTypes\Client\RequestUserEditClass.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="JTypes\Server\ResponseRoleEditClass.cs" />
     <Compile Include="JTypes\Server\ResponseRoleObjectClass.cs" />
     <Compile Include="JTypes\Server\ResponseRolesClass.cs" />
+    <Compile Include="JTypes\Server\ResponseRolesObjectsAddClass.cs" />
     <Compile Include="JTypes\Server\ResponseRolesObjectsClass.cs" />
     <Compile Include="JTypes\Server\ResponseUserAddClass.cs" />
     <Compile Include="JTypes\Server\ResponseUserClass.cs" />

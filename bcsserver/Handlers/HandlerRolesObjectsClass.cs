@@ -86,7 +86,7 @@ namespace bcsserver.Handlers
         }
 
         /// <summary>
-        /// Обработчик добавления должности пользователя
+        /// Обработчик добавления роли пользователей операции над объектом системы
         /// </summary>
         /// <param name="ARequest">Запрос в формате JSON-объекта</param>
         public override bool AddProcessing(string ARequest)
@@ -94,31 +94,35 @@ namespace bcsserver.Handlers
             bool ProcessingSuccess = false;
             try
             {
-                ServerLib.JTypes.Client.RequestJobAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RequestJobAddClass>(ARequest);
+                ServerLib.JTypes.Client.RequestRolesObjectsAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RequestRolesObjectsAddClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
-                Params.CreateParameterValue("JobName", Request.Name.Trim());
+                Params.CreateParameterValue("RoleId", Request.RoleID);
+                Params.CreateParameterValue("ObjectId", Request.ObjectID);
+                Params.CreateParameterValue("OperationId", (int)Request.ObjectOperation);
                 Params.CreateParameterValue("NewId");
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
-                UserSession.Project.Database.Execute("JobAdd", ref Params);
+                UserSession.Project.Database.Execute("RolesObjectsAdd", ref Params);
                 if (Params.ParameterByName("State").AsString == "ok")
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseJobAddClass
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseRolesObjectsAddClass
                     {
                         ID = Params.ParameterByName("NewId").AsInt64,
-                        Name = Request.Name.Trim()
+                        RoleID = Request.RoleID,
+                        ObjectID = Request.ObjectID,
+                        ObjectOperation = Request.ObjectOperation
                     });
                     ProcessingSuccess = true;
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.job_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.roles_objects_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
                 }
             }
             catch (Exception ex)
             {
-                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.job_add, ErrorCodes.FatalError, ex.Message));
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.roles_objects_add, ErrorCodes.FatalError, ex.Message));
             }
             return ProcessingSuccess;
         }

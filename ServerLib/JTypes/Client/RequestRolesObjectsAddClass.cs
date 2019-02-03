@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using CLProject;
 
-namespace ServerLib.JTypes.Server
+namespace ServerLib.JTypes.Client
 {
-    public class ResponseRoleObjectClass : ResponseBaseItemClass
+    /// <summary>
+    /// Запрос на добавление роли пользователей разрешения на операцию над объектом системы
+    /// </summary>
+    public class RequestRolesObjectsAddClass : RequestBaseRequestClass
     {
         /// <summary>
         /// Идентификатор роли пользователей
@@ -24,10 +26,6 @@ namespace ServerLib.JTypes.Server
         [JsonProperty(PropertyName = "object_operation", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
         public Enums.ObjectOperations ObjectOperation { get; set; }
 
-        /// <summary>
-        /// Hash-код объекта
-        /// </summary>
-        [JsonIgnore]
-        public string Hash => Utils.SHA256Base64(ID.ToString() + RoleID.ToString() + ObjectID.ToString() + ObjectOperation.ToString());
+        public RequestRolesObjectsAddClass() : base(Enums.Commands.roles_objects_add) { }
     }
 }
