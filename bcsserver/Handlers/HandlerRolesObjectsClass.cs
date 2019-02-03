@@ -86,7 +86,7 @@ namespace bcsserver.Handlers
         }
 
         /// <summary>
-        /// Обработчик добавления роли пользователей операции над объектом системы
+        /// Обработчик добавления разрешения для роли пользователей к операции над объектом системы
         /// </summary>
         /// <param name="ARequest">Запрос в формате JSON-объекта</param>
         public override bool AddProcessing(string ARequest)
@@ -127,5 +127,40 @@ namespace bcsserver.Handlers
             return ProcessingSuccess;
         }
 
+        /// <summary>
+        /// Обработчик удаления разрешения для роли пользователей к операции над объектом системы
+        /// </summary>
+        /// <param name="ARequest">Запрос в формате JSON-объекта</param>
+        public override bool DeleteProcessing(string ARequest)
+        {
+            bool ProcessingSuccess = false;
+            try
+            {
+                ServerLib.JTypes.Client.RequestRolesObjectsDeleteClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RequestRolesObjectsDeleteClass>(ARequest);
+                DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
+                Params.CreateParameterValue("Token", Request.Token);
+                Params.CreateParameterValue("OperationId", Request.RolesObjectsPermissionID);
+                Params.CreateParameterValue("State");
+                Params.CreateParameterValue("ErrorText");
+                UserSession.Project.Database.Execute("RolesObjectsDelete", ref Params);
+                if (Params.ParameterByName("State").AsString == "ok")
+                {
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseRolesObjectsDeleteClass()
+                    {
+                        ID = Request.RolesObjectsPermissionID
+                    });
+                    ProcessingSuccess = true;
+                }
+                else
+                {
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.roles_objects_delete, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
+                }
+            }
+            catch (Exception ex)
+            {
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.roles_objects_delete, ErrorCodes.FatalError, ex.Message));
+            }
+            return ProcessingSuccess;
+        }
     }
 }
