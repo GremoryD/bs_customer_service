@@ -128,7 +128,7 @@ namespace bcsapp.ViewModels
                 }
             }
             UserUnusedRoles = new ObservableCollection<RoleClass>(DataStorage.Instance.RoleList);
-            UserUnusedRoles.Except(UserUsedRoles).ToList();
+            UserUnusedRoles = new ObservableCollection<RoleClass>(UserUnusedRoles.Except(UserUsedRoles));
             Notify("UserUnusedRoles"); 
         }
 
@@ -137,19 +137,24 @@ namespace bcsapp.ViewModels
             ServerLib.JTypes.Client.UserRoleDeleteClass removeRoleUser = new ServerLib.JTypes.Client.UserRoleDeleteClass()
             {
                 UserRoleID = DataStorage.Instance.UsersRolesList.Find(x => x.RoleID == obj.ID).ID,
-                Token = DataStorage.Instance.Login.Token 
+                Token = DataStorage.Instance.Login.Token
             };
-            DataStorage.Instance.UsersRolesList.Find(x => x.RoleID == obj.ID && SelectedUserClass.ID== x.UserID); 
+            WebSocketController.Instance.OutputQueueAddObject(removeRoleUser);
+
+            DataStorage.Instance.UsersRolesList.Remove(DataStorage.Instance.UsersRolesList.Find(x => x.RoleID == obj.ID && SelectedUserClass.ID == x.UserID));
+             
             UserUnusedRoles.Add(obj);
             UserUsedRoles.Remove(obj);
-            WebSocketController.Instance.OutputQueueAddObject(removeRoleUser);
+            Notify("UserUnusedRoles");
+            Notify("UserUsedRoles"); 
         }
 
         private void AddRoleToUser(RoleClass obj)
         { 
             UserUnusedRoles.Remove(obj);
             UserUsedRoles.Add(obj);
-
+            Notify("UserUnusedRoles");
+            Notify("UserUsedRoles");
             ServerLib.JTypes.Client.UserRoleAddClass addRoleUser = new ServerLib.JTypes.Client.UserRoleAddClass()
             {
                 RoleID = obj.ID,

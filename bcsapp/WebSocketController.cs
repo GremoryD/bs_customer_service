@@ -495,9 +495,9 @@ namespace bcsapp
             else
             {
                 //TODO 
-                foreach (UserRoleClass roleUser in JsonConvert.DeserializeObject<UsersRolesClass>(InputMessage).Items)
+                if(JsonConvert.DeserializeObject<UsersRolesClass>(InputMessage).Command == ServerLib.JTypes.Enums.Commands.users_roles_delete)
                 {
-                    UpdateUserRoleHandler(roleUser);
+
                 }
 
             }
