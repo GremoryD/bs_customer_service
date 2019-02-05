@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace bcsserver.Handlers
 {
-    public class LogoutClass : ServerLib.JTypes.Server.LogoutClass
+    public class LogoutClass : ServerLib.JTypes.Server.ResponseLogoutClass
     {
         private UserSessionClass UserSession;
 
@@ -21,12 +21,12 @@ namespace bcsserver.Handlers
         {
             try
             {
-                ServerLib.JTypes.Client.Logout Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.Logout>(ARequest);
+                ServerLib.JTypes.Client.RequestLogoutClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RequestLogoutClass>(ARequest);
                 UserSession.OutputQueueAddObject(KillSession(Request.Token));
             }
             catch (Exception ex)
             {
-                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(ServerLib.JTypes.Enums.Commands.logout, ServerLib.JTypes.Enums.ErrorCodes.FatalError, ex.Message));
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(ServerLib.JTypes.Enums.Commands.logout, ServerLib.JTypes.Enums.ErrorCodes.FatalError, ex.Message));
             }
         }
 
@@ -42,7 +42,7 @@ namespace bcsserver.Handlers
             Param.CreateParameterValue("State");
             UserSession.Project.Database.Execute("Logout", ref Param);
             UserSession.Login.ID = 0;
-            ServerLib.JTypes.Server.LogoutClass Response = new ServerLib.JTypes.Server.LogoutClass();
+            ServerLib.JTypes.Server.ResponseLogoutClass Response = new ServerLib.JTypes.Server.ResponseLogoutClass();
             if (Param.ParameterByName("State").AsString== "ok")
             {
                 Response.State = ServerLib.JTypes.Enums.ResponseState.ok;

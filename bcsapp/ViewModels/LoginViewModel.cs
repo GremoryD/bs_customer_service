@@ -61,7 +61,7 @@ namespace bcsapp.ViewModels
         
         private void LoginF()
         {
-            SendObject(new  Login()
+            SendObject(new  RequestLoginClass()
             {
                 UserName = LoginInput,
                 Password = PasswordInput
@@ -76,7 +76,7 @@ namespace bcsapp.ViewModels
             WebSocketController.Instance.OutputQueueAddObject(AObject);
         }
 
-        private void LoginDone(LoginClass AObject)
+        private void LoginDone(ResponseLoginClass AObject)
         {
             var id = System.Threading.Thread.CurrentThread.ManagedThreadId;
             ClearMessage();

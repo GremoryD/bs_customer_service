@@ -27,7 +27,7 @@ namespace bcsapp.ViewModels
 
         private void AddJob()
         {
-            ServerLib.JTypes.Client.JobAddClass jobAdd = new ServerLib.JTypes.Client.JobAddClass()
+            ServerLib.JTypes.Client.RequestJobAddClass jobAdd = new ServerLib.JTypes.Client.RequestJobAddClass()
             {
                 Name = JobName,
                 Token = DataStorage.Instance.Login.Token
@@ -37,7 +37,7 @@ namespace bcsapp.ViewModels
             Cancel();
         }
 
-        public AddJobsViewModel(ServerLib.JTypes.Server.JobClass job)
+        public AddJobsViewModel(ServerLib.JTypes.Server.ResponseJobClass job)
         {
             JobName = job.Name;
             AddJobCommand = new SimpleCommand(EditJob);
@@ -47,7 +47,7 @@ namespace bcsapp.ViewModels
 
         private void EditJob()
         {
-            ServerLib.JTypes.Client.JobEditClass jobAdd = new ServerLib.JTypes.Client.JobEditClass()
+            ServerLib.JTypes.Client.RequestJobEditClass jobAdd = new ServerLib.JTypes.Client.RequestJobEditClass()
             {
                 Name = JobName,
                 Token = DataStorage.Instance.Login.Token

@@ -99,6 +99,11 @@ namespace bcsserver
         public Handlers.HandlerObjectsClass Objects;
 
         /// <summary>
+        /// Обработчик списка прав доступа ролей пользователей к объектам системы
+        /// </summary>
+        public Handlers.HandlerRolesObjectsClass RolesObjects;
+
+        /// <summary>
         /// Конструктор класса сессии пользователя
         /// </summary>
         /// <param name="AWebSocketSessionIDSessionID">Идентификатор сессии WebSocket-сервера</param>
@@ -125,6 +130,7 @@ namespace bcsserver
             Roles = new Handlers.HandlerRolesClass(this);
             UsersRoles = new Handlers.HandlerUsersRolesClass(this);
             Objects = new Handlers.HandlerObjectsClass(this);
+            RolesObjects = new Handlers.HandlerRolesObjectsClass(this);
 
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
             OutputQueueProcessing = new Thread(OutputQueueProcessingThread);
@@ -162,7 +168,7 @@ namespace bcsserver
                         }
                         catch
                         {
-                            OutputQueueAddObject(new ExceptionClass(Commands.none, ErrorCodes.NotJSONObject));
+                            OutputQueueAddObject(new ResponseExceptionClass(Commands.none, ErrorCodes.NotJSONObject));
                         }
                         if (CommandStr.Length > 0)
                         {
@@ -224,16 +230,25 @@ namespace bcsserver
                                                 case Commands.objects:
                                                     Objects.SendData();
                                                     break;
+                                                case Commands.roles_objects:
+                                                    RolesObjects.SendData();
+                                                    break;
+                                                case Commands.roles_objects_add:
+                                                    RolesObjects.Add(Request);
+                                                    break;
+                                                case Commands.roles_objects_delete:
+                                                    RolesObjects.Delete(Request);
+                                                    break;
                                             }
                                         }
                                         else
                                         {
-                                            OutputQueueAddObject(new ExceptionClass(Command, ErrorCodes.NotAuthenticated));
+                                            OutputQueueAddObject(new ResponseExceptionClass(Command, ErrorCodes.NotAuthenticated));
                                         }
                                     }
                                     else
                                     {
-                                        OutputQueueAddObject(new ExceptionClass(Command, ErrorCodes.IncorrectToken));
+                                        OutputQueueAddObject(new ResponseExceptionClass(Command, ErrorCodes.IncorrectToken));
                                     }
                                 }
                             }

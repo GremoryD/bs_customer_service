@@ -14,11 +14,11 @@ namespace bcsserver.Handlers
         /// <summary>
         /// Словарь пользователей
         /// </summary>
-        private ConcurrentDictionary<long, ServerLib.JTypes.Server.UserClass> ReadCollection;
+        private ConcurrentDictionary<long, ServerLib.JTypes.Server.ResponseUserClass> ReadCollection;
 
         public HandlerUsersClass(UserSessionClass AUserSession) : base(AUserSession)
         {
-            ReadCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.UserClass>();
+            ReadCollection = new ConcurrentDictionary<long, ServerLib.JTypes.Server.ResponseUserClass>();
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace bcsserver.Handlers
         /// </summary>
         public override void RefreshData()
         {
-            ServerLib.JTypes.Server.UsersClass OutputList = new ServerLib.JTypes.Server.UsersClass();
+            ServerLib.JTypes.Server.ResponseUsersClass OutputList = new ServerLib.JTypes.Server.ResponseUsersClass();
             DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
             Params.CreateParameterValue("Token", UserSession.Login.Token);
             DatabaseTableClass ReadTable = new DatabaseTableClass
@@ -36,7 +36,7 @@ namespace bcsserver.Handlers
 
             foreach (System.Data.DataRow row in ReadTable.Table.Rows)
             {
-                ServerLib.JTypes.Server.UserClass Item = new ServerLib.JTypes.Server.UserClass
+                ServerLib.JTypes.Server.ResponseUserClass Item = new ServerLib.JTypes.Server.ResponseUserClass
                 {
                     ID = ReadTable.AsInt64(row, "ID"),
                     Login = ReadTable.AsString(row, "LOGIN"),
@@ -48,24 +48,24 @@ namespace bcsserver.Handlers
                     Active = (UserActive)ReadTable.AsInt32(row, "ACTIVE")
                 };
 
-                if (ReadCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.UserClass ExistItem))
+                if (ReadCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.ResponseUserClass ExistItem))
                 {
                     if (ExistItem.Hash != Item.Hash)
                     {
-                        Item.Command = ListCommands.edit;
+                        Item.Command = ItemCommands.edit;
                         ReadCollection.TryUpdate(Item.ID, Item, ExistItem);
                         OutputList.Items.Add(Item);
                     }
                 }
                 else
                 {
-                    Item.Command = ListCommands.add;
+                    Item.Command = ItemCommands.add;
                     ReadCollection.TryAdd(Item.ID, Item);
                     OutputList.Items.Add(Item);
                 }
             }
 
-            foreach (System.Collections.Generic.KeyValuePair<long, ServerLib.JTypes.Server.UserClass> Item in ReadCollection)
+            foreach (System.Collections.Generic.KeyValuePair<long, ServerLib.JTypes.Server.ResponseUserClass> Item in ReadCollection)
             {
                 bool IsExist = false;
 
@@ -80,9 +80,9 @@ namespace bcsserver.Handlers
 
                 if (!IsExist)
                 {
-                    Item.Value.Command = ListCommands.delete;
+                    Item.Value.Command = ItemCommands.delete;
                     OutputList.Items.Add(Item.Value);
-                    ReadCollection.TryRemove(Item.Value.ID, out ServerLib.JTypes.Server.UserClass DeletingUser);
+                    ReadCollection.TryRemove(Item.Value.ID, out ServerLib.JTypes.Server.ResponseUserClass DeletingUser);
                 }
             }
 
@@ -101,7 +101,7 @@ namespace bcsserver.Handlers
             bool ProcessingSuccess = false;
             try
             {
-                ServerLib.JTypes.Client.UserAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UserAddClass>(ARequest);
+                ServerLib.JTypes.Client.RequestUserAddClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RequestUserAddClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
                 Params.CreateParameterValue("Login", Request.Login);
@@ -118,7 +118,7 @@ namespace bcsserver.Handlers
                 UserSession.Project.Database.Execute("UserAdd", ref Params);
                 if (Params.ParameterByName("State").AsString == "ok")
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UserAddClass
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseUserAddClass
                     {
                         ID = Params.ParameterByName("AccessUserId").AsInt64,
                         Login = Request.Login,
@@ -133,12 +133,12 @@ namespace bcsserver.Handlers
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.user_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.user_add, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
                 }
             }
             catch (Exception ex)
             {
-                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.user_add, ErrorCodes.FatalError, ex.Message));
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.user_add, ErrorCodes.FatalError, ex.Message));
             }
             return ProcessingSuccess;
         }
@@ -152,7 +152,7 @@ namespace bcsserver.Handlers
             bool ProcessingSuccess = false;
             try
             {
-                ServerLib.JTypes.Client.UserEditClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.UserEditClass>(ARequest);
+                ServerLib.JTypes.Client.RequestUserEditClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RequestUserEditClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
                 Params.CreateParameterValue("UserId", Request.ID);
@@ -168,7 +168,7 @@ namespace bcsserver.Handlers
                 UserSession.Project.Database.Execute("UserEdit", ref Params);
                 if (Params.ParameterByName("State").AsString == "ok")
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.UserEditClass
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseUserEditClass
                     {
                         ID = Request.ID,
                         FirstName = Request.FirstName,
@@ -182,12 +182,12 @@ namespace bcsserver.Handlers
                 }
                 else
                 {
-                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.user_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.user_edit, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
                 }
             }
             catch (Exception ex)
             {
-                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ExceptionClass(Commands.user_edit, ErrorCodes.FatalError, ex.Message));
+                UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.user_edit, ErrorCodes.FatalError, ex.Message));
             }
             return ProcessingSuccess;
         }

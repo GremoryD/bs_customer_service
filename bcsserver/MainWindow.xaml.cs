@@ -85,7 +85,9 @@ namespace bcsserver
             Project.Database.Parameters.CreateParameter("Job", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Должность пользователя", 200);
             Project.Database.Parameters.CreateParameter("JobName", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Должность пользователя", 200);
             Project.Database.Parameters.CreateParameter("JobId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Идентификатор должности", 20);
-            Project.Database.Parameters.CreateParameter("RoleId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Идентификатор роли", 20);
+            Project.Database.Parameters.CreateParameter("RoleId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Идентификатор роли пользователей", 20);
+            Project.Database.Parameters.CreateParameter("ObjectId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Идентификатор объекта системы", 20);
+            Project.Database.Parameters.CreateParameter("OperationId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Идентификатор типа операции над объектом системы", 20);
             Project.Database.Parameters.CreateParameter("Active", System.Data.ParameterDirection.Output, OracleDbType.Decimal, "Признак активности пользователя (1 - активен, 0 - заблокирован)", 20);
             Project.Database.Parameters.CreateParameter("InActive", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Признак активности пользователя (1 - активен, 0 - заблокирован)", 20);
             Project.Database.Parameters.CreateParameter("Token", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Ключ доступа");
@@ -122,6 +124,11 @@ namespace bcsserver
 
             // Объекты системы
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Objects", "USR.GET_OBJECTS(:Token)", "Чтение списка объектов системы");
+
+            // Права доступа ролей пользователей к объектам системы
+            Project.Database.Commands.CreateCommand("conn", RequestType.Table, "RolesObjects", "USR.GET_ROLES_ACCESS_RIGTHS(:Token)", "Чтение списка прав доступа ролей пользователей к объектам системы");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "RolesObjectsAdd", "USR.ROLES_ACCESS_RIGTHS_ADD(:Token, :RoleId, :ObjectId, :OperationId, :NewId, :State, :ErrorText)", "Добавление роли пользователей разрешения на операцию над объектом системы");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "RolesObjectsDelete", "USR.ROLES_ACCESS_RIGTHS_DELETE(:Token, :OperationId, :State, :ErrorText)", "Удаление у роли пользователей разрешения на операцию над объектом системы");
 
             DatabaseCheck.Start();
             SetSettingsButtons();

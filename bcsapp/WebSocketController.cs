@@ -128,7 +128,7 @@ namespace bcsapp
                 {
                     try
                     {
-                        BaseResponseClass Message = JsonConvert.DeserializeObject<BaseResponseClass>(InputMessage);
+                        ResponseBaseClass Message = JsonConvert.DeserializeObject<ResponseBaseClass>(InputMessage);
                         if (Message.State == ServerLib.JTypes.Enums.ResponseState.ok)
                         {
                             switch (Message.Command)
@@ -182,7 +182,7 @@ namespace bcsapp
                             switch (Message.Command)
                             {
                                 case ServerLib.JTypes.Enums.Commands.login:
-                                    switch (JsonConvert.DeserializeObject<ExceptionClass>(InputMessage).Code)
+                                    switch (JsonConvert.DeserializeObject<ResponseExceptionClass>(InputMessage).Code)
                                     {
                                         case ServerLib.JTypes.Enums.ErrorCodes.IncorrectLoginOrPassword:
                                             LoginFailedHandler();
@@ -258,19 +258,19 @@ namespace bcsapp
         public event EventHandler<String> ServerErr;
         public event EventHandler<String> UpdateUserUI;
         public event EventHandler<String> ConnectedState;
-        public event EventHandler<LoginClass> LoginDone;
+        public event EventHandler<ResponseLoginClass> LoginDone;
         public event EventHandler<string> LoginFailed;
 
         //функция для инициализации списков
-        public event EventHandler<List<UserClass>> UpdateUsers;
-        public event EventHandler<List<JobClass>> UpdateJobs;
-        public event EventHandler<List<RoleClass>> UpdateRoles;
-        public event EventHandler<List<UserRoleClass>> UpdateUserRoles;
+        public event EventHandler<List<ResponseUserClass>> UpdateUsers;
+        public event EventHandler<List<ResponseJobClass>> UpdateJobs;
+        public event EventHandler<List<ResponseRoleClass>> UpdateRoles;
+        public event EventHandler<List<ResponseUserRoleClass>> UpdateUserRoles;
         //функции вызываемые при обновление одиночного елемента
-        public event EventHandler<UserClass> UpdateUser;
-        public event EventHandler<JobClass> UpdateJob;
-        public event EventHandler<RoleClass> UpdateRole;
-        public event EventHandler<UserRoleClass> UpdateUserRole; 
+        public event EventHandler<ResponseUserClass> UpdateUser;
+        public event EventHandler<ResponseJobClass> UpdateJob;
+        public event EventHandler<ResponseRoleClass> UpdateRole;
+        public event EventHandler<ResponseUserRoleClass> UpdateUserRole; 
         #endregion
 
         #region Обработчики 
@@ -278,13 +278,13 @@ namespace bcsapp
         //функция логина
         private void LoginHandler(string InputMessage)
         {
-            DataStorage.Instance.Login = JsonConvert.DeserializeObject<LoginClass>(InputMessage);
-            LoginDone?.Invoke(this, JsonConvert.DeserializeObject<LoginClass>(InputMessage));
+            DataStorage.Instance.Login = JsonConvert.DeserializeObject<ResponseLoginClass>(InputMessage);
+            LoginDone?.Invoke(this, JsonConvert.DeserializeObject<ResponseLoginClass>(InputMessage));
         }
         //функция получения информации текущего пользователя
         private void UserInformationHandler(string InputMessage)
         {
-            DataStorage.Instance.UserInformation = JsonConvert.DeserializeObject<UserInformationClass>(InputMessage);
+            DataStorage.Instance.UserInformation = JsonConvert.DeserializeObject<ResponseUserInformationClass>(InputMessage);
             UpdateUserUI?.Invoke(this, String.Format("{0} {1} {2}", DataStorage.Instance.UserInformation.FirstName, DataStorage.Instance.UserInformation.MidleName, DataStorage.Instance.UserInformation.LastName));
         }
 
@@ -293,14 +293,14 @@ namespace bcsapp
         {
             if (DataStorage.Instance.UserList.Count==0)
             {
-                DataStorage.Instance.UserList = JsonConvert.DeserializeObject<UsersClass>(InputMessage).Items;
+                DataStorage.Instance.UserList = JsonConvert.DeserializeObject<ResponseUsersClass>(InputMessage).Items;
                 DataStorage.Instance.UserList.Remove(DataStorage.Instance.UserList.Find(x => x.ID == DataStorage.Instance.Login.ID));
                 UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
             }
             else
             {
                 //TODO 
-                foreach(UserClass user in JsonConvert.DeserializeObject<UsersClass>(InputMessage).Items)
+                foreach(ResponseUserClass user in JsonConvert.DeserializeObject<ResponseUsersClass>(InputMessage).Items)
                 {
                     UpdateUsersHandler(user);
                 } 
@@ -314,8 +314,8 @@ namespace bcsapp
             if (DataStorage.Instance.UserList != null)
             {
                
-                    UserEditClass temp = JsonConvert.DeserializeObject<UserEditClass>(InputMessage);
-                    UserClass user = new UserClass() { ID = temp.ID,
+                    ResponseUserEditClass temp = JsonConvert.DeserializeObject<ResponseUserEditClass>(InputMessage);
+                    ResponseUserClass user = new ResponseUserClass() { ID = temp.ID,
                                                        Active = temp.Active,
                                                        FirstName = temp.FirstName,
                                                        LastName = temp.LastName,
@@ -323,7 +323,7 @@ namespace bcsapp
                                                        JobID = temp.JobId,
                                                        JobName = temp.JobName };
 
-                    UserClass result = DataStorage.Instance.UserList.Find(x => x.ID == user.ID);
+                    ResponseUserClass result = DataStorage.Instance.UserList.Find(x => x.ID == user.ID);
                     if (result!=null)
                     { 
                             DataStorage.Instance.UserList.RemoveAt(DataStorage.Instance.UserList.IndexOf(result));                      
@@ -333,11 +333,11 @@ namespace bcsapp
             } 
         }
 
-        private void UpdateUsersHandler(UserClass InputUser)
+        private void UpdateUsersHandler(ResponseUserClass InputUser)
         {
             if (DataStorage.Instance.UserList != null)
             {   
-                UserClass result = DataStorage.Instance.UserList.Find(x => x.ID == InputUser.ID);
+                ResponseUserClass result = DataStorage.Instance.UserList.Find(x => x.ID == InputUser.ID);
                 if (result != null)
                 {
                     DataStorage.Instance.UserList.RemoveAt(DataStorage.Instance.UserList.IndexOf(result));
@@ -356,12 +356,12 @@ namespace bcsapp
         {
             if (DataStorage.Instance.JobList != null)
             {
-                DataStorage.Instance.JobList = JsonConvert.DeserializeObject<JobsClass>(InputMessage).Jobs;
+                DataStorage.Instance.JobList = JsonConvert.DeserializeObject<ResponseJobsClass>(InputMessage).Jobs;
 
             }
             else
             {
-                foreach (JobClass job in JsonConvert.DeserializeObject<JobsClass>(InputMessage).Jobs)
+                foreach (ResponseJobClass job in JsonConvert.DeserializeObject<ResponseJobsClass>(InputMessage).Jobs)
                 {
                     UpdateJobssListHandler(job);
                 }
@@ -376,14 +376,14 @@ namespace bcsapp
             if (DataStorage.Instance.UserList != null)
             {
 
-                JobAddClass temp = JsonConvert.DeserializeObject<JobAddClass>(InputMessage);
-                JobClass jobAdd = new JobClass()
+                ResponseJobAddClass temp = JsonConvert.DeserializeObject<ResponseJobAddClass>(InputMessage);
+                ResponseJobClass jobAdd = new ResponseJobClass()
                 {
                     ID = temp.ID,
                     Name = temp.Name
                 };
 
-                JobClass result = DataStorage.Instance.JobList.Find(x => x.ID == jobAdd.ID);
+                ResponseJobClass result = DataStorage.Instance.JobList.Find(x => x.ID == jobAdd.ID);
                 if (result != null)
                 {
                     DataStorage.Instance.JobList.RemoveAt(DataStorage.Instance.JobList.IndexOf(result));
@@ -396,18 +396,18 @@ namespace bcsapp
 
 
 
-        private void UpdateJobssListHandler(JobClass InputMessage)
+        private void UpdateJobssListHandler(ResponseJobClass InputMessage)
         {
             if (DataStorage.Instance.UserList != null)
             {
                  
-                JobClass jobAdd = new JobClass()
+                ResponseJobClass jobAdd = new ResponseJobClass()
                 {
                     ID = InputMessage.ID,
                     Name = InputMessage.Name
                 };
 
-                JobClass result = DataStorage.Instance.JobList.Find(x => x.ID == jobAdd.ID);
+                ResponseJobClass result = DataStorage.Instance.JobList.Find(x => x.ID == jobAdd.ID);
                 if (result != null)
                 {
                     DataStorage.Instance.JobList.RemoveAt(DataStorage.Instance.JobList.IndexOf(result));
@@ -425,13 +425,13 @@ namespace bcsapp
         {
             if (DataStorage.Instance.RoleList.Count ==  0)
             {
-                DataStorage.Instance.RoleList = JsonConvert.DeserializeObject<RolesClass>(InputMessage).Items;
+                DataStorage.Instance.RoleList = JsonConvert.DeserializeObject<ResponseRolesClass>(InputMessage).Items;
 
             }
             else
             {
                 //TODO 
-                foreach (RoleClass role in JsonConvert.DeserializeObject<RolesClass>(InputMessage).Items)
+                foreach (ResponseRoleClass role in JsonConvert.DeserializeObject<ResponseRolesClass>(InputMessage).Items)
                 {
                     UpdateRoleHandler(role);
                 } 
@@ -445,8 +445,8 @@ namespace bcsapp
             if (DataStorage.Instance.RoleList != null)
             {
 
-                RoleEditClass temp = JsonConvert.DeserializeObject<RoleEditClass>(InputMessage);
-                RoleClass role = new RoleClass()
+                ResponseRoleEditClass temp = JsonConvert.DeserializeObject<ResponseRoleEditClass>(InputMessage);
+                ResponseRoleClass role = new ResponseRoleClass()
                 {
                      ID = temp.ID,
                      Name = temp.Name,
@@ -455,7 +455,7 @@ namespace bcsapp
                     
                 };
 
-                RoleClass result = DataStorage.Instance.RoleList.Find(x => x.ID == role.ID);
+                ResponseRoleClass result = DataStorage.Instance.RoleList.Find(x => x.ID == role.ID);
                 if (result != null)
                 {
                     DataStorage.Instance.RoleList.RemoveAt(DataStorage.Instance.RoleList.IndexOf(result));
@@ -465,12 +465,12 @@ namespace bcsapp
             } 
         }
 
-        private void UpdateRoleHandler(RoleClass InputRole)
+        private void UpdateRoleHandler(ResponseRoleClass InputRole)
         {
             if (DataStorage.Instance.RoleList != null)
             {
 
-                RoleClass result = DataStorage.Instance.RoleList.Find(x => x.ID == InputRole.ID);
+                ResponseRoleClass result = DataStorage.Instance.RoleList.Find(x => x.ID == InputRole.ID);
                 if (result != null)
                 {
                     DataStorage.Instance.RoleList.RemoveAt(DataStorage.Instance.RoleList.IndexOf(result));
@@ -489,13 +489,13 @@ namespace bcsapp
         {
             if (DataStorage.Instance.UsersRolesList.Count == 0)
             {
-                DataStorage.Instance.UsersRolesList = JsonConvert.DeserializeObject<UsersRolesClass>(InputMessage).Items;
+                DataStorage.Instance.UsersRolesList = JsonConvert.DeserializeObject<ResponseUsersRolesClass>(InputMessage).Items;
 
             }
             else
             {
                 //TODO 
-                if(JsonConvert.DeserializeObject<UsersRolesClass>(InputMessage).Command == ServerLib.JTypes.Enums.Commands.users_roles_delete)
+                foreach (ResponseUserRoleClass roleUser in JsonConvert.DeserializeObject<ResponseUsersRolesClass>(InputMessage).Items)
                 {
 
                 }
@@ -510,8 +510,8 @@ namespace bcsapp
             if (DataStorage.Instance.RoleList != null)
             {
 
-                UserRoleAddClass temp = JsonConvert.DeserializeObject<UserRoleAddClass>(InputMessage);
-                UserRoleClass role = new UserRoleClass()
+                ResponseUserRoleAddClass temp = JsonConvert.DeserializeObject<ResponseUserRoleAddClass>(InputMessage);
+                ResponseUserRoleClass role = new ResponseUserRoleClass()
                 {
                     ID = temp.ID,
                     RoleID = temp.RoleID,
@@ -519,7 +519,7 @@ namespace bcsapp
                     RoleName = DataStorage.Instance.RoleList.Find(x => x.ID == temp.RoleID).Name
                 };
 
-                UserRoleClass result = DataStorage.Instance.UsersRolesList.Find(x => x.ID == role.ID);
+                ResponseUserRoleClass result = DataStorage.Instance.UsersRolesList.Find(x => x.ID == role.ID);
                 if (result != null)
                 {
                     DataStorage.Instance.UsersRolesList.RemoveAt(DataStorage.Instance.UsersRolesList.IndexOf(result));
@@ -534,17 +534,17 @@ namespace bcsapp
             if (DataStorage.Instance.RoleList != null)
             {
 
-                UserRoleDeleteClass temp = JsonConvert.DeserializeObject<UserRoleDeleteClass>(InputMessage);
+                ResponseUserRoleDeleteClass temp = JsonConvert.DeserializeObject<ResponseUserRoleDeleteClass>(InputMessage);
                  
             }
         }
 
-        private void UpdateUserRoleHandler(UserRoleClass InputRole)
+        private void UpdateUserRoleHandler(ResponseUserRoleClass InputRole)
         {
             if (DataStorage.Instance.RoleList != null)
             {
 
-                UserRoleClass role = new UserRoleClass()
+                ResponseUserRoleClass role = new ResponseUserRoleClass()
                 {
                     ID = InputRole.ID,
                     RoleID = InputRole.RoleID,
@@ -552,7 +552,7 @@ namespace bcsapp
                     RoleName = DataStorage.Instance.RoleList.Find(x => x.ID == InputRole.RoleID).Name 
                 };
 
-                UserRoleClass result = DataStorage.Instance.UsersRolesList.Find(x => x.ID == role.ID);
+                ResponseUserRoleClass result = DataStorage.Instance.UsersRolesList.Find(x => x.ID == role.ID);
                 if (result != null)
                 {
                     DataStorage.Instance.UsersRolesList.RemoveAt(DataStorage.Instance.UsersRolesList.IndexOf(result));

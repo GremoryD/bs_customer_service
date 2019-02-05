@@ -31,7 +31,7 @@
     <PublisherName>MassAccess</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>29</ApplicationRevision>
+    <ApplicationRevision>31</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -122,6 +122,7 @@
     <Compile Include="Handlers\HandlerJobsClass.cs" />
     <Compile Include="Handlers\HandlerObjectsClass.cs" />
     <Compile Include="Handlers\HandlerRolesClass.cs" />
+    <Compile Include="Handlers\HandlerRolesObjectsClass.cs" />
     <Compile Include="Handlers\HandlerUsersClass.cs" />
     <Compile Include="Handlers\HandlerUsersRolesClass.cs" />
     <Compile Include="Handlers\LoginClass.cs" />

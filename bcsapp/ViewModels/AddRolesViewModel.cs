@@ -40,7 +40,7 @@ namespace bcsapp.ViewModels
         private void AddRole()
         {
 
-            ServerLib.JTypes.Client.RoleAddClass rolesClass = new ServerLib.JTypes.Client.RoleAddClass
+            ServerLib.JTypes.Client.RequestRoleAddClass rolesClass = new ServerLib.JTypes.Client.RequestRoleAddClass
             {
                 Token = DataStorage.Instance.Login.Token,
                 Name = RoleName,
@@ -50,7 +50,7 @@ namespace bcsapp.ViewModels
 
         }
 
-        public AddRolesViewModel(RoleClass roleClass)
+        public AddRolesViewModel(ResponseRoleClass roleClass)
         {
             roleID = roleClass.ID;
             EditAddButton = "Редактировать";
@@ -62,7 +62,7 @@ namespace bcsapp.ViewModels
 
         private void EditRole()
         {
-            ServerLib.JTypes.Client.RoleEditClass rolesClass = new ServerLib.JTypes.Client.RoleEditClass
+            ServerLib.JTypes.Client.RequestRoleEditClass rolesClass = new ServerLib.JTypes.Client.RequestRoleEditClass
             {
                 Token = DataStorage.Instance.Login.Token,
                 Name = RoleName,
