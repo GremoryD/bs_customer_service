@@ -128,7 +128,7 @@ namespace bcsapp.ViewModels
                 }
             }
             UserUnusedRoles = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList);
-            UserUnusedRoles = new ObservableCollection<RoleClass>(UserUnusedRoles.Except(UserUsedRoles));
+            // UserUnusedRoles = new ObservableCollection<RoleClass>(UserUnusedRoles.Except(UserUsedRoles));
             Notify("UserUnusedRoles"); 
         }
 
