@@ -21,15 +21,18 @@ namespace bcsapp.ViewModels
     {
         public bool FullscreenView { get; set; } = true;
         public bool UserInterface { set; get; } = true;
-        public ICommand RibbonCommand { set; get; } 
+        public ICommand RibbonCommand { set; get; }
 
         //Users left menu commands
         public ICommand UsersGridCommand { set; get; }
         public ICommand JobsGridCommand { set; get; }
-        public ICommand RolsGridCommand { set; get; } 
+        public ICommand RolsGridCommand { set; get; }
         public ICommand AddButtonCommand { set; get; }
         public ICommand EditButtonCommad { set; get; }
         public ICommand DeleteButtonCommand { set; get; }
+
+        public ICommand UnBlockButtonCommand { set; get; }
+        public ICommand BlockCommand { set; get; }
 
         //GridUSers
         public ICommand UserSelectedItemChangedCommand { set; get; }
@@ -51,7 +54,7 @@ namespace bcsapp.ViewModels
 
 
         //Data Grid
-        public ObservableCollection<ResponseUserClass> observableUserClass {set;get; } =new ObservableCollection<ResponseUserClass>(DataStorage.Instance.UserList);
+        public ObservableCollection<ResponseUserClass> observableUserClass { set; get; } = new ObservableCollection<ResponseUserClass>(DataStorage.Instance.UserList);
         public ResponseUserClass SelectedUserClass { set; get; }
         public ObservableCollection<ResponseJobClass> observableJobsClass { set; get; } = new ObservableCollection<ResponseJobClass>(DataStorage.Instance.JobList);
         public ResponseJobClass SelectedJobsClass { set; get; }
@@ -73,7 +76,7 @@ namespace bcsapp.ViewModels
         public ObservableCollection<ResponseRoleClass> observableUsersRole { set; get; } = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList);
 
         public AplicationViewModel()
-        { 
+        {
             RibbonCommand = new SimpleCommand<RibbonControl>(UserRibbon);
             UsersGridCommand = new SimpleCommand(OpenUsersGrid);
             JobsGridCommand = new SimpleCommand(OpenJobsGrid);
@@ -88,10 +91,10 @@ namespace bcsapp.ViewModels
             RemoveRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(RemoveRoleToUser);
 
             WebSocketController.Instance.UpdateUserUI += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUserUI(__));
-            WebSocketController.Instance.ConnectedState +=  (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_ConnectedState(__));
-            WebSocketController.Instance.UpdateUsers += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUsers(__)); 
-            WebSocketController.Instance.UpdateJobs +=  (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateJobs(__)); 
-            WebSocketController.Instance.UpdateRoles += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateRoles(__));  
+            WebSocketController.Instance.ConnectedState += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_ConnectedState(__));
+            WebSocketController.Instance.UpdateUsers += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUsers(__));
+            WebSocketController.Instance.UpdateJobs += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateJobs(__));
+            WebSocketController.Instance.UpdateRoles += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateRoles(__));
 
             Task.Run(() =>
             {
@@ -104,62 +107,75 @@ namespace bcsapp.ViewModels
                 ServerLib.JTypes.Client.RequestUsersRolesClass usersRolesClass = new ServerLib.JTypes.Client.RequestUsersRolesClass { Token = DataStorage.Instance.Login.Token };
                 WebSocketController.Instance.OutputQueueAddObject(usersRolesClass);
             });
-             
+
         }
 
 
         private void UserSelectedItemChanged()
         {
             UserUsedRoles.Clear();
-            foreach(ResponseUserRoleClass userRoleClass in DataStorage.Instance.UsersRolesList)
+            foreach (ResponseUserRoleClass userRoleClass in DataStorage.Instance.UsersRolesList)
             {
-                if(SelectedUserClass != null && userRoleClass.UserID  == SelectedUserClass.ID)
+                if (SelectedUserClass != null && userRoleClass.UserID == SelectedUserClass.ID)
                 {
                     UserUsedRoles.Add(DataStorage.Instance.RoleList.Find(x => x.ID == userRoleClass.RoleID));
                     Notify("UserUsedRoles");
                 }
             }
-            UserUnusedRoles = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList); 
-            Notify("UserUnusedRoles"); 
+            UserUnusedRoles = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList.Except(UserUsedRoles));
+            Notify("UserUnusedRoles");
         }
-
-        // TODO : "удаление роли и добавление роли пользователю перенести в класс Транзакций"
+         
         private void RemoveRoleToUser(ResponseRoleClass obj)
         {
-            ServerLib.JTypes.Client.RequestUserRoleDeleteClass removeRoleUser = new ServerLib.JTypes.Client.RequestUserRoleDeleteClass()
+            bool isDone;
+            TransactionService.RemoveRoleToUser(new Transaction(new ServerLib.JTypes.Client.RequestUserRoleDeleteClass()
             {
                 UserRoleID = DataStorage.Instance.UsersRolesList.Find(x => x.RoleID == obj.ID).ID,
                 Token = DataStorage.Instance.Login.Token
-            };
-            WebSocketController.Instance.OutputQueueAddObject(removeRoleUser);
-             
-            UserUnusedRoles.Add(obj);
-            UserUsedRoles.Remove(obj);
-            Notify("UserUnusedRoles");
-            Notify("UserUsedRoles"); 
-        } 
+            },
+             new Action(() =>
+             {
+                 Application.Current.Dispatcher.Invoke(() =>
+                 {
+                     UserUnusedRoles.Add(obj);
+                     UserUsedRoles.Remove(obj);
+                     Notify("UserUnusedRoles");
+                     Notify("UserUsedRoles");
+                 });
+             }), new Action(() => isDone = false)));
+
+
+        }
+
         private void AddRoleToUser(ResponseRoleClass obj)
-        { 
-            ServerLib.JTypes.Client.RequestUserRoleAddClass addRoleUser = new ServerLib.JTypes.Client.RequestUserRoleAddClass()
+        {
+            bool isDone;
+            TransactionService.AddRoleToUser(new Transaction(new ServerLib.JTypes.Client.RequestUserRoleAddClass()
             {
                 RoleID = obj.ID,
                 UserID = SelectedUserClass.ID,
                 Token = DataStorage.Instance.Login.Token
-            };
-            WebSocketController.Instance.OutputQueueAddObject(addRoleUser);
+            },
+             new Action(() =>
+             {
+                 Application.Current.Dispatcher.Invoke(() =>
+                 {
+                     UserUnusedRoles.Remove(obj);
+                     UserUsedRoles.Add(obj);
+                     Notify("UserUnusedRoles");
+                     Notify("UserUsedRoles");
+                 });
+             }), new Action(() => isDone = false))); ;
 
-            UserUnusedRoles.Remove(obj);
-            UserUsedRoles.Add(obj);
-            Notify("UserUnusedRoles");
-            Notify("UserUsedRoles");
-        }    
+        }
 
 
         #region Ribonn Buttons
         private void DeleteButton()
         {
-            if (UsersGridShow && SelectedUserClass!=null)
-            { 
+            if (UsersGridShow && SelectedUserClass != null)
+            {
                 if (System.Windows.MessageBox.Show("Удалить пользователя " + SelectedUserClass.FirstName + " " + SelectedUserClass.LastName + "?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
                 {
 
@@ -170,9 +186,9 @@ namespace bcsapp.ViewModels
                 }
 
             }
-            if (JobsGridShow && SelectedJobsClass!=null)
+            if (JobsGridShow && SelectedJobsClass != null)
             {
-                if (System.Windows.MessageBox.Show("Удалить должность " + SelectedJobsClass.Name  +  "?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                if (System.Windows.MessageBox.Show("Удалить должность " + SelectedJobsClass.Name + "?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
                 {
 
                 }
@@ -214,33 +230,33 @@ namespace bcsapp.ViewModels
                 NavigationService.Instance.ShowDialogWin(new AddRolesViewModel(SelectedRoleClass), "Новая должность");
             }
 
-        } 
+        }
         private void AddButton()
         {
             if (UsersGridShow)
             {
-                NavigationService.Instance.ShowDialogWin(new AddUserViewModel(), "Новый пользователь"); 
+                NavigationService.Instance.ShowDialogWin(new AddUserViewModel(), "Новый пользователь");
             }
             if (JobsGridShow)
             {
-                NavigationService.Instance.ShowDialogWin(new AddJobsViewModel(), "Новая должность"); 
+                NavigationService.Instance.ShowDialogWin(new AddJobsViewModel(), "Новая должность");
             }
             if (RolesGridShow)
             {
-               NavigationService.Instance.ShowDialogWin(new AddRolesViewModel(), "Новая Роль"); 
+                NavigationService.Instance.ShowDialogWin(new AddRolesViewModel(), "Новая Роль");
             }
         }
 
 
- #endregion
+        #endregion
 
         //обновление данных в таблицах
         private void Instance_UpdateUsers(String data)
-        {  
+        {
             observableUserClass = new ObservableCollection<ResponseUserClass>(DataStorage.Instance.UserList);
             Notify("observableUserClass");
 
-        }   
+        }
         private void Instance_UpdateJobs(String data)
         {
             observableJobsClass = new ObservableCollection<ResponseJobClass>(DataStorage.Instance.JobList);
@@ -251,7 +267,7 @@ namespace bcsapp.ViewModels
         {
             observableRolesClass = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList);
             Notify("observableRolesClass");
-        }  
+        }
         #region Left Menu Functions 
         //Функции кнопок левого меню
         private void OpenUsersGrid()
@@ -280,7 +296,7 @@ namespace bcsapp.ViewModels
 
         }
 
-#endregion
+        #endregion
 
         //вывод состояния соединения и текущего пользователя
         private void Instance_ConnectedState(string value)
@@ -304,22 +320,22 @@ namespace bcsapp.ViewModels
         }
 
         //Функция переключения рибона
-        private void UserRibbon(RibbonControl  ribbonControl)
+        private void UserRibbon(RibbonControl ribbonControl)
         {
-            if(ribbonControl.SelectedPage.Name == "UsersRibbonPage")
-            { 
+            if (ribbonControl.SelectedPage.Name == "UsersRibbonPage")
+            {
                 SelectedUsers = true;
                 Notify("SelectedUsers");
             }
             if (ribbonControl.SelectedPage.Name == "ClientsRibbonPage")
-            { 
+            {
                 SelectedClients = true;
                 Notify("SelectedClients");
             }
             if (ribbonControl.SelectedPage.Name == "SetingsRibbonPage")
             {
                 SelectedSetings = true;
-                Notify("SelectedSetings"); 
+                Notify("SelectedSetings");
             }
 
         }

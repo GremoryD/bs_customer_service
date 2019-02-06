@@ -13,7 +13,6 @@ namespace bcsapp.Models
 
         public static List<Transaction> Transactions { get; set; } = new List<Transaction>();
 
-        //string UserLogin, string UserPassword, string UserName, string UserMiddleName, ServerLib.JTypes.Server.ResponseJobClass SelectedJob
         public static void AddUser(Transaction userAddTransaction)
         {
             Transactions.Add(userAddTransaction);
@@ -213,6 +212,72 @@ namespace bcsapp.Models
             WebSocketController.Instance.OutputQueueAddObject(roleEditTransaction.Data);
         }
 
+        public static void AddRoleToUser(Transaction roleAddUserTransaction)
+        {
+            Transactions.Add(roleAddUserTransaction);
+
+            EventHandler<String> onDoneMessageRecieved = null;
+            EventHandler<string> onErrorMessageRecieved = null;
+
+            onDoneMessageRecieved = new EventHandler<String>((_, userClass) =>
+            {
+                roleAddUserTransaction.Complete();
+                Transactions.Remove(roleAddUserTransaction);
+
+                WebSocketController.Instance.UpdateUserRoleAdd -= onDoneMessageRecieved;
+                WebSocketController.Instance.UpdateUserRoleAdd_Err -= onErrorMessageRecieved;
+            });
+            onErrorMessageRecieved = new EventHandler<string>((_, mess) =>
+            {
+                roleAddUserTransaction.Revert();
+                Transactions.Remove(roleAddUserTransaction);
+
+                WebSocketController.Instance.UpdateUserRoleAdd -= onDoneMessageRecieved;
+                WebSocketController.Instance.UpdateUserRoleAdd_Err -= onErrorMessageRecieved;
+            });
+            WebSocketController.Instance.UpdateUserRoleAdd += onDoneMessageRecieved;
+            WebSocketController.Instance.UpdateUserRoleAdd_Err += onErrorMessageRecieved;
+
+            var timer = new Timer(timeout.TotalMilliseconds) { AutoReset = false };
+            timer.Elapsed += (_, __) => { onErrorMessageRecieved(_, "Timeout."); };
+            timer.Start();
+
+            WebSocketController.Instance.OutputQueueAddObject(roleAddUserTransaction.Data);
+        }
+
+
+        public static void RemoveRoleToUser(Transaction roleRemoveUserTransaction)
+        {
+            Transactions.Add(roleRemoveUserTransaction);
+
+            EventHandler<String> onDoneMessageRecieved = null;
+            EventHandler<string> onErrorMessageRecieved = null;
+
+            onDoneMessageRecieved = new EventHandler<String>((_, userClass) =>
+            {
+                roleRemoveUserTransaction.Complete();
+                Transactions.Remove(roleRemoveUserTransaction);
+
+                WebSocketController.Instance.UpdateUserRoleRemove -= onDoneMessageRecieved;
+                WebSocketController.Instance.UpdateUserRoleRemove_Err -= onErrorMessageRecieved;
+            });
+            onErrorMessageRecieved = new EventHandler<string>((_, mess) =>
+            {
+                roleRemoveUserTransaction.Revert();
+                Transactions.Remove(roleRemoveUserTransaction);
+
+                WebSocketController.Instance.UpdateUserRoleRemove -= onDoneMessageRecieved;
+                WebSocketController.Instance.UpdateUserRoleRemove_Err -= onErrorMessageRecieved;
+            });
+            WebSocketController.Instance.UpdateUserRoleRemove += onDoneMessageRecieved;
+            WebSocketController.Instance.UpdateUserRoleRemove_Err += onErrorMessageRecieved;
+
+            var timer = new Timer(timeout.TotalMilliseconds) { AutoReset = false };
+            timer.Elapsed += (_, __) => { onErrorMessageRecieved(_, "Timeout."); };
+            timer.Start();
+
+            WebSocketController.Instance.OutputQueueAddObject(roleRemoveUserTransaction.Data);
+        }
 
     }
 

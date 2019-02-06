@@ -128,6 +128,7 @@ namespace bcsapp
                 {
                     try
                     {
+                        
                         ResponseBaseClass Message = JsonConvert.DeserializeObject<ResponseBaseClass>(InputMessage);
                         if (Message.State == ServerLib.JTypes.Enums.ResponseState.ok)
                         {
@@ -170,10 +171,12 @@ namespace bcsapp
                                     RolesUsersListHandler(InputMessage);//"{\"users_roles\":[{\"user_id\":1,\"role_id\":1,\"role_name\":\"Администратор\",\"id\":4,\"command\":\"add\"},{\"user_id\":3,\"role_id\":1,\"role_name\":\"Администратор\",\"id\":3,\"command\":\"add\"},{\"user_id\":3,\"role_id\":2,\"role_name\":\"Тестовая роль\",\"id\":31,\"command\":\"add\"}],\"command\":\"users_roles\",\"state\":\"ok\"}"
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.users_roles_add:
-                                    UserRoleAddConfirmationHandler(InputMessage);
+                                    UserRoleAddConfirmationHandler(InputMessage); //"{\"id\":34,\"user_id\":8,\"role_id\":3,\"command\":\"users_roles_add\",\"state\":\"ok\"}"
+                                                                                  //"{\"users_roles\":[{\"user_id\":8,\"role_id\":3,\"role_name\":\"Тест2\",\"id\":34,\"command\":\"add\"}],\"command\":\"users_roles\",\"state\":\"ok\"}"
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.users_roles_delete:
-                                    UserRoleRemoveConfirmationHandler(InputMessage);
+                                    UserRoleRemoveConfirmationHandler(InputMessage);//"{\"command\":\"users_roles_delete\",\"state\":\"ok\"}"
+                                                                                    //"{\"users_roles\":[{\"user_id\":8,\"role_id\":3,\"role_name\":\"Тест2\",\"id\":34,\"command\":\"delete\"}],\"command\":\"users_roles\",\"state\":\"ok\"}"
                                     break;
                             }
                         }
@@ -283,6 +286,8 @@ namespace bcsapp
         public event EventHandler<String> UpdateRoleDelete;
         public event EventHandler<String> UpdateUserRoleAdd;
         public event EventHandler<String> UpdateUserRoleRemove;
+        public event EventHandler<String> UpdateUserRoleAdd_Err;
+        public event EventHandler<String> UpdateUserRoleRemove_Err;
         #endregion
 
         #region Обработчики 
@@ -394,7 +399,12 @@ namespace bcsapp
                 foreach (ResponseUserRoleClass role in JsonConvert.DeserializeObject<ResponseUsersRolesClass>(InputMessage).Items)
                 {
                     if (role.Command == ServerLib.JTypes.Enums.ItemCommands.add) DataStorage.Instance.UsersRolesList.Add(role);
-                    if (role.Command == ServerLib.JTypes.Enums.ItemCommands.delete) DataStorage.Instance.UsersRolesList.Remove(role);
+                    if (role.Command == ServerLib.JTypes.Enums.ItemCommands.delete)
+                    { 
+                         ResponseUserRoleClass temp = DataStorage.Instance.UsersRolesList.Find(x => x.Hash == role.Hash);
+                         DataStorage.Instance.UsersRolesList.Remove(temp);
+                  
+                    }
                     if (role.Command == ServerLib.JTypes.Enums.ItemCommands.edit)
                     {
                         ResponseUserRoleClass temp = DataStorage.Instance.UsersRolesList.Find(x=>x.ID == role.ID);
@@ -409,42 +419,42 @@ namespace bcsapp
 
         public void UserRoleRemoveConfirmationHandler(string inputMessage)
         {
-
+            UpdateUserRoleRemove?.Invoke(this, "");
         }
 
         public void UserRoleAddConfirmationHandler(string inputMessage)
         {
-
+            UpdateUserRoleAdd?.Invoke(this, "");
         }
 
         public void RoleEditConfirmationHandler(string inputMessage)
         {
-
+            UpdateRoleEdit?.Invoke(this, "");
         }
 
         public void RoleAddConfirmationHandler(string inputMessage)
         {
-
+            UpdateRoleAdd?.Invoke(this, "");
         }
 
         public void JobEditConfirmationHandler(string inputMessage)
         {
-
+            UpdateJobEdit?.Invoke(this, "");
         }
 
         public void JobAddConfirmationListHandler(string inputMessage)
         {
-
+            UpdateJobAdd?.Invoke(this, "");
         }
 
         public void UserEditConfirmationHandler(string inputMessage)
         {
-
+            UpdateUserEdit?.Invoke(this, "");
         }
 
         public void UserAddConfirmationHandler(string inputMessage)
         {
-
+            UpdateUserAdd?.Invoke(this, "");
         }
 
 
