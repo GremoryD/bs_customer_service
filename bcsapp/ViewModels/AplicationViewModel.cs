@@ -26,10 +26,7 @@ namespace bcsapp.ViewModels
         //Users left menu commands
         public ICommand UsersGridCommand { set; get; }
         public ICommand JobsGridCommand { set; get; }
-        public ICommand RolsGridCommand { set; get; }
-
-
-
+        public ICommand RolsGridCommand { set; get; } 
         public ICommand AddButtonCommand { set; get; }
         public ICommand EditButtonCommad { set; get; }
         public ICommand DeleteButtonCommand { set; get; }
@@ -92,14 +89,9 @@ namespace bcsapp.ViewModels
 
             WebSocketController.Instance.UpdateUserUI += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUserUI(__));
             WebSocketController.Instance.ConnectedState +=  (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_ConnectedState(__));
-            WebSocketController.Instance.UpdateUsers += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUsers(__));
-            WebSocketController.Instance.UpdateUser += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUser(__));
-            WebSocketController.Instance.UpdateJobs +=  (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateJobs(__));
-            WebSocketController.Instance.UpdateJob += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateJob(__));
-            WebSocketController.Instance.UpdateRoles += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateRoles(__));
-            WebSocketController.Instance.UpdateRole += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateRole(__));
-            WebSocketController.Instance.UpdateUserRoles += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUserRoles(__));
-            WebSocketController.Instance.UpdateUserRole += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUserRole(__));
+            WebSocketController.Instance.UpdateUsers += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUsers(__)); 
+            WebSocketController.Instance.UpdateJobs +=  (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateJobs(__)); 
+            WebSocketController.Instance.UpdateRoles += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateRoles(__));  
 
             Task.Run(() =>
             {
@@ -127,11 +119,11 @@ namespace bcsapp.ViewModels
                     Notify("UserUsedRoles");
                 }
             }
-            UserUnusedRoles = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList);
-            // UserUnusedRoles = new ObservableCollection<RoleClass>(UserUnusedRoles.Except(UserUsedRoles));
+            UserUnusedRoles = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList); 
             Notify("UserUnusedRoles"); 
         }
 
+        // TODO : "удаление роли и добавление роли пользователю перенести в класс Транзакций"
         private void RemoveRoleToUser(ResponseRoleClass obj)
         {
             ServerLib.JTypes.Client.RequestUserRoleDeleteClass removeRoleUser = new ServerLib.JTypes.Client.RequestUserRoleDeleteClass()
@@ -140,39 +132,27 @@ namespace bcsapp.ViewModels
                 Token = DataStorage.Instance.Login.Token
             };
             WebSocketController.Instance.OutputQueueAddObject(removeRoleUser);
-
-            DataStorage.Instance.UsersRolesList.Remove(DataStorage.Instance.UsersRolesList.Find(x => x.RoleID == obj.ID && SelectedUserClass.ID == x.UserID));
              
             UserUnusedRoles.Add(obj);
             UserUsedRoles.Remove(obj);
             Notify("UserUnusedRoles");
             Notify("UserUsedRoles"); 
-        }
-
+        } 
         private void AddRoleToUser(ResponseRoleClass obj)
         { 
-            UserUnusedRoles.Remove(obj);
-            UserUsedRoles.Add(obj);
-            Notify("UserUnusedRoles");
-            Notify("UserUsedRoles");
             ServerLib.JTypes.Client.RequestUserRoleAddClass addRoleUser = new ServerLib.JTypes.Client.RequestUserRoleAddClass()
             {
                 RoleID = obj.ID,
                 UserID = SelectedUserClass.ID,
                 Token = DataStorage.Instance.Login.Token
-            }; 
+            };
             WebSocketController.Instance.OutputQueueAddObject(addRoleUser);
-        }  
 
-        private void Instance_UpdateUserRole(ResponseUserRoleClass userRoleClass)
-        {
-              
-        }
-
-        private void Instance_UpdateUserRoles(List<ResponseUserRoleClass> userRoles)
-        {
-             
-        }
+            UserUnusedRoles.Remove(obj);
+            UserUsedRoles.Add(obj);
+            Notify("UserUnusedRoles");
+            Notify("UserUsedRoles");
+        }    
 
 
         #region Ribonn Buttons
@@ -255,51 +235,23 @@ namespace bcsapp.ViewModels
  #endregion
 
         //обновление данных в таблицах
-        private void Instance_UpdateUsers(List<ResponseUserClass> users)
-        { 
-
-            observableUserClass = new ObservableCollection<ResponseUserClass>(users);
+        private void Instance_UpdateUsers(String data)
+        {  
+            observableUserClass = new ObservableCollection<ResponseUserClass>(DataStorage.Instance.UserList);
             Notify("observableUserClass");
 
-        }
-        private void Instance_UpdateUser(ResponseUserClass user)
-        {
-            //observableUserClass.Remove(observableUserClass.Where(x => x.ID == user.ID).First());
-            observableUserClass.Add(user);
-            Notify("observableUserClass");
-
-        }
-        private void Instance_UpdateJob(ResponseJobClass jobClass)
+        }   
+        private void Instance_UpdateJobs(String data)
         {
             observableJobsClass = new ObservableCollection<ResponseJobClass>(DataStorage.Instance.JobList);
-            Notify("observableJobsClass"); 
-        }
-
-
-    private void Instance_UpdateJobs(List<ResponseJobClass> jobs)
-        {
-            observableJobsClass = new ObservableCollection<ResponseJobClass>(jobs);
             Notify("observableJobsClass");
         }
 
-        private void Instance_UpdateRoles(List<ResponseRoleClass> roles)
+        private void Instance_UpdateRoles(String data)
         {
-            observableRolesClass = new ObservableCollection<ResponseRoleClass>(roles);
+            observableRolesClass = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList);
             Notify("observableRolesClass");
-        }
-
-
-
-        private void Instance_UpdateRole(ResponseRoleClass roles)
-        {
-
-           // observableRolesClass.Remove(observableRolesClass.Where(x => x.ID == roles.ID).First());
-            observableRolesClass.Add(roles);
-            Notify("observableRolesClass");
-
-        }
-
-
+        }  
         #region Left Menu Functions 
         //Функции кнопок левого меню
         private void OpenUsersGrid()

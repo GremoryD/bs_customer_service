@@ -27,14 +27,14 @@ namespace bcsapp.ViewModels
 
         private void AddJob()
         {
-            ServerLib.JTypes.Client.RequestJobAddClass jobAdd = new ServerLib.JTypes.Client.RequestJobAddClass()
+            bool isDone;
+            TransactionService.AddJob(new Transaction(new ServerLib.JTypes.Client.RequestJobAddClass()
             {
                 Name = JobName,
                 Token = DataStorage.Instance.Login.Token
-            };
-
-            WebSocketController.Instance.OutputQueueAddObject(jobAdd);
-            Cancel();
+            },
+            new Action(() => isDone = true), new Action(() => isDone = false)));
+            Cancel();  
         }
 
         public AddJobsViewModel(ServerLib.JTypes.Server.ResponseJobClass job)
@@ -47,13 +47,14 @@ namespace bcsapp.ViewModels
 
         private void EditJob()
         {
-            ServerLib.JTypes.Client.RequestJobEditClass jobAdd = new ServerLib.JTypes.Client.RequestJobEditClass()
+            bool isDone;
+            TransactionService.EditJob(new Transaction(new ServerLib.JTypes.Client.RequestJobEditClass()
             {
                 Name = JobName,
                 Token = DataStorage.Instance.Login.Token
-        }; 
-            WebSocketController.Instance.OutputQueueAddObject(jobAdd);
-            Cancel();
+            },
+            new Action(() => isDone = true), new Action(() => isDone = false)));
+            Cancel();  
         }
 
 

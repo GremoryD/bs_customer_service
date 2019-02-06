@@ -134,46 +134,46 @@ namespace bcsapp
                             switch (Message.Command)
                             {
                                 case ServerLib.JTypes.Enums.Commands.login:
-                                    LoginHandler(InputMessage);
+                                    LoginHandler(InputMessage);//"{\"token\":\"4hg62w+7GrRlTOL+CXD332a6TAQrP5zULdeHwRp4d70=\",\"id\":1,\"active\":\"activated\",\"command\":\"login\",\"state\":\"ok\"}"
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.user_information:
-                                    UserInformationHandler(InputMessage);
+                                    UserInformationHandler(InputMessage);//"{\"first_name\":\"Super\",\"last_name\":\"Puper\",\"midle_name\":\"Admin\",\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"command\":\"user_information\",\"state\":\"ok\"}"
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.users:
-                                    UsersListHandler(InputMessage);
+                                    UsersListHandler(InputMessage);//"{\"users\":[{\"login\":\"admin\",\"first_name\":\"Super\",\"last_name\":\"Puper\",\"midle_name\":\"Admin\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"id\":1,\"command\":\"add\"},{\"login\":\"Тест\",\"first_name\":\"Тест\",\"last_name\":\"Тест\",\"midle_name\":\"Тест\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"id\":4,\"command\":\"add\"},{\"login\":\"new1\",\"first_name\":\"Новый\",\"last_name\":\"Пользователь\",\"midle_name\":\"ТЕСТ\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"id\":3,\"command\":\"add\"},{\"login\":\"TestBan\",\"first_name\":\"Заблокированный\",\"last_name\":\"Пользователь\",\"midle_name\":\"ТЕСТ\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"id\":2,\"command\":\"add\"}],\"command\":\"users\",\"state\":\"ok\"}"
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.user_add:
-                                    UpdateUsersHandler(InputMessage);
-                                    break;
+                                    UserAddConfirmationHandler(InputMessage);//"{\"id\":6,\"login\":\"Тест2\",\"first_name\":\"Тест2\",\"last_name\":\"Тест2\",\"midle_name\":\"Тест2\",\"job_id\":2,\"job_name\":\"Тест\",\"active\":\"activated\",\"command\":\"user_add\",\"state\":\"ok\"}"
+                                    break;                           //"{\"users\":[{\"login\":\"Тест2\",\"first_name\":\"Тест2\",\"last_name\":\"Тест2\",\"midle_name\":\"Тест2\",\"job_id\":2,\"job_name\":\"Тест\",\"active\":\"activated\",\"id\":6,\"command\":\"add\"}],\"command\":\"users\",\"state\":\"ok\"}" 
                                 case ServerLib.JTypes.Enums.Commands.user_edit:
-                                    UpdateUsersHandler(InputMessage);
-                                    break;
+                                    UserEditConfirmationHandler(InputMessage);//"{\"id\":4,\"first_name\":\"Тест1\",\"last_name\":\"Тест1\",\"midle_name\":\"Тест1\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"command\":\"user_edit\",\"state\":\"ok\"}"
+                                    break;                           //"{\"users\":[{\"login\":\"Тест\",\"first_name\":\"Тест2\",\"last_name\":\"Тест2\",\"midle_name\":\"Тест2\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"id\":4,\"command\":\"edit\"}],\"command\":\"users\",\"state\":\"ok\"}"
                                 case ServerLib.JTypes.Enums.Commands.jobs:
-                                    JobssListHandler(InputMessage); 
+                                    JobssListHandler(InputMessage); //"{\"jobs\":[{\"name\":\"Главный администратор\",\"id\":1,\"command\":\"add\"}],\"command\":\"jobs\",\"state\":\"ok\"}"
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.job_add:
-                                    UpdateJobssListHandler(InputMessage);
-                                    break;
+                                    JobAddConfirmationListHandler(InputMessage);//"{\"id\":2,\"name\":\"Тест\",\"command\":\"job_add\",\"state\":\"ok\"}"
+                                    break;                              //"{\"jobs\":[{\"name\":\"Тест\",\"id\":2,\"command\":\"add\"}],\"command\":\"jobs\",\"state\":\"ok\"}"
                                 case ServerLib.JTypes.Enums.Commands.job_edit:
-                                    UpdateJobssListHandler(InputMessage);
+                                    JobEditConfirmationHandler(InputMessage); //"{\"id\":0,\"name\":\"Тест2\",\"command\":\"job_edit\",\"state\":\"ok\"}"
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.roles:
-                                    RolesListHandler(InputMessage);
+                                    RolesListHandler(InputMessage);//"{\"roles\":[{\"name\":\"Администратор\",\"description\":\"Пользователи с неограниченными правами доступа\",\"id\":1,\"command\":\"add\"},{\"name\":\"Тестовая роль\",\"id\":2,\"command\":\"add\"}],\"command\":\"roles\",\"state\":\"ok\"}"
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.roles_add:
-                                    UpdateRoleHandler(InputMessage);
-                                    break;
+                                    RoleAddConfirmationHandler(InputMessage);//"{\"id\":3,\"name\":\"Тест1\",\"description\":\"Тестовая роль\",\"command\":\"roles_add\",\"state\":\"ok\"}"
+                                    break;                          //"{\"roles\":[{\"name\":\"Тест1\",\"description\":\"Тестовая роль\",\"id\":3,\"command\":\"add\"}],\"command\":\"roles\",\"state\":\"ok\"}"
                                 case ServerLib.JTypes.Enums.Commands.roles_edit:
-                                    UpdateRoleHandler(InputMessage);
-                                    break;
+                                    RoleEditConfirmationHandler(InputMessage);//"{\"id\":3,\"name\":\"Тест2\",\"description\":\"Тестовая роль\",\"command\":\"roles_edit\",\"state\":\"ok\"}"
+                                    break;                          //"{\"roles\":[{\"name\":\"Тест2\",\"description\":\"Тестовая роль\",\"id\":3,\"command\":\"edit\"}],\"command\":\"roles\",\"state\":\"ok\"}"
                                 case ServerLib.JTypes.Enums.Commands.users_roles:
-                                    RolesUsersListHandler(InputMessage);
+                                    RolesUsersListHandler(InputMessage);//"{\"users_roles\":[{\"user_id\":1,\"role_id\":1,\"role_name\":\"Администратор\",\"id\":4,\"command\":\"add\"},{\"user_id\":3,\"role_id\":1,\"role_name\":\"Администратор\",\"id\":3,\"command\":\"add\"},{\"user_id\":3,\"role_id\":2,\"role_name\":\"Тестовая роль\",\"id\":31,\"command\":\"add\"}],\"command\":\"users_roles\",\"state\":\"ok\"}"
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.users_roles_add:
-                                    UpdateUserRoleAddHandler(InputMessage);
+                                    UserRoleAddConfirmationHandler(InputMessage);
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.users_roles_delete:
-                                    UpdateUserRoleDeleteHandler(InputMessage);
+                                    UserRoleRemoveConfirmationHandler(InputMessage);
                                     break;
                             }
                         }
@@ -206,7 +206,7 @@ namespace bcsapp
                 Thread.Sleep(1);
             }
         }
-
+         
         /// <summary>
         /// Добавляет строку в выходную очередь
         /// </summary>
@@ -262,15 +262,27 @@ namespace bcsapp
         public event EventHandler<string> LoginFailed;
 
         //функция для инициализации списков
-        public event EventHandler<List<ResponseUserClass>> UpdateUsers;
-        public event EventHandler<List<ResponseJobClass>> UpdateJobs;
-        public event EventHandler<List<ResponseRoleClass>> UpdateRoles;
-        public event EventHandler<List<ResponseUserRoleClass>> UpdateUserRoles;
-        //функции вызываемые при обновление одиночного елемента
-        public event EventHandler<ResponseUserClass> UpdateUser;
-        public event EventHandler<ResponseJobClass> UpdateJob;
-        public event EventHandler<ResponseRoleClass> UpdateRole;
-        public event EventHandler<ResponseUserRoleClass> UpdateUserRole; 
+        public event EventHandler<String> UpdateUsers;
+        public event EventHandler<String> UpdateJobs;
+        public event EventHandler<String> UpdateRoles;
+        public event EventHandler<String> UpdateUserRoles;
+
+        //функции для подтверждения действий
+        public event EventHandler<String> UpdateUserAdd;
+        public event EventHandler<String> UpdateUserEdit;
+        public event EventHandler<String> UpdateUserAdd_Err;
+        public event EventHandler<String> UpdateUserEdit_Err;
+        public event EventHandler<String> UpdateJobAdd;
+        public event EventHandler<String> UpdateJobEdit;
+        public event EventHandler<String> UpdateJobAdd_Err;
+        public event EventHandler<String> UpdateJobEdit_Err;
+        public event EventHandler<String> UpdateRoleAdd;
+        public event EventHandler<String> UpdateRoleEdit;
+        public event EventHandler<String> UpdateRoleAdd_Err;
+        public event EventHandler<String> UpdateRoleEdit_Err;
+        public event EventHandler<String> UpdateRoleDelete;
+        public event EventHandler<String> UpdateUserRoleAdd;
+        public event EventHandler<String> UpdateUserRoleRemove;
         #endregion
 
         #region Обработчики 
@@ -295,61 +307,24 @@ namespace bcsapp
             {
                 DataStorage.Instance.UserList = JsonConvert.DeserializeObject<ResponseUsersClass>(InputMessage).Items;
                 DataStorage.Instance.UserList.Remove(DataStorage.Instance.UserList.Find(x => x.ID == DataStorage.Instance.Login.ID));
-                UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
+               
             }
             else
-            {
-                //TODO 
+            { 
                 foreach(ResponseUserClass user in JsonConvert.DeserializeObject<ResponseUsersClass>(InputMessage).Items)
                 {
-                    UpdateUsersHandler(user);
-                } 
-
-                UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
-            }
-        }
-
-        private void UpdateUsersHandler(string InputMessage)
-        {
-            if (DataStorage.Instance.UserList != null)
-            {
-               
-                    ResponseUserEditClass temp = JsonConvert.DeserializeObject<ResponseUserEditClass>(InputMessage);
-                    ResponseUserClass user = new ResponseUserClass() { ID = temp.ID,
-                                                       Active = temp.Active,
-                                                       FirstName = temp.FirstName,
-                                                       LastName = temp.LastName,
-                                                       MidleName = temp.MidleName,
-                                                       JobID = temp.JobId,
-                                                       JobName = temp.JobName };
-
-                    ResponseUserClass result = DataStorage.Instance.UserList.Find(x => x.ID == user.ID);
-                    if (result!=null)
-                    { 
-                            DataStorage.Instance.UserList.RemoveAt(DataStorage.Instance.UserList.IndexOf(result));                      
-                    } 
-                    DataStorage.Instance.UserList.Add(user); 
-                    UpdateUser?.Invoke(this, user);
-            } 
-        }
-
-        private void UpdateUsersHandler(ResponseUserClass InputUser)
-        {
-            if (DataStorage.Instance.UserList != null)
-            {   
-                ResponseUserClass result = DataStorage.Instance.UserList.Find(x => x.ID == InputUser.ID);
-                if (result != null)
-                {
-                    DataStorage.Instance.UserList.RemoveAt(DataStorage.Instance.UserList.IndexOf(result));
+                    if (user.Command == ServerLib.JTypes.Enums.ItemCommands.add) DataStorage.Instance.UserList.Add(user);
+                    if (user.Command == ServerLib.JTypes.Enums.ItemCommands.delete) DataStorage.Instance.UserList.Remove(user);
+                    if (user.Command == ServerLib.JTypes.Enums.ItemCommands.edit)
+                    {
+                        ResponseUserClass temp = DataStorage.Instance.UserList.Find(x => x.ID == user.ID);
+                        DataStorage.Instance.UserList.Remove(temp);
+                        DataStorage.Instance.UserList.Add(user);
+                    }
                 }
-                DataStorage.Instance.UserList.Add(InputUser);
-                UpdateUser?.Invoke(this, InputUser);
             }
-            else
-            {
-
-            }
-        }
+            UpdateUsers?.Invoke(this, "");
+        } 
 
         //функции для работы с професиями
         private void JobssListHandler(string InputMessage)
@@ -361,64 +336,21 @@ namespace bcsapp
             }
             else
             {
-                foreach (ResponseJobClass job in JsonConvert.DeserializeObject<ResponseJobsClass>(InputMessage).Jobs)
+                foreach (ResponseJobClass jobs in JsonConvert.DeserializeObject<ResponseJobsClass>(InputMessage).Jobs)
                 {
-                    UpdateJobssListHandler(job);
-                }
+                    if (jobs.Command ==  ServerLib.JTypes.Enums.ItemCommands.add ) DataStorage.Instance.JobList.Add(jobs);
+                    if (jobs.Command == ServerLib.JTypes.Enums.ItemCommands.delete) DataStorage.Instance.JobList.Remove(jobs);
+                    if (jobs.Command == ServerLib.JTypes.Enums.ItemCommands.edit)
+                    {
+                        ResponseJobClass temp = DataStorage.Instance.JobList.Find(x => x.ID == jobs.ID);
+                        DataStorage.Instance.JobList.Remove(temp);
+                        DataStorage.Instance.JobList.Add(jobs);
 
-                UpdateUsers?.Invoke(this, DataStorage.Instance.UserList);
+                    }
+                } 
             }
-            UpdateJobs?.Invoke(this, DataStorage.Instance.JobList);
-        } 
-         
-        private void UpdateJobssListHandler(string InputMessage)
-        {
-            if (DataStorage.Instance.UserList != null)
-            {
-
-                ResponseJobAddClass temp = JsonConvert.DeserializeObject<ResponseJobAddClass>(InputMessage);
-                ResponseJobClass jobAdd = new ResponseJobClass()
-                {
-                    ID = temp.ID,
-                    Name = temp.Name
-                };
-
-                ResponseJobClass result = DataStorage.Instance.JobList.Find(x => x.ID == jobAdd.ID);
-                if (result != null)
-                {
-                    DataStorage.Instance.JobList.RemoveAt(DataStorage.Instance.JobList.IndexOf(result));
-                }
-                DataStorage.Instance.JobList.Add(jobAdd);
-                UpdateJob?.Invoke(this, jobAdd);
-            }
-            
-        }
-
-
-
-        private void UpdateJobssListHandler(ResponseJobClass InputMessage)
-        {
-            if (DataStorage.Instance.UserList != null)
-            {
-                 
-                ResponseJobClass jobAdd = new ResponseJobClass()
-                {
-                    ID = InputMessage.ID,
-                    Name = InputMessage.Name
-                };
-
-                ResponseJobClass result = DataStorage.Instance.JobList.Find(x => x.ID == jobAdd.ID);
-                if (result != null)
-                {
-                    DataStorage.Instance.JobList.RemoveAt(DataStorage.Instance.JobList.IndexOf(result));
-                }
-                DataStorage.Instance.JobList.Add(jobAdd);
-                UpdateJob?.Invoke(this, jobAdd);
-            }
-
-        }
-
-
+            UpdateJobs?.Invoke(this, "");
+        }  
 
         //Функции для работы с ролями
         private void RolesListHandler(string InputMessage)
@@ -430,60 +362,25 @@ namespace bcsapp
             }
             else
             {
-                //TODO 
+
                 foreach (ResponseRoleClass role in JsonConvert.DeserializeObject<ResponseRolesClass>(InputMessage).Items)
                 {
-                    UpdateRoleHandler(role);
+                    if (role.Command == ServerLib.JTypes.Enums.ItemCommands.add) DataStorage.Instance.RoleList.Add(role);
+                    if (role.Command == ServerLib.JTypes.Enums.ItemCommands.delete) DataStorage.Instance.RoleList.Remove(role);
+                    if (role.Command == ServerLib.JTypes.Enums.ItemCommands.edit)
+                    {
+                        ResponseRoleClass temp = DataStorage.Instance.RoleList.Find(x => x.ID == role.ID);
+                        DataStorage.Instance.RoleList.Remove(temp);
+                        DataStorage.Instance.RoleList.Add(role);
+
+                    }
+
                 } 
 
             }
-            UpdateRoles?.Invoke(this, DataStorage.Instance.RoleList);
+            UpdateRoles?.Invoke(this,"");
         }
-
-        private void UpdateRoleHandler(string InputMessage)
-        {
-            if (DataStorage.Instance.RoleList != null)
-            {
-
-                ResponseRoleEditClass temp = JsonConvert.DeserializeObject<ResponseRoleEditClass>(InputMessage);
-                ResponseRoleClass role = new ResponseRoleClass()
-                {
-                     ID = temp.ID,
-                     Name = temp.Name,
-                     Description = temp.Description 
-                    
-                    
-                };
-
-                ResponseRoleClass result = DataStorage.Instance.RoleList.Find(x => x.ID == role.ID);
-                if (result != null)
-                {
-                    DataStorage.Instance.RoleList.RemoveAt(DataStorage.Instance.RoleList.IndexOf(result));
-                }
-                DataStorage.Instance.RoleList.Add(role);
-                UpdateRole?.Invoke(this, role);
-            } 
-        }
-
-        private void UpdateRoleHandler(ResponseRoleClass InputRole)
-        {
-            if (DataStorage.Instance.RoleList != null)
-            {
-
-                ResponseRoleClass result = DataStorage.Instance.RoleList.Find(x => x.ID == InputRole.ID);
-                if (result != null)
-                {
-                    DataStorage.Instance.RoleList.RemoveAt(DataStorage.Instance.RoleList.IndexOf(result));
-                }
-                DataStorage.Instance.RoleList.Add(InputRole);
-                UpdateRole?.Invoke(this, InputRole);
-            }
-            else
-            {
-
-            }
-        }
-
+         
         //функция получения ролей пользователей 
         private void RolesUsersListHandler(string InputMessage)
         {
@@ -494,78 +391,61 @@ namespace bcsapp
             }
             else
             {
-                //TODO 
-                foreach (ResponseUserRoleClass roleUser in JsonConvert.DeserializeObject<ResponseUsersRolesClass>(InputMessage).Items)
+                foreach (ResponseUserRoleClass role in JsonConvert.DeserializeObject<ResponseUsersRolesClass>(InputMessage).Items)
                 {
-
+                    if (role.Command == ServerLib.JTypes.Enums.ItemCommands.add) DataStorage.Instance.UsersRolesList.Add(role);
+                    if (role.Command == ServerLib.JTypes.Enums.ItemCommands.delete) DataStorage.Instance.UsersRolesList.Remove(role);
+                    if (role.Command == ServerLib.JTypes.Enums.ItemCommands.edit)
+                    {
+                        ResponseUserRoleClass temp = DataStorage.Instance.UsersRolesList.Find(x=>x.ID == role.ID);
+                        DataStorage.Instance.UsersRolesList.Remove(temp);
+                        DataStorage.Instance.UsersRolesList.Add(role);
+                    } 
                 }
 
             }
-            UpdateUserRoles?.Invoke(this, DataStorage.Instance.UsersRolesList);
-
+            UpdateUserRoles?.Invoke(this,""); 
         }
 
-        private void UpdateUserRoleAddHandler(string InputMessage)
-        { 
-            if (DataStorage.Instance.RoleList != null)
-            {
-
-                ResponseUserRoleAddClass temp = JsonConvert.DeserializeObject<ResponseUserRoleAddClass>(InputMessage);
-                ResponseUserRoleClass role = new ResponseUserRoleClass()
-                {
-                    ID = temp.ID,
-                    RoleID = temp.RoleID,
-                    UserID = temp.UserID,
-                    RoleName = DataStorage.Instance.RoleList.Find(x => x.ID == temp.RoleID).Name
-                };
-
-                ResponseUserRoleClass result = DataStorage.Instance.UsersRolesList.Find(x => x.ID == role.ID);
-                if (result != null)
-                {
-                    DataStorage.Instance.UsersRolesList.RemoveAt(DataStorage.Instance.UsersRolesList.IndexOf(result));
-                }
-                DataStorage.Instance.UsersRolesList.Add(role);
-                UpdateUserRole?.Invoke(this, role);
-            }
-        }
-
-        private void UpdateUserRoleDeleteHandler(string InputMessage)
-        { 
-            if (DataStorage.Instance.RoleList != null)
-            {
-
-                ResponseUserRoleDeleteClass temp = JsonConvert.DeserializeObject<ResponseUserRoleDeleteClass>(InputMessage);
-                 
-            }
-        }
-
-        private void UpdateUserRoleHandler(ResponseUserRoleClass InputRole)
+        public void UserRoleRemoveConfirmationHandler(string inputMessage)
         {
-            if (DataStorage.Instance.RoleList != null)
-            {
 
-                ResponseUserRoleClass role = new ResponseUserRoleClass()
-                {
-                    ID = InputRole.ID,
-                    RoleID = InputRole.RoleID,
-                    UserID = InputRole.UserID,
-                    RoleName = DataStorage.Instance.RoleList.Find(x => x.ID == InputRole.RoleID).Name 
-                };
-
-                ResponseUserRoleClass result = DataStorage.Instance.UsersRolesList.Find(x => x.ID == role.ID);
-                if (result != null)
-                {
-                    DataStorage.Instance.UsersRolesList.RemoveAt(DataStorage.Instance.UsersRolesList.IndexOf(result));
-                }
-                DataStorage.Instance.UsersRolesList.Add(role);
-                UpdateUserRole?.Invoke(this, role);
-            }
-            else
-            {
-
-            }
         }
 
+        public void UserRoleAddConfirmationHandler(string inputMessage)
+        {
+
+        }
+
+        public void RoleEditConfirmationHandler(string inputMessage)
+        {
+
+        }
+
+        public void RoleAddConfirmationHandler(string inputMessage)
+        {
+
+        }
+
+        public void JobEditConfirmationHandler(string inputMessage)
+        {
+
+        }
+
+        public void JobAddConfirmationListHandler(string inputMessage)
+        {
+
+        }
+
+        public void UserEditConfirmationHandler(string inputMessage)
+        {
+
+        }
+
+        public void UserAddConfirmationHandler(string inputMessage)
+        {
+
+        }
 
 
         #endregion

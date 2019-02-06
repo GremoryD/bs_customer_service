@@ -92,6 +92,7 @@
     <Compile Include="Models\AccessRolesData.cs" />
     <Compile Include="Models\Behoviour\MenuBehaviour.cs" />
     <Compile Include="Models\DataStorage.cs" />
+    <Compile Include="Models\TransactionService.cs" />
     <Compile Include="ViewModels\AddJobsViewModel.cs" />
     <Compile Include="ViewModels\AddRolesViewModel.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />

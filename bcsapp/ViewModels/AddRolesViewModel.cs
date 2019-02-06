@@ -40,13 +40,14 @@ namespace bcsapp.ViewModels
         private void AddRole()
         {
 
-            ServerLib.JTypes.Client.RequestRoleAddClass rolesClass = new ServerLib.JTypes.Client.RequestRoleAddClass
+            bool isDone;
+            TransactionService.AddRole(new Transaction(new ServerLib.JTypes.Client.RequestRoleAddClass
             {
                 Token = DataStorage.Instance.Login.Token,
                 Name = RoleName,
                 Description = RoleDescription
-            };
-            WebSocketController.Instance.OutputQueueAddObject(rolesClass);
+            },
+            new Action(() => isDone = true), new Action(() => isDone = false))); 
 
         }
 
@@ -62,14 +63,15 @@ namespace bcsapp.ViewModels
 
         private void EditRole()
         {
-            ServerLib.JTypes.Client.RequestRoleEditClass rolesClass = new ServerLib.JTypes.Client.RequestRoleEditClass
+            bool isDone;
+            TransactionService.EditRole(new Transaction(new ServerLib.JTypes.Client.RequestRoleEditClass
             {
                 Token = DataStorage.Instance.Login.Token,
                 Name = RoleName,
                 ID = roleID,
                 Description = RoleDescription
-            };
-            WebSocketController.Instance.OutputQueueAddObject(rolesClass);
+            },
+            new Action(() => isDone = true), new Action(() => isDone = false))); 
 
         }
 

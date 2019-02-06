@@ -72,7 +72,8 @@ namespace bcsapp.ViewModels
 
         private void AddUser()
         {
-            ServerLib.JTypes.Client.RequestUserAddClass addUser = new ServerLib.JTypes.Client.RequestUserAddClass()
+            bool isDone;
+            TransactionService.AddUser(new Transaction(new ServerLib.JTypes.Client.RequestUserAddClass()
             {
                 Login = UserLogin,
                 Password = UserPassword,
@@ -80,12 +81,10 @@ namespace bcsapp.ViewModels
                 LastName = UserSurname,
                 MidleName = UserMiddleName,
                 Active = ServerLib.JTypes.Enums.UserActive.activated,
-                JobID = SelectedJob!=null? SelectedJob.ID:1,
+                JobID = SelectedJob != null ? SelectedJob.ID : 1,
                 Token = DataStorage.Instance.Login.Token
-            };
-
-            WebSocketController.Instance.OutputQueueAddObject(addUser);
-
+            },
+            new Action(() => isDone = true), new Action(() => isDone = false))); 
             Cancel();
         }
 
@@ -93,19 +92,19 @@ namespace bcsapp.ViewModels
 
         private void EditUser()
         {
-            ServerLib.JTypes.Client.RequestUserEditClass addUser = new ServerLib.JTypes.Client.RequestUserEditClass()
+            bool isDone;
+            TransactionService.EditUser(new Transaction(new ServerLib.JTypes.Client.RequestUserEditClass()
             {
                 ID = user.ID,
                 FirstName = UserName,
                 LastName = UserSurname,
-                MidleName = UserMiddleName, 
-                JobID = SelectedJob!=null? SelectedJob.ID:1,
+                MidleName = UserMiddleName,
+                JobID = SelectedJob != null ? SelectedJob.ID : 1,
                 Active = user.Active,
                 Token = DataStorage.Instance.Login.Token
-            };
-
-            WebSocketController.Instance.OutputQueueAddObject(addUser);
-            Cancel();
+            },
+            new Action(() => isDone = true), new Action(() => isDone = false)));
+            Cancel();   
         }
     }
 }

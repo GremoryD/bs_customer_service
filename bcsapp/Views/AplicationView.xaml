@@ -137,7 +137,7 @@
                             <Grid>
                                 <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableJobsClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedJobsClass, Mode=TwoWay}">
                                     <dxg:GridControl.View>
-                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="True" AutoWidth="True"/>
+                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="False" AutoWidth="True"/>
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
                             </Grid>
@@ -162,7 +162,7 @@
                                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="5" ResizeDirection="Columns"></GridSplitter>
                                 <dxg:GridControl Grid.Column="2" HorizontalAlignment="Stretch" ItemsSource="{Binding accessRolesData}"  AutoGenerateColumns="AddNew"  >
                                     <dxg:GridControl.View>
-                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="True" AutoWidth="True"/>
+                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="False" AutoWidth="True"/>
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
                             </Grid>
