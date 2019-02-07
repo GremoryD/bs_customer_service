@@ -23,6 +23,13 @@ namespace bcsapp.ViewModels
         public String UserName { set; get; }
         public String UserMiddleName { set; get; }
         public String EditAddButton { set; get; }
+        public bool ActiveCheck { set; get; } = true;
+        public bool PasswordEnable { set; get; } = true;
+        
+
+        public bool UserLoginShow { set; get; }
+        public bool UserPasswordShow { set; get; }
+
 
         public ObservableCollection<ResponseJobClass> observableJobsClass { set; get; } = new ObservableCollection<ResponseJobClass>(DataStorage.Instance.JobList);
         public ResponseJobClass SelectedJob { set; get; }
@@ -40,24 +47,36 @@ namespace bcsapp.ViewModels
 
         public AddUserViewModel()
         {
+            SelectedJob = observableJobsClass.First();
+            Notify("SelectedJob");
+            UserLoginShow = true;
+            Notify("UserLoginShow");
+            UserPasswordShow = true;
+            Notify("UserPasswordShow");
             EditAddButton = "Добваить";
             AddUserCommand = new SimpleCommand(AddUser);
             CancelCommand = new SimpleCommand(Cancel);
         }
 
         public AddUserViewModel(ResponseUserClass user)
-        {
+        { 
+            PasswordEnable = false;
+            Notify("PasswordEnable");
+               UserLoginShow = false;
+            Notify("UserLoginShow");
+            UserPasswordShow = false;
+            Notify("UserPasswordShow");
             this.user = user;
-            UserLogin = user.Login;
-            UserPassword = "";
+            UserLogin = user.Login; 
             UserSurname = user.LastName;
             UserName = user.FirstName;
             UserMiddleName = user.MidleName;
+            ActiveCheck = (user.Active == ServerLib.JTypes.Enums.UserActive.activated);
             if (observableJobsClass.Where(x => x.ID == user.ID).Count<ResponseJobClass>()>0)
             {
                 SelectedJob = observableJobsClass.Where(x => x.ID == user.ID).Last<ResponseJobClass>();
-
             }
+            Notify("SelectedJob");
             EditAddButton = "Изменить";
             AddUserCommand = new SimpleCommand(EditUser);
             CancelCommand = new SimpleCommand(Cancel);
@@ -80,7 +99,7 @@ namespace bcsapp.ViewModels
                 FirstName = UserName,
                 LastName = UserSurname,
                 MidleName = UserMiddleName,
-                Active = ServerLib.JTypes.Enums.UserActive.activated,
+                Active = ActiveCheck?ServerLib.JTypes.Enums.UserActive.activated:ServerLib.JTypes.Enums.UserActive.blocked,
                 JobID = SelectedJob != null ? SelectedJob.ID : 1,
                 Token = DataStorage.Instance.Login.Token
             },
@@ -95,12 +114,12 @@ namespace bcsapp.ViewModels
             bool isDone;
             TransactionService.EditUser(new Transaction(new ServerLib.JTypes.Client.RequestUserEditClass()
             {
-                ID = user.ID,
+                ID = user.ID, 
                 FirstName = UserName,
                 LastName = UserSurname,
                 MidleName = UserMiddleName,
                 JobID = SelectedJob != null ? SelectedJob.ID : 1,
-                Active = user.Active,
+                Active = ActiveCheck ? ServerLib.JTypes.Enums.UserActive.activated : ServerLib.JTypes.Enums.UserActive.blocked,
                 Token = DataStorage.Instance.Login.Token
             },
             new Action(() => isDone = true), new Action(() => isDone = false)));

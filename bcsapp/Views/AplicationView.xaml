@@ -74,13 +74,13 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableUserClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedUserClass, Mode=TwoWay}" >
-                                    <dxg:GridColumn FieldName="ID" Visible="False"/>
-                                    <dxg:GridColumn FieldName="Login" Visible="True"/>
-                                    <dxg:GridColumn FieldName="FirstName" Visible="True"/>
-                                    <dxg:GridColumn FieldName="LastName" Visible="True"/>
-                                    <dxg:GridColumn FieldName="MidleName" Visible="True"/>
-                                    <dxg:GridColumn FieldName="JobName" Visible="True"/>
-                                    <dxg:GridColumn FieldName="Active" Visible="True"/>
+                                    <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
+                                    <dxg:GridColumn FieldName="Login"  Header="Логин" Visible="True"/>
+                                    <dxg:GridColumn FieldName="FirstName" Header="Имя"  Visible="True"/>
+                                    <dxg:GridColumn FieldName="LastName" Header="Фамилия" Visible="True"/>
+                                    <dxg:GridColumn FieldName="MidleName" Header="Отчество" Visible="True"/>
+                                    <dxg:GridColumn FieldName="JobName"  Header="Должность"  Visible="True"/>
+                                    <dxg:GridColumn FieldName="Active" Header="Активность"  Visible="True"/>
                                     <dxg:GridColumn FieldName="JobID" Visible="False"/>
                                     <dxg:GridColumn FieldName="Command" Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
@@ -96,10 +96,17 @@
                                 </dxg:GridControl>
                                 <Grid Grid.Row="1">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*"/>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="3*"/>
                                     </Grid.ColumnDefinitions>
-                                    <ListView Grid.Column="0" Margin="5" ItemsSource="{Binding  UserUnusedRoles}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="8*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Доступние роли пользователя:"/>
+                                    <TextBlock Grid.Column="2"  Text="{Binding StringFormat=Роли пользователя {0} ,Path=SelectedUserClass.Login}"/>
+                                    <ListView x:Name="AllRoles" Grid.Column="0" Grid.Row="1" Margin="5" ItemsSource="{Binding  UserUnusedRoles}">
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem">
                                                 <Setter Property="HorizontalContentAlignment" Value="Right" />
@@ -109,22 +116,25 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate >
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  FlowDirection="LeftToRight" >
-                                                    <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" Margin="0" FontSize="20"  />
-                                                    <Button Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=DataContext.AddRoleToUserCommand}" CommandParameter="{Binding}" Foreground="{x:Null}" BorderBrush="{x:Null}" Background="{x:Null}">
-                                                        <Image Source="{dx:DXImage Image=Add_32x32.png}"></Image>
-                                                    </Button>
+                                                    <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" Margin="0" FontSize="20"  /> 
                                                 </StackPanel>
                                             </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                        
+                                        </ListView.ItemTemplate> 
                                     </ListView>
-                                    <ListView Grid.Column="1" Margin="5" ItemsSource="{Binding UserUsedRoles}">
+                                    <Grid Grid.Column="1"  Grid.Row="1" >
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Button Grid.Row="1" Command="{Binding AddRoleToUserCommand}" CommandParameter="{Binding ElementName=AllRoles,Path=SelectedItem}" Content=">" Margin="0"/>
+                                        <Button Grid.Row="2" Command="{Binding RemoveRoleToUserCommand}"  CommandParameter="{Binding ElementName=UserRoles,Path=SelectedItem}" Content="&#60;" Margin="0"/>
+                                    </Grid>
+                                    <ListView x:Name="UserRoles" Grid.Column="2" Margin="5" Grid.Row="1"  ItemsSource="{Binding UserUsedRoles}">
                                         <ListView.ItemTemplate>
                                             <DataTemplate >
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                                    <Button Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=DataContext.RemoveRoleToUserCommand}" CommandParameter="{Binding}" Foreground="{x:Null}" BorderBrush="{x:Null}" Background="{x:Null}">
-                                                        <Image Source="{dx:DXImage Image=Remove_32x32.png}"></Image>
-                                                    </Button>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"> 
                                                     <TextBlock Text="{Binding Path=Name}"  VerticalAlignment="Center" Margin="0" FontSize="20" />
                                                 </StackPanel>
                                             </DataTemplate>
@@ -135,9 +145,13 @@
                         </TabItem>
                         <TabItem   Visibility="Collapsed"  IsSelected="{Binding JobsGridShow}" >
                             <Grid>
-                                <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableJobsClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedJobsClass, Mode=TwoWay}">
-                                    <dxg:GridControl.View>
-                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="False" AutoWidth="True"/>
+                                <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableJobsClass}"   AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedJobsClass, Mode=TwoWay}">
+                                    <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
+                                    <dxg:GridColumn FieldName="Name" Header="Название" Visible="True"/> 
+                                    <dxg:GridColumn FieldName="Command" Visible="False"/>
+                                    <dxg:GridColumn FieldName="Hash" Visible="False"/> 
+                                    <dxg:GridControl.View> 
+                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True" AllowEditing="False" AutoWidth="True"/>
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
                             </Grid>
@@ -150,10 +164,10 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <dxg:GridControl Grid.Column="0" HorizontalAlignment="Stretch" ItemsSource="{Binding observableRolesClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedRoleClass, Mode=TwoWay}">
-                                    <dxg:GridColumn FieldName="ID" Visible="False"/>
-                                    <dxg:GridColumn FieldName="Name" Visible="True"/>
-                                    <dxg:GridColumn FieldName="Description" Visible="True"/>
-                                    <dxg:GridColumn FieldName="Command" Visible="False"/>
+                                    <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
+                                    <dxg:GridColumn FieldName="Name" Header="Название" Visible="True"/>
+                                    <dxg:GridColumn FieldName="Description" Header="Описание"  Visible="True"/>
+                                    <dxg:GridColumn FieldName="Command" Visible="False"/>   
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
                                     <dxg:GridControl.View>
                                         <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="False" AutoWidth="True"/>

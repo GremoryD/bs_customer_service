@@ -124,6 +124,7 @@ namespace bcsapp.ViewModels
             }
             UserUnusedRoles = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList.Except(UserUsedRoles));
             Notify("UserUnusedRoles");
+            Notify("SelectedUserClass");
         }
          
         private void RemoveRoleToUser(ResponseRoleClass obj)
