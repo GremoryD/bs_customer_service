@@ -323,8 +323,12 @@ namespace bcsapp
                     if (user.Command == ServerLib.JTypes.Enums.ItemCommands.edit)
                     {
                         ResponseUserClass temp = DataStorage.Instance.UserList.Find(x => x.ID == user.ID);
-                        DataStorage.Instance.UserList.Remove(temp);
-                        DataStorage.Instance.UserList.Add(user);
+                        int index = DataStorage.Instance.UserList.IndexOf(temp);
+                        DataStorage.Instance.UserList[index].FirstName = user.FirstName;
+                        DataStorage.Instance.UserList[index].MidleName = user.MidleName;
+                        DataStorage.Instance.UserList[index].LastName = user.LastName;
+                        DataStorage.Instance.UserList[index].JobID = user.JobID;
+                        DataStorage.Instance.UserList[index].Active = user.Active;
                     }
                 }
             }
@@ -348,8 +352,8 @@ namespace bcsapp
                     if (jobs.Command == ServerLib.JTypes.Enums.ItemCommands.edit)
                     {
                         ResponseJobClass temp = DataStorage.Instance.JobList.Find(x => x.ID == jobs.ID);
-                        DataStorage.Instance.JobList.Remove(temp);
-                        DataStorage.Instance.JobList.Add(jobs);
+                        int index = DataStorage.Instance.JobList.IndexOf(temp);
+                        DataStorage.Instance.JobList[index].Name = jobs.Name; 
 
                     }
                 } 
@@ -375,8 +379,9 @@ namespace bcsapp
                     if (role.Command == ServerLib.JTypes.Enums.ItemCommands.edit)
                     {
                         ResponseRoleClass temp = DataStorage.Instance.RoleList.Find(x => x.ID == role.ID);
-                        DataStorage.Instance.RoleList.Remove(temp);
-                        DataStorage.Instance.RoleList.Add(role);
+                        int index = DataStorage.Instance.RoleList.IndexOf(temp);
+                        DataStorage.Instance.RoleList[index].Name = role.Name;
+                        DataStorage.Instance.RoleList[index].Description = role.Description;
 
                     }
 

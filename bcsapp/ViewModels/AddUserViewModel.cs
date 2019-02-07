@@ -25,7 +25,7 @@ namespace bcsapp.ViewModels
         public String EditAddButton { set; get; }
         public bool ActiveCheck { set; get; } = true;
         public bool PasswordEnable { set; get; } = true;
-        
+        public bool CanSave { set; get; }
 
         public bool UserLoginShow { set; get; }
         public bool UserPasswordShow { set; get; }
@@ -54,7 +54,12 @@ namespace bcsapp.ViewModels
             UserPasswordShow = true;
             Notify("UserPasswordShow");
             EditAddButton = "Добваить";
-            AddUserCommand = new SimpleCommand(AddUser);
+            AddUserCommand = new SimpleCommand(AddUser, (_) =>
+            {
+                if (UserLogin == null || UserPassword == null)
+                    return false; 
+                return UserLogin.Length >= 1 && UserPassword.Length >= 1;
+            });
             CancelCommand = new SimpleCommand(Cancel);
         }
 

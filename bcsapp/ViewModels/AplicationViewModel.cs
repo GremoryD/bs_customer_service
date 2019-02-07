@@ -72,8 +72,6 @@ namespace bcsapp.ViewModels
 
         //roles grid controle
         public ObservableCollection<AccessRolesData> accessRolesData { set; get; } = new ObservableCollection<AccessRolesData>(DataStorage.Instance.accessRolesData);
-
-
         public ObservableCollection<ResponseRoleClass> observableUsersRole { set; get; } = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList);
 
         public AplicationViewModel()

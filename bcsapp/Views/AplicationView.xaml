@@ -4,19 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:bcsapp.Views"
-             xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" xmlns:dxn="http://schemas.devexpress.com/winfx/2008/xaml/navbar" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
-    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dxa="http://schemas.devexpress.com/winfx/2008/xaml/accordion" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" x:Class="bcsapp.Views.AplicationView"
+             xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" xmlns:dxn="http://schemas.devexpress.com/winfx/2008/xaml/navbar" 
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dxa="http://schemas.devexpress.com/winfx/2008/xaml/accordion" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" x:Class="bcsapp.Views.AplicationView"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" MinWidth="450" MinHeight="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="31*"/>
-            <ColumnDefinition Width="169*"/>
-        </Grid.ColumnDefinitions>
+     
+    <Grid> 
         <Grid.RowDefinitions>
             <RowDefinition Height="74*"/>
             <RowDefinition Height="351*"/>
-            <RowDefinition Height="24*"/>
+            <RowDefinition Height="26"/>
         </Grid.RowDefinitions>
 
         <dxr:RibbonControl x:Name="ribbonControl" Grid.ColumnSpan="2" RibbonStyle="Office2010" VerticalAlignment="Stretch" >
@@ -25,14 +23,14 @@
             </dxmvvm:Interaction.Behaviors>
             <dxr:RibbonDefaultPageCategory >
                 <dxr:RibbonPage x:Name="UsersRibbonPage" Caption="Пользователи">
-                    <dxr:RibbonPageGroup >
+                    <dxr:RibbonPageGroup Caption="Список" >
                         <dxb:BarButtonItem Content="Добавить" Command="{Binding AddButtonCommand}" Glyph="{dx:DXImage Image=Add_32x32.png}" LargeGlyph="{dx:DXImage Image=Add_32x32.png}"/>
                         <dxb:BarButtonItem Content="Редактировать" Command="{Binding EditButtonCommad}" Glyph="{dx:DXImage Image=EditName_32x32.png}" LargeGlyph="{dx:DXImage Image=EditName_32x32.png}"/>
                         <dxb:BarButtonItem Content="Удалить" Command="{Binding DeleteButtonCommand}" Glyph="{dx:DXImage Image=Remove_32x32.png}" LargeGlyph="{dx:DXImage Image=Remove_32x32.png}"/>
                     </dxr:RibbonPageGroup>
-                    <dxr:RibbonPageGroup IsVisible="{Binding UserInterface}">
-                        <dxb:BarButtonItem Content="Заблокировать" Glyph="/bcsapp;component/Images/Lock-Lock-icon.png" Command="{Binding BlockCommand}" />
-                        <dxb:BarButtonItem Content="Разблокировать" Glyph="/bcsapp;component/Images/Lock-Unlock-icon.png" Command="{Binding UnBlockButtonCommand}" />
+                    <dxr:RibbonPageGroup IsVisible="{Binding UserInterface}" Caption="Управление">
+                        <dxb:BarButtonItem Content="Заблокировать" LargeGlyph="/bcsapp;component/Images/Lock-Lock-icon.png" Command="{Binding BlockCommand}" />
+                        <dxb:BarButtonItem Content="Разблокировать" LargeGlyph="/bcsapp;component/Images/Lock-Unlock-icon.png" Command="{Binding UnBlockButtonCommand}" />
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
                 <dxr:RibbonPage  x:Name="ClientsRibbonPage"  Caption="Клиенты">
@@ -43,84 +41,83 @@
                 </dxr:RibbonPage>
             </dxr:RibbonDefaultPageCategory>
         </dxr:RibbonControl>
-        <dxr:RibbonStatusBarControl Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,0" VerticalAlignment="Stretch"  >
+        <dxr:RibbonStatusBarControl Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Stretch" Margin="0,0,0,0"    >
             <dxr:RibbonStatusBarControl.RightItems>
-                <dxb:BarButtonItem Content="{Binding ConectedState}"/>
+                <dxb:BarStaticItem Content="{Binding ConectedState}"/>
             </dxr:RibbonStatusBarControl.RightItems>
             <dxr:RibbonStatusBarControl.LeftItems>
-                <dxb:BarButtonItem Content="{Binding UserName}"/>
+                <dxb:BarStaticItem Content="{Binding UserName}"/>
             </dxr:RibbonStatusBarControl.LeftItems>
 
         </dxr:RibbonStatusBarControl>
 
-        <TabControl HorizontalAlignment="Stretch"  Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2">
+        <TabControl HorizontalAlignment="Stretch"  Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2"  Padding="0">
             <TabItem x:Name="UserTabItem" Visibility="Collapsed" IsSelected="{Binding SelectedUsers, FallbackValue=true}">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="4*"/>
                     </Grid.ColumnDefinitions>
-                    <dxa:AccordionControl  Grid.Column="0" Background="White"> 
-                            <dxa:AccordionItem  Header="Пользователи" Command="{Binding UsersGridCommand}"/>
-                            <dxa:AccordionItem  Header="Должности" Command="{Binding JobsGridCommand}"/>
-                            <dxa:AccordionItem  Header="Роли"  Command="{Binding RolsGridCommand}"/>
+                    <dxa:AccordionControl  Grid.Column="0" Background="White" >
+                        <dxa:AccordionItem  Header="Пользователи" Command="{Binding UsersGridCommand}"/>
+                        <dxa:AccordionItem  Header="Должности" Command="{Binding JobsGridCommand}"/>
+                        <dxa:AccordionItem  Header="Роли"  Command="{Binding RolsGridCommand}"/>
                     </dxa:AccordionControl>
 
-                    <TabControl Grid.Column="1"  >
-                        <TabItem  Visibility="Collapsed" IsSelected="{Binding UsersGridShow, FallbackValue=true}">
+                    <TabControl Grid.Column="1" Margin="0,0,0,0" Padding="0">
+                        <TabItem  Visibility="Collapsed" IsSelected="{Binding UsersGridShow, FallbackValue=true}" >
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="4*"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableUserClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedUserClass, Mode=TwoWay}" >
-                                    <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
-                                    <dxg:GridColumn FieldName="Login"  Header="Логин" Visible="True"/>
-                                    <dxg:GridColumn FieldName="FirstName" Header="Имя"  Visible="True"/>
-                                    <dxg:GridColumn FieldName="LastName" Header="Фамилия" Visible="True"/>
-                                    <dxg:GridColumn FieldName="MidleName" Header="Отчество" Visible="True"/>
-                                    <dxg:GridColumn FieldName="JobName"  Header="Должность"  Visible="True"/>
-                                    <dxg:GridColumn FieldName="Active" Header="Активность"  Visible="True"/>
+                                <dxg:GridControl HorizontalAlignment="Stretch"  SelectionMode="Row" ItemsSource="{Binding observableUserClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedUserClass, Mode=TwoWay}" >
+                                    <dxg:GridColumn FieldName="ID" Header="№"  HorizontalHeaderContentAlignment="Center" Visible="False"/>
+                                    <dxg:GridColumn FieldName="Login"  Header="Логин" HorizontalHeaderContentAlignment="Center" Visible="True"/>
+                                    <dxg:GridColumn FieldName="FirstName" Header="Имя" HorizontalHeaderContentAlignment="Center"  Visible="True"/>
+                                    <dxg:GridColumn FieldName="LastName" Header="Фамилия" HorizontalHeaderContentAlignment="Center" Visible="True"/>
+                                    <dxg:GridColumn FieldName="MidleName" Header="Отчество" HorizontalHeaderContentAlignment="Center" Visible="True"/>
+                                    <dxg:GridColumn FieldName="JobName"  Header="Должность" HorizontalHeaderContentAlignment="Center"  Visible="True"/>
+                                    <dxg:GridColumn FieldName="Active" Header="Активность" HorizontalHeaderContentAlignment="Center"  Visible="True"/>
                                     <dxg:GridColumn FieldName="JobID" Visible="False"/>
                                     <dxg:GridColumn FieldName="Command" Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
+                                     
                                     <dxmvvm:Interaction.Behaviors>
                                         <dxmvvm:EventToCommand EventName="SelectedItemChanged" Command="{Binding UserSelectedItemChangedCommand}" />
                                     </dxmvvm:Interaction.Behaviors>
                                     <dxg:GridControl.View>
-                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True" x:Name="gridView" AllowEditing="False" AutoWidth="True">
-                                             
+                                        <dxg:TableView ShowGroupedColumns="True" NavigationStyle="Row"  CellStyle="{x:Null}"  ShowAutoFilterRow="True" x:Name="gridView" AllowEditing="False" AutoWidth="True">
+   
+                                            
                                         </dxg:TableView>
 
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
-                                <Grid Grid.Row="1">
+                                <Grid Grid.Row="1" VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="3*"/>
-                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="45"/>
                                         <ColumnDefinition Width="3*"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="8*"/>
+                                        <RowDefinition Height="2*"/>
+                                        <RowDefinition Height="10*"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Grid.Column="0" Text="Доступние роли пользователя:"/>
-                                    <TextBlock Grid.Column="2"  Text="{Binding StringFormat=Роли пользователя {0} ,Path=SelectedUserClass.Login}"/>
-                                    <ListView x:Name="AllRoles" Grid.Column="0" Grid.Row="1" Margin="5" ItemsSource="{Binding  UserUnusedRoles}">
-                                        <ListView.ItemContainerStyle>
-                                            <Style TargetType="ListViewItem">
-                                                <Setter Property="HorizontalContentAlignment" Value="Right" />
-                                                <Setter Property="HorizontalAlignment" Value="Stretch" />
-                                            </Style>
-                                        </ListView.ItemContainerStyle>
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate >
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  FlowDirection="LeftToRight" >
-                                                    <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" Margin="0" FontSize="20"  /> 
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate> 
-                                    </ListView>
+                                    <TextBlock Grid.Column="0" Margin="10,0,10,0" Padding="0" Text="Доступние роли пользователя:" VerticalAlignment="Top"/>
+                                    <TextBlock Grid.Column="2"  Margin="10,0,10,10" Padding="0"   Text="{Binding StringFormat=Роли пользователя {0}: ,Path=SelectedUserClass.Login}" VerticalAlignment="Top"/>
+
+                                    <dxg:GridControl Margin="0,0,0,0" Grid.Column="0" Grid.Row="1"  HorizontalAlignment="Stretch" ItemsSource="{Binding UserUnusedRoles}"  AutoGenerateColumns="AddNew"  x:Name="AllRoles" >
+                                        <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
+                                        <dxg:GridColumn FieldName="Name" Header="Название" Visible="True"/>
+                                        <dxg:GridColumn FieldName="Description" Header="Описание"  Visible="False"/>
+                                        <dxg:GridColumn FieldName="Command" Visible="False"/>
+                                        <dxg:GridColumn FieldName="Hash" Visible="False"/>
+                                        <dxg:GridControl.View>
+                                            <dxg:TableView ShowGroupedColumns="True"  ShowGroupPanel="False" ShowTotalSummary="False" NavigationStyle="Row"  ShowAutoFilterRow="False" AllowEditing="False" AutoWidth="True"> 
+                                            </dxg:TableView> 
+                                        </dxg:GridControl.View>
+                                    </dxg:GridControl> 
                                     <Grid Grid.Column="1"  Grid.Row="1" >
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*"/>
@@ -131,15 +128,17 @@
                                         <Button Grid.Row="1" Command="{Binding AddRoleToUserCommand}" CommandParameter="{Binding ElementName=AllRoles,Path=SelectedItem}" Content=">" Margin="0"/>
                                         <Button Grid.Row="2" Command="{Binding RemoveRoleToUserCommand}"  CommandParameter="{Binding ElementName=UserRoles,Path=SelectedItem}" Content="&#60;" Margin="0"/>
                                     </Grid>
-                                    <ListView x:Name="UserRoles" Grid.Column="2" Margin="5" Grid.Row="1"  ItemsSource="{Binding UserUsedRoles}">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate >
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"> 
-                                                    <TextBlock Text="{Binding Path=Name}"  VerticalAlignment="Center" Margin="0" FontSize="20" />
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
+                                    <dxg:GridControl Margin="0,0,0,0"  Grid.Column="2" Grid.Row="1"  HorizontalAlignment="Stretch" ItemsSource="{Binding UserUsedRoles}"  AutoGenerateColumns="AddNew" x:Name="UserRoles" >
+                                        <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
+                                        <dxg:GridColumn FieldName="Name" Header="Название" Visible="True"/>
+                                        <dxg:GridColumn FieldName="Description" Header="Описание"  Visible="False"/>
+                                        <dxg:GridColumn FieldName="Command" Visible="False"/>
+                                        <dxg:GridColumn FieldName="Hash" Visible="False"/>
+                                        <dxg:GridControl.View>
+                                            <dxg:TableView ShowGroupedColumns="True"  ShowGroupPanel="False" ShowTotalSummary="False" NavigationStyle="Row"  AllowEditing="False"  ShowAutoFilterRow="False" AutoWidth="True">
+                                            </dxg:TableView>
+                                        </dxg:GridControl.View>
+                                    </dxg:GridControl> 
                                 </Grid>
                             </Grid>
                         </TabItem>
@@ -147,10 +146,10 @@
                             <Grid>
                                 <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableJobsClass}"   AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedJobsClass, Mode=TwoWay}">
                                     <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
-                                    <dxg:GridColumn FieldName="Name" Header="Название" Visible="True"/> 
+                                    <dxg:GridColumn FieldName="Name" Header="Название" Visible="True"/>
                                     <dxg:GridColumn FieldName="Command" Visible="False"/>
-                                    <dxg:GridColumn FieldName="Hash" Visible="False"/> 
-                                    <dxg:GridControl.View> 
+                                    <dxg:GridColumn FieldName="Hash" Visible="False"/>
+                                    <dxg:GridControl.View>
                                         <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True" AllowEditing="False" AutoWidth="True"/>
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
@@ -167,7 +166,7 @@
                                     <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
                                     <dxg:GridColumn FieldName="Name" Header="Название" Visible="True"/>
                                     <dxg:GridColumn FieldName="Description" Header="Описание"  Visible="True"/>
-                                    <dxg:GridColumn FieldName="Command" Visible="False"/>   
+                                    <dxg:GridColumn FieldName="Command" Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
                                     <dxg:GridControl.View>
                                         <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="False" AutoWidth="True"/>
