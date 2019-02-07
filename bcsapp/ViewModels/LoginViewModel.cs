@@ -8,8 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
+using System.Text; 
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -23,11 +24,7 @@ namespace bcsapp.ViewModels
         public String LoginInput { get; set; }
         public String PasswordInput { get; set; }
         public String Output { set; get; }
-        public String MessageState { get; set; }
-        //отображения загрузки и ошибки
-        public Boolean IsWait { get; set; }
-        public Boolean IsError { get; set; }
-        public Boolean IsBlocked { get; set; }
+        public String MessageState { get; set; } 
 
         //команды 
         public ICommand LoginCommand { get; set; }
@@ -48,7 +45,7 @@ namespace bcsapp.ViewModels
                 return LoginInput.Length >= 1 && PasswordInput.Length >=1;
             });
 
-            WebSocketController.Instance.LoginFailed += (_, __) => Application.Current.Dispatcher.Invoke(() => ErrorMessage(__));
+            WebSocketController.Instance.LoginFailed += (_, __) => Application.Current.Dispatcher.Invoke(() => ErrorMessage(__)); 
             WebSocketController.Instance.LoginDone += (_, __) => Application.Current.Dispatcher.Invoke(() => LoginDone(__));
             WebSocketController.Instance.ServerErr += (_, __) => Application.Current.Dispatcher.Invoke(() => ErrorMessage(__));
         }
@@ -95,33 +92,29 @@ namespace bcsapp.ViewModels
 
 
         private void ClearMessage()
-        {
-            IsBlocked = false;
-            Notify("IsBlocked");
-            IsError = false;
-            Notify("IsError");
+        { 
             MessageState = "";
             Notify("MessageState");
         }
 
+        private static TimeSpan timeout = TimeSpan.FromSeconds(3);
         private void ErrorMessage(string Message)
-        {
-            IsBlocked = false;
-            Notify("IsBlocked");
-            IsError = true;
-            Notify("IsError");
-            MessageState = Message; 
-            Notify("MessageState"); 
+        { 
+            MessageState = Message;
+            Notify("MessageState");
+            var timer = new Timer(timeout.TotalMilliseconds) { AutoReset = false };
+            timer.Elapsed += (_, __) => { ClearMessage(); };
+            timer.Start(); 
+
         }
 
         private void BlockMessage(string Message)
-        {
-            IsError = false;
-            Notify("IsError");
-            IsBlocked = true;
-            Notify("IsBlocked");
+        { 
             MessageState = Message;
             Notify("MessageState");
+            var timer = new Timer(timeout.TotalMilliseconds) { AutoReset = false };
+            timer.Elapsed += (_, __) => { ClearMessage(); };
+            timer.Start();
         }
     }
 }
