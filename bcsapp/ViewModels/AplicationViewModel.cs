@@ -30,6 +30,7 @@ namespace bcsapp.ViewModels
         public ICommand AddButtonCommand { set; get; }
         public ICommand EditButtonCommad { set; get; }
         public ICommand DeleteButtonCommand { set; get; }
+        public ICommand PasswordChangeCommand { set; get; }
 
         public ICommand UnBlockButtonCommand { set; get; }
         public ICommand BlockCommand { set; get; }
@@ -81,7 +82,7 @@ namespace bcsapp.ViewModels
             UsersGridCommand = new SimpleCommand(OpenUsersGrid);
             JobsGridCommand = new SimpleCommand(OpenJobsGrid);
             RolsGridCommand = new SimpleCommand(OpenRolesGrid);
-
+            PasswordChangeCommand = new SimpleCommand(PasswordChange);
             AddButtonCommand = new SimpleCommand(AddButton);
             EditButtonCommad = new SimpleCommand(EditButton);
             DeleteButtonCommand = new SimpleCommand(DeleteButton);
@@ -110,6 +111,10 @@ namespace bcsapp.ViewModels
 
         }
 
+        private void PasswordChange()
+        {
+            NavigationService.Instance.ShowDialogWin(new PasswordChangeViewModel(SelectedUserClass), "Изменить пароль");
+        }
 
         private void UserSelectedItemChanged()
         {

@@ -99,6 +99,7 @@
     <Compile Include="ViewModels\AplicationViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\PasswordChangeViewModel.cs" />
     <Compile Include="Views\AddJobsView.xaml.cs">
       <DependentUpon>AddJobsView.xaml</DependentUpon>
     </Compile>
@@ -113,6 +114,9 @@
     </Compile>
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PasswordChangeView.xaml.cs">
+      <DependentUpon>PasswordChangeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="WebSocketController.cs" />
     <Page Include="MainWindow.xaml">
@@ -159,6 +163,10 @@
     <Page Include="Views\LoginView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PasswordChangeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
