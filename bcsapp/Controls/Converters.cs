@@ -24,4 +24,23 @@ namespace bcsapp.Controls.Converters
             throw new NotImplementedException();
         }
     }
+
+
+
+    public class ActiveToBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(value is ServerLib.JTypes.Enums.UserActive)
+            {
+                return (ServerLib.JTypes.Enums.UserActive)value == ServerLib.JTypes.Enums.UserActive.activated;
+            }
+            return true;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

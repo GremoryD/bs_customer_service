@@ -32,15 +32,5 @@
             </Setter.Value>
         </Setter>
     </Style>
- 
-     <Style x:Key="CustomCellStyle" BasedOn="{StaticResource {dxgt:GridRowThemeKey ResourceKey=LightweightCellStyle}}" TargetType="dxg:LightweightCellEditor">
-        <Setter Property="MaxHeight" Value="20"/>
-        <Style.Triggers>
-            <Trigger Property="IsFocusedCell" Value="True">
-                <Setter Property="Background" Value= "MediumPurple" />
-                <Setter Property="Foreground" Value="Black"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
+  
 </ResourceDictionary>

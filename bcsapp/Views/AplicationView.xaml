@@ -69,6 +69,7 @@
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="4*"/>
+                                    <RowDefinition Height="5"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <dxg:GridControl HorizontalAlignment="Stretch"  SelectionMode="Row" ItemsSource="{Binding observableUserClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedUserClass, Mode=TwoWay}" >
@@ -78,7 +79,8 @@
                                     <dxg:GridColumn FieldName="LastName" Header="Фамилия" HorizontalHeaderContentAlignment="Center" Visible="True"/>
                                     <dxg:GridColumn FieldName="MidleName" Header="Отчество" HorizontalHeaderContentAlignment="Center" Visible="True"/>
                                     <dxg:GridColumn FieldName="JobName"  Header="Должность" HorizontalHeaderContentAlignment="Center"  Visible="True"/>
-                                    <dxg:GridColumn FieldName="Active" Header="Активность" HorizontalHeaderContentAlignment="Center"  Visible="True"/>
+                                    <dxg:GridColumn FieldName="ActiveBool" Header="Активность" HorizontalHeaderContentAlignment="Center"  Visible="True"/>
+                                    <dxg:GridColumn FieldName="Active" Visible="False"/>
                                     <dxg:GridColumn FieldName="JobID" Visible="False"/>
                                     <dxg:GridColumn FieldName="Command" Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
@@ -94,18 +96,19 @@
 
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
-                                <Grid Grid.Row="1" VerticalAlignment="Center">
+                                <GridSplitter Grid.Row="1" Margin="0,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ResizeDirection="Rows" />
+                                <Grid Grid.Row="2" VerticalAlignment="Stretch">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="3*"/>
                                         <ColumnDefinition Width="45"/>
                                         <ColumnDefinition Width="3*"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="2*"/>
+                                        <RowDefinition Height="auto"/>
                                         <RowDefinition Height="10*"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Grid.Column="0" Margin="10,0,10,0" Padding="0" Text="Доступние роли пользователя:" VerticalAlignment="Top"/>
-                                    <TextBlock Grid.Column="2"  Margin="10,0,10,10" Padding="0"   Text="{Binding StringFormat=Роли пользователя {0}: ,Path=SelectedUserClass.Login}" VerticalAlignment="Top"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="0" Margin="10,3,10,3" Padding="0" Text="Доступние роли пользователя:" VerticalAlignment="Top"/>
+                                    <TextBlock Grid.Column="2" Grid.Row="0" Margin="10,3,10,3" Padding="0"   Text="{Binding StringFormat=Роли пользователя {0}: ,Path=SelectedUserClass.Login}" VerticalAlignment="Top"/>
 
                                     <dxg:GridControl Margin="0,0,0,0" Grid.Column="0" Grid.Row="1"  HorizontalAlignment="Stretch" ItemsSource="{Binding UserUnusedRoles}"  AutoGenerateColumns="AddNew"  x:Name="AllRoles" >
                                         <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
@@ -114,7 +117,7 @@
                                         <dxg:GridColumn FieldName="Command" Visible="False"/>
                                         <dxg:GridColumn FieldName="Hash" Visible="False"/>
                                         <dxg:GridControl.View>
-                                            <dxg:TableView ShowGroupedColumns="True"  ShowGroupPanel="False" ShowTotalSummary="False" NavigationStyle="Row"  ShowAutoFilterRow="False" AllowEditing="False" AutoWidth="True"> 
+                                            <dxg:TableView ShowGroupedColumns="True"   CellStyle="{x:Null}" ShowGroupPanel="False" ShowTotalSummary="False" NavigationStyle="Row"  ShowAutoFilterRow="False" AllowEditing="False" AutoWidth="True"> 
                                             </dxg:TableView> 
                                         </dxg:GridControl.View>
                                     </dxg:GridControl> 
@@ -150,7 +153,7 @@
                                     <dxg:GridColumn FieldName="Command" Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
                                     <dxg:GridControl.View>
-                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True" AllowEditing="False" AutoWidth="True"/>
+                                        <dxg:TableView ShowGroupedColumns="True"  NavigationStyle="Row" ShowAutoFilterRow="True" AllowEditing="False" AutoWidth="True"/>
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
                             </Grid>
@@ -169,7 +172,7 @@
                                     <dxg:GridColumn FieldName="Command" Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
                                     <dxg:GridControl.View>
-                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="False" AutoWidth="True"/>
+                                        <dxg:TableView ShowGroupedColumns="True"  NavigationStyle="Row" ShowAutoFilterRow="True"  AllowEditing="False" AutoWidth="True"/>
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
                                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="5" ResizeDirection="Columns"></GridSplitter>

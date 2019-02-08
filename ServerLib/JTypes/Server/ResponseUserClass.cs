@@ -51,6 +51,9 @@ namespace ServerLib.JTypes.Server
         [JsonProperty(PropertyName = "active", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
         public Enums.UserActive Active { get; set; }
 
+         
+        public bool ActiveBool { get=> this.Active == Enums.UserActive.activated; }
+
         /// <summary>
         /// Hash-код объекта
         /// </summary>
