@@ -257,8 +257,11 @@ namespace bcsapp.ViewModels
         //обновление данных в таблицах
         private void Instance_UpdateUsers(String data)
         {
+            int temp = observableUserClass.IndexOf(SelectedUserClass);
             observableUserClass = new ObservableCollection<ResponseUserClass>(DataStorage.Instance.UserList);
             Notify("observableUserClass");
+            if (temp > 0) SelectedUserClass = observableUserClass[temp];
+            Notify("SelectedUserClass");
 
         }
         private void Instance_UpdateJobs(String data)

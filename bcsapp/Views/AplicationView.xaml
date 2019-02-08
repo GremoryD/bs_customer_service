@@ -72,7 +72,7 @@
                                     <RowDefinition Height="5"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <dxg:GridControl HorizontalAlignment="Stretch"  SelectionMode="Row" ItemsSource="{Binding observableUserClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedUserClass, Mode=TwoWay}" >
+                                <dxg:GridControl HorizontalAlignment="Stretch"  SelectionMode="Row" ItemsSource="{Binding observableUserClass}" AllowUpdateTwoWayBoundPropertiesOnSynchronization="False"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedUserClass,Mode=TwoWay}"  >
                                     <dxg:GridColumn FieldName="ID" Header="№"  HorizontalHeaderContentAlignment="Center" Visible="False"/>
                                     <dxg:GridColumn FieldName="Login"  Header="Логин" HorizontalHeaderContentAlignment="Center" Visible="True"/>
                                     <dxg:GridColumn FieldName="FirstName" Header="Имя" HorizontalHeaderContentAlignment="Center"  Visible="True"/>
@@ -88,7 +88,7 @@
                                     <dxmvvm:Interaction.Behaviors>
                                         <dxmvvm:EventToCommand EventName="SelectedItemChanged" Command="{Binding UserSelectedItemChangedCommand}" />
                                     </dxmvvm:Interaction.Behaviors>
-                                    <dxg:GridControl.View>
+                                    <dxg:GridControl.View> 
                                         <dxg:TableView ShowGroupedColumns="True" NavigationStyle="Row"  CellStyle="{x:Null}"  ShowAutoFilterRow="True" x:Name="gridView" AllowEditing="False" AutoWidth="True">
    
                                             

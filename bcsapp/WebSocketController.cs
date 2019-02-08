@@ -328,7 +328,9 @@ namespace bcsapp
                         DataStorage.Instance.UserList[index].MidleName = user.MidleName;
                         DataStorage.Instance.UserList[index].LastName = user.LastName;
                         DataStorage.Instance.UserList[index].JobID = user.JobID;
-                        DataStorage.Instance.UserList[index].Active = user.Active;
+                        DataStorage.Instance.UserList[index].JobName = user.JobName;
+                        DataStorage.Instance.UserList[index].Login = user.Login;
+                        DataStorage.Instance.UserList[index].Active = user.Active; 
                     }
                 }
             }
@@ -353,7 +355,7 @@ namespace bcsapp
                     {
                         ResponseJobClass temp = DataStorage.Instance.JobList.Find(x => x.ID == jobs.ID);
                         int index = DataStorage.Instance.JobList.IndexOf(temp);
-                        DataStorage.Instance.JobList[index].Name = jobs.Name; 
+                        DataStorage.Instance.JobList[index] = jobs; 
 
                     }
                 } 
@@ -380,8 +382,7 @@ namespace bcsapp
                     {
                         ResponseRoleClass temp = DataStorage.Instance.RoleList.Find(x => x.ID == role.ID);
                         int index = DataStorage.Instance.RoleList.IndexOf(temp);
-                        DataStorage.Instance.RoleList[index].Name = role.Name;
-                        DataStorage.Instance.RoleList[index].Description = role.Description;
+                        DataStorage.Instance.RoleList[index] = role; 
 
                     }
 
