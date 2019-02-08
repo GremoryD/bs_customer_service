@@ -23,6 +23,9 @@ namespace bcsapp.ViewModels
         public bool UserInterface { set; get; } = true;
         public ICommand RibbonCommand { set; get; }
 
+        public ICommand InitDoneCommand { get; set; }
+        public event EventHandler OnInitDone;
+
         //Users left menu commands
         public ICommand UsersGridCommand { set; get; }
         public ICommand JobsGridCommand { set; get; }
@@ -76,6 +79,11 @@ namespace bcsapp.ViewModels
 
         public AplicationViewModel()
         {
+            InitDoneCommand = new SimpleCommand(() =>
+            {
+                OnInitDone?.Invoke(this, EventArgs.Empty);
+            });
+
             RibbonCommand = new SimpleCommand<RibbonControl>(UserRibbon);
             UsersGridCommand = new SimpleCommand(OpenUsersGrid);
             JobsGridCommand = new SimpleCommand(OpenJobsGrid);
@@ -321,6 +329,7 @@ namespace bcsapp.ViewModels
 
         //Функция для Нотифая
         public event PropertyChangedEventHandler PropertyChanged;
+
         private void Notify(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

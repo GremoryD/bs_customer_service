@@ -62,19 +62,26 @@ namespace bcsapp.Controls
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
+                currentWindow.Visibility = Visibility.Collapsed;
+
+                model.OnInitDone += (_, __) =>
+                {
+                    if (model.FullscreenView)
+                    {
+                        currentWindow.WindowState = WindowState.Maximized;
+                        currentWindow.SizeToContent = SizeToContent.Manual;
+                    }
+                    else
+                    {
+                        currentWindow.WindowState = WindowState.Normal;
+                        currentWindow.SizeToContent = SizeToContent.WidthAndHeight;
+                    }
+
+                    currentWindow.Visibility = Visibility.Visible;
+                };
+
                 currentWindow.Content = model;
                 viewModels.Add(model);
-
-                if (model.FullscreenView)
-                {
-                    currentWindow.WindowState = WindowState.Maximized;
-                    currentWindow.SizeToContent = SizeToContent.Manual;
-                }
-                else
-                {
-                    currentWindow.WindowState = WindowState.Normal;
-                    currentWindow.SizeToContent = SizeToContent.WidthAndHeight;
-                }
             });
         }
 

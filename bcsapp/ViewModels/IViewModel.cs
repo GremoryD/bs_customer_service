@@ -9,5 +9,7 @@ namespace bcsapp.ViewModels
     public interface IViewModel
     {
         bool FullscreenView { get; set; }
+
+        event EventHandler OnInitDone;
     }
 }

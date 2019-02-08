@@ -36,6 +36,8 @@ namespace bcsapp.ViewModels
 
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler OnInitDone;
+
         private void Notify(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

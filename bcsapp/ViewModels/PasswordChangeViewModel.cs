@@ -22,6 +22,8 @@ namespace bcsapp.ViewModels
         public bool FullscreenView { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler OnInitDone;
+
         private void Notify(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
