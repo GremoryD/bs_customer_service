@@ -65,6 +65,8 @@ namespace bcsapp.ViewModels
 
         //Функция для Нотифая
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler OnInitDone;
+
         private void Notify(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

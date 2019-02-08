@@ -8,8 +8,8 @@
         xmlns:vm="clr-namespace:bcsapp.ViewModels" 
         x:Class="bcsapp.MainWindow"
         mc:Ignorable="d"
-    SizeToContent="WidthAndHeight"
-        Title="Customer Service" Height="450" Width="375.244" x:Name="MainWIndowClient" Closed="Window_Closed" Loaded="Window_Loaded">
+        SizeToContent="WidthAndHeight"
+        Title="Customer Service" x:Name="MainWIndowClient" Closed="Window_Closed" Loaded="Window_Loaded">
     <Grid>
         <Button x:Name="Login" Content="Login" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" Height="28"/>
         <Button x:Name="LoginError" Content="Login Error" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Width="75" Height="29" Click="LoginError_Click"/>
