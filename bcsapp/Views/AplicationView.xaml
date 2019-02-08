@@ -110,7 +110,7 @@
 
                                     <dxg:GridControl Margin="0,0,0,0" Grid.Column="0" Grid.Row="1"  HorizontalAlignment="Stretch" ItemsSource="{Binding UserUnusedRoles}"  AutoGenerateColumns="AddNew"  x:Name="AllRoles" >
                                         <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
-                                        <dxg:GridColumn FieldName="Name" Header="Название" Visible="True"/>
+                                        <dxg:GridColumn FieldName="Name" Header="Наименование" Visible="True"/>
                                         <dxg:GridColumn FieldName="Description" Header="Описание"  Visible="False"/>
                                         <dxg:GridColumn FieldName="Command" Visible="False"/>
                                         <dxg:GridColumn FieldName="Hash" Visible="False"/>
@@ -139,7 +139,7 @@
                                     </Grid>
                                     <dxg:GridControl Margin="0,0,0,0"  Grid.Column="2" Grid.Row="1"  HorizontalAlignment="Stretch" ItemsSource="{Binding UserUsedRoles}"  AutoGenerateColumns="AddNew" x:Name="UserRoles" >
                                         <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
-                                        <dxg:GridColumn FieldName="Name" Header="Название" Visible="True"/>
+                                        <dxg:GridColumn FieldName="Name" Header="Наименование" Visible="True"/>
                                         <dxg:GridColumn FieldName="Description" Header="Описание"  Visible="False"/>
                                         <dxg:GridColumn FieldName="Command" Visible="False"/>
                                         <dxg:GridColumn FieldName="Hash" Visible="False"/>
@@ -155,7 +155,7 @@
                             <Grid>
                                 <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableJobsClass}"   AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedJobsClass, Mode=TwoWay}">
                                     <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
-                                    <dxg:GridColumn FieldName="Name" Header="Название" Visible="True"/>
+                                    <dxg:GridColumn FieldName="Name" Header="Наименование" Visible="True"/>
                                     <dxg:GridColumn FieldName="Command" Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
                                     <dxg:GridControl.View>
@@ -173,7 +173,7 @@
                                 </Grid.ColumnDefinitions>
                                 <dxg:GridControl Grid.Column="0" HorizontalAlignment="Stretch" ItemsSource="{Binding observableRolesClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedRoleClass, Mode=TwoWay}">
                                     <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
-                                    <dxg:GridColumn FieldName="Name" Header="Название" Visible="True"/>
+                                    <dxg:GridColumn FieldName="Name" Header="Наименование" Visible="True"/>
                                     <dxg:GridColumn FieldName="Description" Header="Описание"  Visible="True"/>
                                     <dxg:GridColumn FieldName="Command" Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
