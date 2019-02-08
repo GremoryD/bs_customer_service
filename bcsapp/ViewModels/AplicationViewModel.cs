@@ -140,6 +140,7 @@ namespace bcsapp.ViewModels
          
         private void RemoveRoleToUser(ResponseRoleClass obj)
         {
+            if (obj == null) return;
             bool isDone;
             TransactionService.RemoveRoleToUser(new Transaction(new ServerLib.JTypes.Client.RequestUserRoleDeleteClass()
             {
