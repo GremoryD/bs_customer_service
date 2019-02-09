@@ -20,8 +20,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="" TextWrapping="Wrap"  TextAlignment="Left" VerticalAlignment="Top" FontSize="18"/>
         <TextBlock Grid.Row="1" Grid.Column="2" Text="Логин:" TextWrapping="Wrap"  IsEnabled="{Binding PasswordEnable}"  TextAlignment="Left" VerticalAlignment="Top"/>
@@ -34,10 +34,10 @@
         <dxe:TextEdit Grid.Row="2" VerticalAlignment="Center" Text="{Binding UserSurname}"  Grid.Column="1" Margin="0.2,10,10.4,10"/>
         <dxe:CheckEdit Grid.Column="2" Content="Активен" IsChecked="{Binding ActiveCheck}" Grid.Row="3" VerticalAlignment="Center" Margin="9.8,24.4,10.4,24.4" />
         <TextBlock Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Text="Должность" TextWrapping="Wrap"  TextAlignment="Left" VerticalAlignment="Top" Height="21" Margin="0.2,0.2,29.4,0"/>
-        <dxe:ListBoxEdit Grid.Row="4" Grid.ColumnSpan="3"  Grid.Column="1" Margin="0.2,21.4,29.4,0" ItemsSource="{Binding observableJobsClass}" DisplayMember="Name" SelectedItem="{Binding SelectedJob}" Height="137" VerticalAlignment="Top"/>
+        <dxe:ComboBoxEdit Grid.Row="4" Grid.ColumnSpan="2" IsTextEditable="False"  Grid.Column="1" Margin="0,21.4,0.4,0" ItemsSource="{Binding observableJobsClass}" DisplayMember="Name" SelectedItem="{Binding SelectedJob}" Height="28" VerticalAlignment="Top" IsPopupOpen="True"/>
         <TextBlock Grid.Row="3" Grid.Column="1" Text="Отчество:" TextWrapping="Wrap"  TextAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0.2,9.2,145.8,0"/>
         <dxe:TextEdit Grid.Row="3" VerticalAlignment="Center" Text="{Binding UserMiddleName}"  Grid.Column="1" Margin="0.2,10,10.4,10"/>
-        <dx:SimpleButton Grid.Column="1" Grid.Row="5" Content="{Binding EditAddButton}" Margin="10"  Command="{Binding AddUserCommand}"/>
+        <dx:SimpleButton Grid.Column="1" Grid.Row="5" Content="Сохранить" Margin="10"  Command="{Binding AddUserCommand}"/>
         <dx:SimpleButton Grid.Column="2" Grid.Row="5" Content="Отмена" Margin="10" Command="{Binding CancelCommand}"/>
     </Grid>
 </UserControl>
