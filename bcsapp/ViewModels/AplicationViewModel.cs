@@ -57,6 +57,10 @@ namespace bcsapp.ViewModels
         public bool RolesGridShow { set; get; } = false;
 
 
+        public bool AddRoleToUserButtonEnable { set; get; } = false;
+        public bool RemoveRoleToUserButtonEnable { set; get; } = false;
+
+
         //Data Grid
         public ObservableCollection<ResponseUserClass> observableUserClass { set; get; } = new ObservableCollection<ResponseUserClass>(DataStorage.Instance.UserList);
         public ResponseUserClass SelectedUserClass { set; get; }
@@ -136,6 +140,30 @@ namespace bcsapp.ViewModels
             UserUnusedRoles = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList.Except(UserUsedRoles));
             Notify("UserUnusedRoles");
             Notify("SelectedUserClass");
+
+            if (UserUnusedRoles.Count == 0)
+            {
+                AddRoleToUserButtonEnable = false;
+                Notify("AddRoleToUserButtonEnable");
+            }
+            else
+            {
+                AddRoleToUserButtonEnable = true;
+                Notify("AddRoleToUserButtonEnable");
+            }
+
+
+            if (UserUsedRoles.Count == 0)
+            {
+                RemoveRoleToUserButtonEnable = false;
+                Notify("RemoveRoleToUserButtonEnable");
+            }
+            else
+            {
+                RemoveRoleToUserButtonEnable = true;
+                Notify("RemoveRoleToUserButtonEnable");
+            }
+
         }
          
         private void RemoveRoleToUser(ResponseRoleClass obj)
@@ -163,6 +191,7 @@ namespace bcsapp.ViewModels
 
         private void AddRoleToUser(ResponseRoleClass obj)
         {
+            if (obj == null) return;
             bool isDone;
             TransactionService.AddRoleToUser(new Transaction(new ServerLib.JTypes.Client.RequestUserRoleAddClass()
             {

@@ -126,12 +126,12 @@
                                             <RowDefinition Height="auto"/>
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
-                                        <Button Grid.Row="1" Padding="5"  Command="{Binding AddRoleToUserCommand}" CommandParameter="{Binding ElementName=AllRoles,Path=SelectedItem}"  Margin="4" >
+                                        <Button Grid.Row="1" Padding="5"  Command="{Binding AddRoleToUserCommand}" CommandParameter="{Binding ElementName=AllRoles,Path=SelectedItem}"   IsEnabled="{Binding AddRoleToUserButtonEnable}"  Margin="4" >
                                             <Button.Content>
                                                 <Image Source="/bcsapp;component/Images/right-arrow.png"/>
                                             </Button.Content> 
                                         </Button>
-                                        <Button Grid.Row="2" Padding="5" Command="{Binding RemoveRoleToUserCommand}"  CommandParameter="{Binding ElementName=UserRoles,Path=SelectedItem}"  Margin="4">
+                                        <Button Grid.Row="2" Padding="5" Command="{Binding RemoveRoleToUserCommand}"  CommandParameter="{Binding ElementName=UserRoles,Path=SelectedItem}"  IsEnabled="{Binding RemoveRoleToUserButtonEnable}" Margin="4">
                                             <Button.Content>
                                                 <Image Source="/bcsapp;component/Images/back.png" />
                                             </Button.Content>
