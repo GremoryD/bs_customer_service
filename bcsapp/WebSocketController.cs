@@ -310,8 +310,7 @@ namespace bcsapp
         {
             if (DataStorage.Instance.UserList.Count==0)
             {
-                DataStorage.Instance.UserList = JsonConvert.DeserializeObject<ResponseUsersClass>(InputMessage).Items;
-                DataStorage.Instance.UserList.Remove(DataStorage.Instance.UserList.Find(x => x.ID == DataStorage.Instance.Login.ID));
+                DataStorage.Instance.UserList = JsonConvert.DeserializeObject<ResponseUsersClass>(InputMessage).Items; 
                
             }
             else
