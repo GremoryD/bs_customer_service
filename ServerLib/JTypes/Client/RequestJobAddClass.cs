@@ -5,7 +5,7 @@ namespace ServerLib.JTypes.Client
     /// <summary>
     /// Запрос на добавление должности пользователей
     /// </summary>
-    public class RequestJobAddClass : RequestBaseRequestClass
+    public class RequestJobAddClass : RequestBaseClass
     {
         /// <summary>
         /// Наименование должности

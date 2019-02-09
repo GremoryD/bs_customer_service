@@ -6,7 +6,7 @@ namespace ServerLib.JTypes.Client
     /// <summary>
     /// Запрос редактирования пользователя
     /// </summary>
-    public class RequestUserEditClass : RequestBaseRequestClass
+    public class RequestUserEditClass : RequestBaseClass
     {
         /// <summary>
         /// Идентификатор пользователя

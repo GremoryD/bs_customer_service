@@ -5,7 +5,7 @@ namespace ServerLib.JTypes.Client
     /// <summary>
     /// Запрос на добавление роли пользователей
     /// </summary>
-    public class RequestRoleAddClass : RequestBaseRequestClass
+    public class RequestRoleAddClass : RequestBaseClass
     {
         /// <summary>
         /// Наименование роли

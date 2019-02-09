@@ -7,7 +7,7 @@ namespace ServerLib.JTypes.Client
     /// <summary>
     /// Базовый класс запросов поступающих от клиента
     /// </summary>
-    public class RequestBaseRequestClass
+    public class RequestBaseClass
     {
         /// <summary>
         /// Команда запроса
@@ -21,9 +21,9 @@ namespace ServerLib.JTypes.Client
         [JsonProperty("token", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
         public string Token { get; set; } = null;
 
-        public RequestBaseRequestClass() { }
+        public RequestBaseClass() { }
 
-        public RequestBaseRequestClass(Commands ACommand)
+        public RequestBaseClass(Commands ACommand)
         {
             Command = ACommand;
         }

@@ -6,7 +6,7 @@ namespace ServerLib.JTypes.Client
     /// <summary>
     /// Запрос на добавление роли пользователей разрешения на операцию над объектом системы
     /// </summary>
-    public class RequestRolesObjectsAddClass : RequestBaseRequestClass
+    public class RequestRolesObjectsAddClass : RequestBaseClass
     {
         /// <summary>
         /// Идентификатор роли пользователей

@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JTypes\Client\RequestBaseRequestClass.cs" />
+    <Compile Include="JTypes\Client\RequestBaseClass.cs" />
     <Compile Include="JTypes\Client\RequestJobAddClass.cs" />
     <Compile Include="JTypes\Client\RequestJobEditClass.cs" />
     <Compile Include="JTypes\Client\RequestJobsClass.cs" />
@@ -59,6 +59,7 @@
     <Compile Include="JTypes\Client\RequestRolesObjectsDeleteClass.cs" />
     <Compile Include="JTypes\Client\RequestUserAddClass.cs" />
     <Compile Include="JTypes\Client\RequestUserEditClass.cs" />
+    <Compile Include="JTypes\Client\RequestUserPasswordChangeClass.cs" />
     <Compile Include="JTypes\Client\RequestUserRoleAddClass.cs" />
     <Compile Include="JTypes\Client\RequestUserRoleDeleteClass.cs" />
     <Compile Include="JTypes\Client\RequestUsersClass.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="JTypes\Server\ResponseUserClass.cs" />
     <Compile Include="JTypes\Server\ResponseUserEditClass.cs" />
     <Compile Include="JTypes\Server\ResponseUserInformationClass.cs" />
+    <Compile Include="JTypes\Server\ResponseUserPasswordChangeClass.cs" />
     <Compile Include="JTypes\Server\ResponseUserRoleAddClass.cs" />
     <Compile Include="JTypes\Server\ResponseUserRoleClass.cs" />
     <Compile Include="JTypes\Server\ResponseUserRoleDeleteClass.cs" />

@@ -5,7 +5,7 @@ namespace ServerLib.JTypes.Client
     /// <summary>
     /// Запрос на изменение роли пользователей
     /// </summary>
-    public class RequestRoleEditClass : RequestBaseRequestClass
+    public class RequestRoleEditClass : RequestBaseClass
     {
         /// <summary>
         /// Идетификатор роли пользователей

@@ -3,7 +3,7 @@
     /// <summary>
     /// Запрос списка пользователей
     /// </summary>
-    public class RequestUsersClass : RequestBaseRequestClass
+    public class RequestUsersClass : RequestBaseClass
     {
         public RequestUsersClass() : base(Enums.Commands.users) { }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using CLProject;
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
@@ -190,6 +191,44 @@ namespace bcsserver.Handlers
                 UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.user_edit, ErrorCodes.FatalError, ex.Message));
             }
             return ProcessingSuccess;
+        }
+
+        /// <summary>
+        /// Изменение пароля пользователя
+        /// </summary>
+        /// <param name="ARequest">Запрос в формате JSON-объекта</param>
+        public void ChangePassword(string ARequest)
+        {
+            Thread th = new Thread(() =>
+            {
+                try
+                {
+                    ServerLib.JTypes.Client.RequestUserPasswordChangeClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RequestUserPasswordChangeClass>(ARequest);
+                    DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
+                    Params.CreateParameterValue("Token", Request.Token);
+                    Params.CreateParameterValue("UserId", Request.ID);
+                    Params.CreateParameterValue("Password", Request.Password);
+                    Params.CreateParameterValue("State");
+                    Params.CreateParameterValue("ErrorText");
+                    UserSession.Project.Database.Execute("UserPasswordChange", ref Params);
+                    if (Params.ParameterByName("State").AsString == "ok")
+                    {
+                        UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseUserPasswordChangeClass
+                        {
+                            ID = Request.ID
+                        });
+                    }
+                    else
+                    {
+                        UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.user_password_change, ErrorCodes.DatabaseError, Params.ParameterByName("ErrorText").AsString));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseExceptionClass(Commands.user_password_change, ErrorCodes.FatalError, ex.Message));
+                }
+            });
+            th.Start();
         }
     }
 }
