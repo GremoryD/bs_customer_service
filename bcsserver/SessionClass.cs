@@ -239,6 +239,9 @@ namespace bcsserver
                                                 case Commands.roles_objects_delete:
                                                     RolesObjects.Delete(Request);
                                                     break;
+                                                case Commands.user_password_change:
+                                                    Users.ChangePassword(Request);
+                                                    break;
                                             }
                                         }
                                         else

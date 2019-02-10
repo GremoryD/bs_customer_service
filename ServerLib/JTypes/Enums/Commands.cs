@@ -103,6 +103,11 @@
         /// <summary>
         /// Удаление разрешения роли пользователей на операцию над объектом системы
         /// </summary>
-        roles_objects_delete
+        roles_objects_delete,
+
+        /// <summary>
+        /// Изменение пароля пользователя
+        /// </summary>
+        user_password_change
     }
 }

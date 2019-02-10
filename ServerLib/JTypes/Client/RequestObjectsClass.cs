@@ -3,7 +3,7 @@
     /// <summary>
     /// Запрос списка объектов
     /// </summary>
-    public class RequestObjectsClass : RequestBaseRequestClass
+    public class RequestObjectsClass : RequestBaseClass
     {
         public RequestObjectsClass() : base(Enums.Commands.objects) { }
     }

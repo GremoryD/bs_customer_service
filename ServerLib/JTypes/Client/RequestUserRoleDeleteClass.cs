@@ -2,7 +2,7 @@
 
 namespace ServerLib.JTypes.Client
 {
-    public class RequestUserRoleDeleteClass : RequestBaseRequestClass
+    public class RequestUserRoleDeleteClass : RequestBaseClass
     {
         /// <summary>
         /// Идентификатор роли пользователя

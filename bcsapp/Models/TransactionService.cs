@@ -283,11 +283,11 @@ namespace bcsapp.Models
 
     public class Transaction
     {
-        public ServerLib.JTypes.Client.RequestBaseRequestClass Data;
+        public ServerLib.JTypes.Client.RequestBaseClass Data;
         public Action Complete;
         public Action Revert;
 
-        public Transaction(ServerLib.JTypes.Client.RequestBaseRequestClass message, Action complete, Action revert)
+        public Transaction(ServerLib.JTypes.Client.RequestBaseClass message, Action complete, Action revert)
         {
             Data = message;
             Complete = complete;

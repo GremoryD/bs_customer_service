@@ -5,7 +5,7 @@ namespace ServerLib.JTypes.Client
     /// <summary>
     /// Запрос на изменение должности
     /// </summary>
-    public class RequestJobEditClass : RequestBaseRequestClass
+    public class RequestJobEditClass : RequestBaseClass
     {
         /// <summary>
         /// Идетификатор должности

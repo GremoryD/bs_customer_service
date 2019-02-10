@@ -59,6 +59,22 @@ namespace bcsserver.Handlers
                             UserSession.Project.Database.Execute("UserInformation", ref Param);
                             if (Param.ParameterByName("State").AsString == "ok")
                             {
+                                DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
+                                Params.CreateParameterValue("Token", UserSession.Login.Token);
+                                DatabaseTableClass ReadTable = new DatabaseTableClass
+                                {
+                                    Table = (System.Data.DataTable)UserSession.Project.Database.Execute("UserPermissions", ref Params)
+                                };
+                                Permissions.Clear();
+                                foreach (System.Data.DataRow row in ReadTable.Table.Rows)
+                                {
+                                    Permissions.Add(new ServerLib.JTypes.Server.ResponseUserPermissionClass
+                                    {
+                                        ObjectName = ReadTable.AsString(row, "OBJECT"),
+                                        Operation = (ServerLib.JTypes.Enums.ObjectOperations)ReadTable.AsInt32(row, "OPERATION")
+                                    });
+                                }
+
                                 string OldMessage = JsonConvert.SerializeObject(this);
                                 FirstName = Param.ParameterByName("FirstName").AsString;
                                 LastName = Param.ParameterByName("LastName").AsString;

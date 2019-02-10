@@ -2,7 +2,7 @@
 
 namespace ServerLib.JTypes.Client
 {
-    public class RequestUserRoleAddClass : RequestBaseRequestClass
+    public class RequestUserRoleAddClass : RequestBaseClass
     {
         /// <summary>
         /// Идентификатор пользователя

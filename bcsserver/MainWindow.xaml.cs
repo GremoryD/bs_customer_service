@@ -98,9 +98,11 @@ namespace bcsserver
 
             Project.Database.Commands.CreateCommand("conn", RequestType.Reader, "ConnectionCheck", "SELECT 1 FROM DUAL", "Проверка соединения с базой данных");
 
+            // Пользователь
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Login", "USR.LOGIN(:WebSocketID, :Login, :Password, :AccessToken, :AccessUserId, :Active)", "Аутентификация пользователя");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Logout", "USR.LOGOUT(:Token, :State)", "Выход из системы");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserInformation", "USR.GET_USER_INFORMATION(:Token, :UserId, :FirstName, :LastName, :MidleName, :Job, :Active, :State, :ErrorText)", "Чтение информации и пользователе");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Table, "UserPermissions", "USR.GET_USER_PERMISSIONS(:Token)", "Права доступа пользователя к операциям над объектами системы");
 
             // Пользователи
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Users", "USR.GET_USERS(:Token)", "Чтение списка пользователей");
@@ -129,6 +131,10 @@ namespace bcsserver
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "RolesObjects", "USR.GET_ROLES_ACCESS_RIGTHS(:Token)", "Чтение списка прав доступа ролей пользователей к объектам системы");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "RolesObjectsAdd", "USR.ROLES_ACCESS_RIGTHS_ADD(:Token, :RoleId, :ObjectId, :OperationId, :NewId, :State, :ErrorText)", "Добавление роли пользователей разрешения на операцию над объектом системы");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "RolesObjectsDelete", "USR.ROLES_ACCESS_RIGTHS_DELETE(:Token, :OperationId, :State, :ErrorText)", "Удаление у роли пользователей разрешения на операцию над объектом системы");
+
+            // Пароли пользователей
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserPasswordChange", "USR.USER_PASSWORD_CHANGE(:Token, :UserId, :Password, :State, :ErrorText)", "Изменение пароля пользователя");
+
 
             DatabaseCheck.Start();
             SetSettingsButtons();

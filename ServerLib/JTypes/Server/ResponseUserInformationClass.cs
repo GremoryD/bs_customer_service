@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Collections.Generic;
 
 namespace ServerLib.JTypes.Server
 {
@@ -38,6 +39,15 @@ namespace ServerLib.JTypes.Server
         [JsonProperty(PropertyName = "active", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
         public Enums.UserActive Active { get; set; }
 
-        public ResponseUserInformationClass() : base(Enums.Commands.user_information) { }
+        /// <summary>
+        /// Список разрешений пользователю на операции над объектами системы
+        /// </summary>
+        [JsonProperty(PropertyName = "permissions", Required = Required.Always)]
+        public List<ResponseUserPermissionClass> Permissions { get; set; }
+
+        public ResponseUserInformationClass() : base(Enums.Commands.user_information)
+        {
+            Permissions = new List<ResponseUserPermissionClass>();
+        }
     }
 }

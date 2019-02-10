@@ -6,7 +6,7 @@ namespace ServerLib.JTypes.Client
     /// <summary>
     /// Запрос создания пользователя
     /// </summary>
-    public class RequestUserAddClass : RequestBaseRequestClass
+    public class RequestUserAddClass : RequestBaseClass
     {
         /// <summary>
         /// Логин

@@ -3,7 +3,7 @@
     /// <summary>
     /// Запрос списка должностей пользователей
     /// </summary>
-    public class RequestJobsClass : RequestBaseRequestClass
+    public class RequestJobsClass : RequestBaseClass
     {
         public RequestJobsClass() : base(Enums.Commands.jobs) { }
     }
