@@ -92,6 +92,7 @@ namespace bcsapp.Controls
             window.Title = title;
             window.WindowStyle = WindowStyle.ToolWindow;
             window.ShowInTaskbar = false;
+            window.Owner = currentWindow;
             window.Content = viewModel;
             window.SizeToContent = SizeToContent.WidthAndHeight;
             window.ShowDialog();

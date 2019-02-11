@@ -79,9 +79,9 @@ namespace bcsapp.ViewModels
             UserName = user.FirstName;
             UserMiddleName = user.MidleName;
             ActiveCheck = (user.Active == ServerLib.JTypes.Enums.UserActive.activated);
-            if (observableJobsClass.Where(x => x.ID == user.ID).Count<ResponseJobClass>()>0)
+            if (observableJobsClass.Where(x => x.ID == user.JobID).Count<ResponseJobClass>()>0)
             {
-                SelectedJob = observableJobsClass.Where(x => x.ID == user.ID).Last<ResponseJobClass>();
+                SelectedJob = observableJobsClass.Where(x => x.ID == user.JobID).First<ResponseJobClass>();
             }
             Notify("SelectedJob");
             EditAddButton = "Изменить";
