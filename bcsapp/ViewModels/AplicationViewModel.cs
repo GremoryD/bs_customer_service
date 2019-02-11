@@ -141,6 +141,7 @@ namespace bcsapp.ViewModels
             Notify("UserUnusedRoles");
             Notify("SelectedUserClass");
 
+
             if (UserUnusedRoles.Count == 0)
             {
                 AddRoleToUserButtonEnable = false;
@@ -183,6 +184,32 @@ namespace bcsapp.ViewModels
                      UserUsedRoles.Remove(obj);
                      Notify("UserUnusedRoles");
                      Notify("UserUsedRoles");
+
+
+                     if (UserUnusedRoles.Count == 0)
+                     {
+                         AddRoleToUserButtonEnable = false;
+                         Notify("AddRoleToUserButtonEnable");
+                     }
+                     else
+                     {
+                         AddRoleToUserButtonEnable = true;
+                         Notify("AddRoleToUserButtonEnable");
+                     }
+
+
+                     if (UserUsedRoles.Count == 0)
+                     {
+                         RemoveRoleToUserButtonEnable = false;
+                         Notify("RemoveRoleToUserButtonEnable");
+                     }
+                     else
+                     {
+                         RemoveRoleToUserButtonEnable = true;
+                         Notify("RemoveRoleToUserButtonEnable");
+                     }
+
+
                  });
              }), new Action(() => isDone = false)));
 
@@ -207,6 +234,31 @@ namespace bcsapp.ViewModels
                      UserUsedRoles.Add(obj);
                      Notify("UserUnusedRoles");
                      Notify("UserUsedRoles");
+
+
+                     if (UserUnusedRoles.Count == 0)
+                     {
+                         AddRoleToUserButtonEnable = false;
+                         Notify("AddRoleToUserButtonEnable");
+                     }
+                     else
+                     {
+                         AddRoleToUserButtonEnable = true;
+                         Notify("AddRoleToUserButtonEnable");
+                     }
+
+
+                     if (UserUsedRoles.Count == 0)
+                     {
+                         RemoveRoleToUserButtonEnable = false;
+                         Notify("RemoveRoleToUserButtonEnable");
+                     }
+                     else
+                     {
+                         RemoveRoleToUserButtonEnable = true;
+                         Notify("RemoveRoleToUserButtonEnable");
+                     }
+
                  });
              }), new Action(() => isDone = false))); ;
 
