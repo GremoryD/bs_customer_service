@@ -32,38 +32,20 @@ namespace bcsapp
          
 
         private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            SendObject(new ServerLib.JTypes.Client.RequestLoginClass()
-            { 
-                UserName = "admin",
-                Password = "123456"
-            });
+        { 
         }
 
         public void SendObject(object AObject)
-        { 
-            WebSocketController.Instance.OutputQueueAddObject(AObject);
+        {  
         }
 
         private void LoginError_Click(object sender, RoutedEventArgs e)
-        {
-            SendObject(new ServerLib.JTypes.Client.RequestLoginClass()
-            {
-
-                UserName = "32123",
-                Password = "123456"
-            });
+        { 
         }
          
 
         private void LoginBan_Click(object sender, RoutedEventArgs e)
-        {
-            SendObject(new ServerLib.JTypes.Client.RequestLoginClass()
-            {
-
-                UserName = "TestBan",
-                Password = "123456"
-            });
+        { 
 
         }
     }

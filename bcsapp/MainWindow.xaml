@@ -9,17 +9,10 @@
         x:Class="bcsapp.MainWindow"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
-        Title="Customer Service" x:Name="MainWIndowClient" Closed="Window_Closed" Loaded="Window_Loaded" MinHeight="400" MinWidth="200" >
-    <Grid>
-        <Button x:Name="Login" Content="Login" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" Height="28"/>
-        <Button x:Name="LoginError" Content="Login Error" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Width="75" Height="29" Click="LoginError_Click"/>
-
-        <ContentPresenter Margin="106,0,0.6,0">
+        Title="Customer Service" x:Name="MainWIndowClient" Closed="Window_Closed" Loaded="Window_Loaded" MinHeight="400" MinWidth="200" ResizeMode="NoResize" >
+      <ContentPresenter Margin="0,0,0,0">
             <ContentPresenter.Content>
                 <vm:LoginViewModel/>
             </ContentPresenter.Content>
-        </ContentPresenter>
-        <Button x:Name="LoginBan" Content="Ban Error" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top" Width="75" Height="29" Click="LoginBan_Click"  />
-
-    </Grid>
+        </ContentPresenter> 
 </Window>
