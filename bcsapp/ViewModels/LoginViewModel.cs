@@ -68,18 +68,14 @@ namespace bcsapp.ViewModels
 
 
         public void SendObject(object AObject)
-        { 
-            Output = string.Format("{0}Send: {1}\n\r", Output, JsonConvert.SerializeObject(AObject));
-            Notify("Output"); 
+        {  
             WebSocketController.Instance.OutputQueueAddObject(AObject);
         }
 
         private void LoginDone(ResponseLoginClass AObject)
         {
             var id = System.Threading.Thread.CurrentThread.ManagedThreadId;
-            ClearMessage();
-            Output = string.Format("{0}Get: {1}\n\r", Output, JsonConvert.SerializeObject(AObject));
-            Notify("Output");
+            ClearMessage(); 
             if (AObject.Active == ServerLib.JTypes.Enums.UserActive.blocked)
             {
                 BlockMessage("Пользователь заблокирован");

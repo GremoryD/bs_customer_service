@@ -60,6 +60,15 @@ namespace bcsapp.Controls
 
         public void Navigate(IViewModel model)
         {
+            if (model is LoginViewModel)
+            {
+                currentWindow.ResizeMode = ResizeMode.NoResize;
+            }
+            else
+            {
+                currentWindow.ResizeMode = ResizeMode.CanResize;
+            } 
+
             Application.Current.Dispatcher.Invoke(() =>
             {
                 currentWindow.Visibility = Visibility.Collapsed;
