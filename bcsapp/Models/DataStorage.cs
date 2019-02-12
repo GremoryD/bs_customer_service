@@ -12,6 +12,7 @@ namespace bcsapp.Models
         private static DataStorage s_instance;
         public static DataStorage Instance { get { if (s_instance == null) { s_instance = new DataStorage(); } return s_instance; } }
 
+        public ServerLib.JTypes.Client.RequestLoginClass LoginIN { set; get; }
         public ResponseLoginClass Login { set; get; }
         public ResponseUserInformationClass UserInformation { set; get; }
         public List<ResponseUserClass> UserList { set; get; } = new List<ResponseUserClass>();

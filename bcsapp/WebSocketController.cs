@@ -83,7 +83,7 @@ namespace bcsapp
         {
             IsStarting = false;
             WebSocketClient.Close();
-        }
+        } 
 
         /// <summary>
         /// Поток подключения к WebSocket-серверу
@@ -139,7 +139,7 @@ namespace bcsapp
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.user_information:
                                     UserInformationHandler(InputMessage);//"{\"first_name\":\"Super\",\"last_name\":\"Puper\",\"midle_name\":\"Admin\",\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"command\":\"user_information\",\"state\":\"ok\"}"
-                                    break;
+                                    break;                               //"{\"first_name\":\"Super\",\"last_name\":\"Puper\",\"midle_name\":\"Admin\",\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"command\":\"user_information\",\"state\":\"ok\"}"
                                 case ServerLib.JTypes.Enums.Commands.users:
                                     UsersListHandler(InputMessage);//"{\"users\":[{\"login\":\"admin\",\"first_name\":\"Super\",\"last_name\":\"Puper\",\"midle_name\":\"Admin\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"id\":1,\"command\":\"add\"},{\"login\":\"Тест\",\"first_name\":\"Тест\",\"last_name\":\"Тест\",\"midle_name\":\"Тест\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"id\":4,\"command\":\"add\"},{\"login\":\"new1\",\"first_name\":\"Новый\",\"last_name\":\"Пользователь\",\"midle_name\":\"ТЕСТ\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"id\":3,\"command\":\"add\"},{\"login\":\"TestBan\",\"first_name\":\"Заблокированный\",\"last_name\":\"Пользователь\",\"midle_name\":\"ТЕСТ\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"id\":2,\"command\":\"add\"}],\"command\":\"users\",\"state\":\"ok\"}"
                                     break;
@@ -231,14 +231,30 @@ namespace bcsapp
         /// <summary>
         /// Поток передачи данных из выходной очереди в WebSocket-соединение
         /// </summary>
+        private bool ReconectState=false;
         private void OutputQueueProcessingThread()
         {
             while (IsStarting)
             {
                 if (WebSocketClient.ReadyState == WebSocketState.Closed)
-                { ServerErr?.Invoke(this, "Отсутствует подключение к серверу"); ConnectedState?.Invoke(this, "Отсутствует подключение"); }
+                {
+                    ServerErr?.Invoke(this, "Отсутствует подключение к серверу");
+                    ConnectedState?.Invoke(this, "Отсутствует подключение");
+                    ReconectState = true;
+                }
 
-                if (WebSocketClient.ReadyState == WebSocketState.Open) ConnectedState?.Invoke(this, "Соеденено");
+                if (WebSocketClient.ReadyState == WebSocketState.Open)
+                { 
+                    ConnectedState?.Invoke(this, "Соеденено"); ReconectState = false;
+                }  
+                if(OutputQueue.IsEmpty && ReconectState)
+                {
+                    ReconectToken(); ReconectState = false;
+                    Thread.Sleep(3000);
+                }
+
+
+
                 if (OutputQueue.TryDequeue(out string Message))
                 {
                     try
@@ -254,6 +270,13 @@ namespace bcsapp
                 Thread.Sleep(1);
             }
         }
+
+
+        private void ReconectToken()
+        { 
+           OutputQueueAddObject(Models.DataStorage.Instance.LoginIN); 
+        }
+
 
         #region События 
 

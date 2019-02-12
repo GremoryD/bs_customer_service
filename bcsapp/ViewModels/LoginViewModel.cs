@@ -59,22 +59,18 @@ namespace bcsapp.ViewModels
         
         private void LoginF()
         {
-            SendObject(new  RequestLoginClass()
+            Models.DataStorage.Instance.LoginIN = new RequestLoginClass()
             {
                 UserName = LoginInput,
                 Password = PasswordInput
-            });
-        }
+            }; 
+            WebSocketController.Instance.OutputQueueAddObject(Models.DataStorage.Instance.LoginIN);
 
-
-        public void SendObject(object AObject)
-        {  
-            WebSocketController.Instance.OutputQueueAddObject(AObject);
         }
+         
 
         private void LoginDone(ResponseLoginClass AObject)
-        {
-            var id = System.Threading.Thread.CurrentThread.ManagedThreadId;
+        { 
             ClearMessage(); 
             if (AObject.Active == ServerLib.JTypes.Enums.UserActive.blocked)
             {
