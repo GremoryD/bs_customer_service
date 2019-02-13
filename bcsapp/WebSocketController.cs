@@ -60,9 +60,23 @@ namespace bcsapp
             Project = new ProjectClass("BCSApp");
             WebSocketClient = new WebSocket(string.Format("ws://{0}:{1}/", Project.Settings.WebSocketServerAddress, Project.Settings.WebSocketServerPort));
             WebSocketClient.OnMessage += OnWebSocketMessage;
+            WebSocketClient.OnOpen += OnOpen;
             ConnectToWebSocketServerThread = new Thread(ConnectToWebSocketServer);
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
             OutputQueueProcessing = new Thread(OutputQueueProcessingThread);
+        }
+         
+        private void OnOpen(object sender, EventArgs e)
+        {
+            if (DataStorage.Instance.LoginIN!=null)
+            {
+                ReconectToken();  
+            }
+        }
+
+        private void ReconectToken()
+        {
+            OutputQueueAddObject(DataStorage.Instance.LoginIN);
         }
 
         /// <summary>
@@ -139,7 +153,7 @@ namespace bcsapp
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.user_information:
                                     UserInformationHandler(InputMessage);//"{\"first_name\":\"Super\",\"last_name\":\"Puper\",\"midle_name\":\"Admin\",\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"command\":\"user_information\",\"state\":\"ok\"}"
-                                    break;                               //"{\"first_name\":\"Super\",\"last_name\":\"Puper\",\"midle_name\":\"Admin\",\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"command\":\"user_information\",\"state\":\"ok\"}"
+                                    break;                             
                                 case ServerLib.JTypes.Enums.Commands.users:
                                     UsersListHandler(InputMessage);//"{\"users\":[{\"login\":\"admin\",\"first_name\":\"Super\",\"last_name\":\"Puper\",\"midle_name\":\"Admin\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"id\":1,\"command\":\"add\"},{\"login\":\"Тест\",\"first_name\":\"Тест\",\"last_name\":\"Тест\",\"midle_name\":\"Тест\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"id\":4,\"command\":\"add\"},{\"login\":\"new1\",\"first_name\":\"Новый\",\"last_name\":\"Пользователь\",\"midle_name\":\"ТЕСТ\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"id\":3,\"command\":\"add\"},{\"login\":\"TestBan\",\"first_name\":\"Заблокированный\",\"last_name\":\"Пользователь\",\"midle_name\":\"ТЕСТ\",\"job_id\":1,\"job_name\":\"Главный администратор\",\"active\":\"activated\",\"id\":2,\"command\":\"add\"}],\"command\":\"users\",\"state\":\"ok\"}"
                                     break;
@@ -231,7 +245,6 @@ namespace bcsapp
         /// <summary>
         /// Поток передачи данных из выходной очереди в WebSocket-соединение
         /// </summary>
-        private bool ReconectState=false;
         private void OutputQueueProcessingThread()
         {
             while (IsStarting)
@@ -240,18 +253,12 @@ namespace bcsapp
                 {
                     ServerErr?.Invoke(this, "Отсутствует подключение к серверу");
                     ConnectedState?.Invoke(this, "Отсутствует подключение");
-                    ReconectState = true;
                 }
 
                 if (WebSocketClient.ReadyState == WebSocketState.Open)
                 { 
-                    ConnectedState?.Invoke(this, "Соеденено"); ReconectState = false;
+                    ConnectedState?.Invoke(this, "Соеденено");
                 }  
-                if(OutputQueue.IsEmpty && ReconectState)
-                {
-                    ReconectToken(); ReconectState = false;
-                    Thread.Sleep(3000);
-                }
 
 
 
@@ -270,12 +277,8 @@ namespace bcsapp
                 Thread.Sleep(1);
             }
         }
+         
 
-
-        private void ReconectToken()
-        { 
-           OutputQueueAddObject(Models.DataStorage.Instance.LoginIN); 
-        }
 
 
         #region События 
@@ -362,7 +365,7 @@ namespace bcsapp
         //функции для работы с професиями
         private void JobssListHandler(string InputMessage)
         {
-            if (DataStorage.Instance.JobList != null)
+            if (DataStorage.Instance.JobList.Count == 0)
             {
                 DataStorage.Instance.JobList = JsonConvert.DeserializeObject<ResponseJobsClass>(InputMessage).Jobs;
 

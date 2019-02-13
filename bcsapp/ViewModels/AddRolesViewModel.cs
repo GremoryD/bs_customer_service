@@ -47,8 +47,8 @@ namespace bcsapp.ViewModels
                 Name = RoleName,
                 Description = RoleDescription
             },
-            new Action(() => isDone = true), new Action(() => isDone = false))); 
-
+            new Action(() => isDone = true), new Action(() => isDone = false)));
+            Cancel();
         }
 
         public AddRolesViewModel(ResponseRoleClass roleClass)
@@ -71,8 +71,8 @@ namespace bcsapp.ViewModels
                 ID = roleID,
                 Description = RoleDescription
             },
-            new Action(() => isDone = true), new Action(() => isDone = false))); 
-
+            new Action(() => isDone = true), new Action(() => isDone = false)));
+            Cancel();
         }
 
 
