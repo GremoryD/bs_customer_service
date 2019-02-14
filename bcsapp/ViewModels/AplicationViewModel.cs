@@ -92,6 +92,8 @@ namespace bcsapp.ViewModels
             AddButtonCommand = new SimpleCommand(AddButton);
             EditButtonCommad = new SimpleCommand(EditButton);
             DeleteButtonCommand = new SimpleCommand(DeleteButton);
+            UnBlockButtonCommand = new SimpleCommand(UnBlockUser);
+            BlockCommand = new SimpleCommand(BlockUser);
 
             UserSelectedItemChangedCommand = new SimpleCommand(UpdateRoles);
             AddRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(AddRoleToUser);
@@ -102,6 +104,7 @@ namespace bcsapp.ViewModels
             WebSocketController.Instance.UpdateUsers += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUsers(__));
             WebSocketController.Instance.UpdateJobs += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateJobs(__));
             WebSocketController.Instance.UpdateRoles += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateRoles(__));
+            WebSocketController.Instance.UpdateUserRoles += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUserRoles(__));
 
             Task.Run(() =>
             {
@@ -119,6 +122,10 @@ namespace bcsapp.ViewModels
             {
                 OnInitDone?.Invoke(this, EventArgs.Empty);
             });
+        }
+
+        private void Instance_UpdateUserRoles(string e)
+        { 
         }
 
         private void PasswordChange()
@@ -167,28 +174,11 @@ namespace bcsapp.ViewModels
                      Notify("UserUsedRoles");
 
 
-                     if (UserUnusedRoles.Count == 0)
-                     {
-                         AddRoleToUserButtonEnable = false;
-                         Notify("AddRoleToUserButtonEnable");
-                     }
-                     else
-                     {
-                         AddRoleToUserButtonEnable = true;
-                         Notify("AddRoleToUserButtonEnable");
-                     }
+                     AddRoleToUserButtonEnable = UserUnusedRoles.Count > 0;
+                     Notify("AddRoleToUserButtonEnable");
 
-
-                     if (UserUsedRoles.Count == 0)
-                     {
-                         RemoveRoleToUserButtonEnable = false;
-                         Notify("RemoveRoleToUserButtonEnable");
-                     }
-                     else
-                     {
-                         RemoveRoleToUserButtonEnable = true;
-                         Notify("RemoveRoleToUserButtonEnable");
-                     }
+                     RemoveRoleToUserButtonEnable = UserUsedRoles.Count > 0;
+                     Notify("RemoveRoleToUserButtonEnable");
 
 
                  });
@@ -214,31 +204,13 @@ namespace bcsapp.ViewModels
                      UserUnusedRoles.Remove(obj);
                      UserUsedRoles.Add(obj);
                      Notify("UserUnusedRoles");
-                     Notify("UserUsedRoles");
+                     Notify("UserUsedRoles"); 
 
+                     AddRoleToUserButtonEnable = UserUnusedRoles.Count > 0;
+                     Notify("AddRoleToUserButtonEnable");
 
-                     if (UserUnusedRoles.Count == 0)
-                     {
-                         AddRoleToUserButtonEnable = false;
-                         Notify("AddRoleToUserButtonEnable");
-                     }
-                     else
-                     {
-                         AddRoleToUserButtonEnable = true;
-                         Notify("AddRoleToUserButtonEnable");
-                     }
-
-
-                     if (UserUsedRoles.Count == 0)
-                     {
-                         RemoveRoleToUserButtonEnable = false;
-                         Notify("RemoveRoleToUserButtonEnable");
-                     }
-                     else
-                     {
-                         RemoveRoleToUserButtonEnable = true;
-                         Notify("RemoveRoleToUserButtonEnable");
-                     }
+                     RemoveRoleToUserButtonEnable = UserUsedRoles.Count > 0;
+                     Notify("RemoveRoleToUserButtonEnable");
 
                  });
              }), new Action(() => isDone = false))); ;
@@ -276,7 +248,7 @@ namespace bcsapp.ViewModels
             if (RolesGridShow && SelectedRoleClass != null)
             {
                 if (System.Windows.MessageBox.Show("Удалить роль " + SelectedRoleClass.Name + "?", "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
-                {
+                { 
 
                 }
                 else
@@ -323,6 +295,39 @@ namespace bcsapp.ViewModels
         }
 
 
+        private void BlockUser()
+        {
+            bool isDone;
+            TransactionService.EditUser(new Transaction(new ServerLib.JTypes.Client.RequestUserEditClass()
+            {
+                ID = SelectedUserClass.ID,
+                FirstName = SelectedUserClass.FirstName,
+                LastName = SelectedUserClass.LastName,
+                MidleName = SelectedUserClass.MidleName,
+                JobID = SelectedUserClass.JobID,
+                Active = ServerLib.JTypes.Enums.UserActive.blocked,
+                Token = DataStorage.Instance.Login.Token
+            },
+            new Action(() => isDone = true), new Action(() => isDone = false))); 
+
+        }
+
+        private void UnBlockUser()
+        {
+            bool isDone;
+            TransactionService.EditUser(new Transaction(new ServerLib.JTypes.Client.RequestUserEditClass()
+            {
+                ID = SelectedUserClass.ID,
+                FirstName = SelectedUserClass.FirstName,
+                LastName = SelectedUserClass.LastName,
+                MidleName = SelectedUserClass.MidleName,
+                JobID = SelectedUserClass.JobID,
+                Active = ServerLib.JTypes.Enums.UserActive.activated,
+                Token = DataStorage.Instance.Login.Token
+            },
+            new Action(() => isDone = true), new Action(() => isDone = false)));
+        }
+
         #endregion
 
         //обновление данных в таблицах
@@ -338,16 +343,24 @@ namespace bcsapp.ViewModels
         }
         private void Instance_UpdateJobs(String data)
         {
+            int temp = observableJobsClass.IndexOf(SelectedJobsClass);
             observableJobsClass = new ObservableCollection<ResponseJobClass>(DataStorage.Instance.JobList);
             Notify("observableJobsClass");
+            if (temp > 0)
+                SelectedJobsClass = observableJobsClass[temp];
+            Notify("SelectedJobsClass");
         }
 
         private void Instance_UpdateRoles(String data)
         {
+            int temp = observableRolesClass.IndexOf(SelectedRoleClass);
             observableRolesClass = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList);
             Notify("observableRolesClass");
+            if (temp > 0)
+                SelectedRoleClass = observableRolesClass[temp];
+            Notify("SelectedRoleClass");
 
-            UpdateRoles();
+            UpdateRoles(); 
         }
         #region Left Menu Functions 
         //Функции кнопок левого меню

@@ -110,7 +110,7 @@
                                     <TextBlock Grid.Column="0" Grid.Row="0" Margin="10,3,10,3" Padding="0" Text="Доступние роли пользователя:" VerticalAlignment="Top"/>
                                     <TextBlock Grid.Column="2" Grid.Row="0" Margin="10,3,10,3" Padding="0"   Text="{Binding StringFormat=Роли пользователя {0}: ,Path=SelectedUserClass.Login}" VerticalAlignment="Top"/>
 
-                                    <dxg:GridControl Margin="0,0,0,0" Grid.Column="0" Grid.Row="1"  HorizontalAlignment="Stretch" ItemsSource="{Binding UserUnusedRoles}"  AutoGenerateColumns="AddNew"  x:Name="AllRoles" >
+                                    <dxg:GridControl Margin="0,0,0,0" Grid.Column="0" Grid.Row="1" AllowInitiallyFocusedRow="False"  HorizontalAlignment="Stretch" ItemsSource="{Binding UserUnusedRoles}"  AutoGenerateColumns="AddNew"  x:Name="AllRoles" >
                                         <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
                                         <dxg:GridColumn FieldName="Name" Header="Наименование" HorizontalHeaderContentAlignment="Center"  Visible="True"/>
                                         <dxg:GridColumn FieldName="Description" Header="Описание"  HorizontalHeaderContentAlignment="Center"  Visible="False"/>
@@ -118,7 +118,7 @@
                                         <dxg:GridColumn FieldName="Hash" Visible="False"/>
                                         <dxg:GridColumn FieldName="Builder" Visible="False"/>
                                         <dxg:GridControl.View>
-                                            <dxg:TableView ShowGroupedColumns="True"   CellStyle="{x:Null}" ShowGroupPanel="False" ShowTotalSummary="False" NavigationStyle="Row"  ShowAutoFilterRow="False" AllowEditing="False" AutoWidth="True"> 
+                                            <dxg:TableView ShowGroupedColumns="True"  ShowGroupPanel="False" ShowTotalSummary="False" NavigationStyle="Row"  AllowEditing="False"  ShowAutoFilterRow="False" AutoWidth="True">
                                             </dxg:TableView> 
                                         </dxg:GridControl.View>
                                     </dxg:GridControl> 
@@ -140,7 +140,7 @@
                                             </Button.Content>
                                         </Button>
                                     </Grid>
-                                    <dxg:GridControl Margin="0,0,0,0"  Grid.Column="2" Grid.Row="1"  HorizontalAlignment="Stretch" ItemsSource="{Binding UserUsedRoles}"  AutoGenerateColumns="AddNew" x:Name="UserRoles" >
+                                    <dxg:GridControl Margin="0,0,0,0"  Grid.Column="2" Grid.Row="1" AllowInitiallyFocusedRow="False" HorizontalAlignment="Stretch" ItemsSource="{Binding UserUsedRoles}"  AutoGenerateColumns="AddNew" x:Name="UserRoles" >
                                         <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
                                         <dxg:GridColumn FieldName="Name" Header="Наименование"   HorizontalHeaderContentAlignment="Center"  Visible="True"/>
                                         <dxg:GridColumn FieldName="Description" Header="Описание"  HorizontalHeaderContentAlignment="Center"  Visible="False"/>
@@ -157,9 +157,9 @@
                         </TabItem>
                         <TabItem   Visibility="Collapsed"  IsSelected="{Binding JobsGridShow}" >
                             <Grid>
-                                <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableJobsClass}"   AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedJobsClass, Mode=TwoWay}">
-                                    <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
-                                    <dxg:GridColumn FieldName="Name" Header="Наименование" Visible="True"/>
+                                <dxg:GridControl HorizontalAlignment="Stretch" ItemsSource="{Binding observableJobsClass}" AllowInitiallyFocusedRow="False"   AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedJobsClass, Mode=TwoWay}">
+                                    <dxg:GridColumn FieldName="ID" Header="№"   HorizontalHeaderContentAlignment="Center"   Visible="False"/>
+                                    <dxg:GridColumn FieldName="Name" Header="Наименование"   HorizontalHeaderContentAlignment="Center"   Visible="True"/>
                                     <dxg:GridColumn FieldName="Command" Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
                                     <dxg:GridColumn FieldName="Builder" Visible="False"/>
@@ -176,10 +176,10 @@
                                     <ColumnDefinition Width="5"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <dxg:GridControl Grid.Column="0" HorizontalAlignment="Stretch" ItemsSource="{Binding observableRolesClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedRoleClass, Mode=TwoWay}">
+                                <dxg:GridControl Grid.Column="0" AllowInitiallyFocusedRow="False"  HorizontalAlignment="Stretch" ItemsSource="{Binding observableRolesClass}"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedRoleClass, Mode=TwoWay}">
                                     <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
-                                    <dxg:GridColumn FieldName="Name" Header="Наименование" Visible="True"/>
-                                    <dxg:GridColumn FieldName="Description" Header="Описание"  Visible="True"/>
+                                    <dxg:GridColumn FieldName="Name" Header="Наименование"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
+                                    <dxg:GridColumn FieldName="Description" Header="Описание"    HorizontalHeaderContentAlignment="Center"  Visible="True"/>
                                     <dxg:GridColumn FieldName="Command" Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
                                     <dxg:GridColumn FieldName="Builder" Visible="False"/>
@@ -188,7 +188,13 @@
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
                                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="5" ResizeDirection="Columns"></GridSplitter>
-                                <dxg:GridControl Grid.Column="2" HorizontalAlignment="Stretch" ItemsSource="{Binding accessRolesData}"  AutoGenerateColumns="AddNew"  >
+                                <dxg:GridControl Grid.Column="2" AllowInitiallyFocusedRow="False"   HorizontalAlignment="Stretch" ItemsSource="{Binding accessRolesData}"  AutoGenerateColumns="AddNew"  >
+                                    <dxg:GridColumn FieldName="Name" Header="Наименование"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
+                                    <dxg:GridColumn FieldName="Read" Header="Чтение"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
+                                    <dxg:GridColumn FieldName="Create" Header="Создание"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
+                                    <dxg:GridColumn FieldName="Edit" Header="Запись"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
+                                    <dxg:GridColumn FieldName="Delete" Header="Удаление"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
+                                    <dxg:GridColumn FieldName="Description" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
                                     <dxg:GridControl.View>
                                         <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="False" AutoWidth="True"/>
                                     </dxg:GridControl.View>

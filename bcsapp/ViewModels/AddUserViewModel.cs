@@ -107,12 +107,11 @@ namespace bcsapp.ViewModels
                 FirstName = UserName,
                 LastName = UserSurname,
                 MidleName = UserMiddleName,
-                Active = ActiveCheck?ServerLib.JTypes.Enums.UserActive.activated:ServerLib.JTypes.Enums.UserActive.blocked,
+                Active = ActiveCheck ? ServerLib.JTypes.Enums.UserActive.activated : ServerLib.JTypes.Enums.UserActive.blocked,
                 JobID = SelectedJob != null ? SelectedJob.ID : 1,
                 Token = DataStorage.Instance.Login.Token
             },
             new Action(() => isDone = true), new Action(() => isDone = false))); 
-            Cancel();
         }
 
 
