@@ -81,7 +81,9 @@
                                     <dxg:GridColumn FieldName="JobID" Visible="False"/>
                                     <dxg:GridColumn FieldName="Command" Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
-                                     
+                                    <dxg:GridColumn FieldName="Builder" Visible="False"/>
+
+
                                     <dxmvvm:Interaction.Behaviors>
                                         <dxmvvm:EventToCommand EventName="Loaded" Command="{Binding InitDoneCommand}" />
                                         <dxmvvm:EventToCommand EventName="SelectedItemChanged" Command="{Binding UserSelectedItemChangedCommand}" />
@@ -114,6 +116,7 @@
                                         <dxg:GridColumn FieldName="Description" Header="Описание"  HorizontalHeaderContentAlignment="Center"  Visible="False"/>
                                         <dxg:GridColumn FieldName="Command" Visible="False"/>
                                         <dxg:GridColumn FieldName="Hash" Visible="False"/>
+                                        <dxg:GridColumn FieldName="Builder" Visible="False"/>
                                         <dxg:GridControl.View>
                                             <dxg:TableView ShowGroupedColumns="True"   CellStyle="{x:Null}" ShowGroupPanel="False" ShowTotalSummary="False" NavigationStyle="Row"  ShowAutoFilterRow="False" AllowEditing="False" AutoWidth="True"> 
                                             </dxg:TableView> 
@@ -143,6 +146,7 @@
                                         <dxg:GridColumn FieldName="Description" Header="Описание"  HorizontalHeaderContentAlignment="Center"  Visible="False"/>
                                         <dxg:GridColumn FieldName="Command" Visible="False"/>
                                         <dxg:GridColumn FieldName="Hash" Visible="False"/>
+                                        <dxg:GridColumn FieldName="Builder" Visible="False"/>
                                         <dxg:GridControl.View>
                                             <dxg:TableView ShowGroupedColumns="True"  ShowGroupPanel="False" ShowTotalSummary="False" NavigationStyle="Row"  AllowEditing="False"  ShowAutoFilterRow="False" AutoWidth="True">
                                             </dxg:TableView>
@@ -158,6 +162,7 @@
                                     <dxg:GridColumn FieldName="Name" Header="Наименование" Visible="True"/>
                                     <dxg:GridColumn FieldName="Command" Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
+                                    <dxg:GridColumn FieldName="Builder" Visible="False"/>
                                     <dxg:GridControl.View>
                                         <dxg:TableView ShowGroupedColumns="True"  NavigationStyle="Row" ShowAutoFilterRow="True" AllowEditing="False" AutoWidth="True"/>
                                     </dxg:GridControl.View>
@@ -177,6 +182,7 @@
                                     <dxg:GridColumn FieldName="Description" Header="Описание"  Visible="True"/>
                                     <dxg:GridColumn FieldName="Command" Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Visible="False"/>
+                                    <dxg:GridColumn FieldName="Builder" Visible="False"/>
                                     <dxg:GridControl.View>
                                         <dxg:TableView ShowGroupedColumns="True"  NavigationStyle="Row" ShowAutoFilterRow="True"  AllowEditing="False" AutoWidth="True"/>
                                     </dxg:GridControl.View>
