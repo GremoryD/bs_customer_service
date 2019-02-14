@@ -60,6 +60,7 @@ namespace bcsapp.Controls
 
         public void Navigate(IViewModel model)
         {
+
             if (model is LoginViewModel)
             {
                 currentWindow.ResizeMode = ResizeMode.NoResize;

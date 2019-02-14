@@ -23,8 +23,8 @@ namespace bcsapp.ViewModels
         public String UserName { set; get; }
         public String UserMiddleName { set; get; }
         public String EditAddButton { set; get; }
-        public bool ActiveCheck { set; get; } = true;
-        public bool PasswordEnable { set; get; } = true;
+        public bool ActiveCheck { set; get; }
+        public bool PasswordEnable { set; get; }
         public bool CanSave { set; get; }
 
         public bool UserLoginShow { set; get; }
@@ -79,6 +79,7 @@ namespace bcsapp.ViewModels
             UserName = user.FirstName;
             UserMiddleName = user.MidleName;
             ActiveCheck = (user.Active == ServerLib.JTypes.Enums.UserActive.activated);
+            Notify("ActiveCheck");
             if (observableJobsClass.Where(x => x.ID == user.JobID).Count<ResponseJobClass>()>0)
             {
                 SelectedJob = observableJobsClass.Where(x => x.ID == user.JobID).First<ResponseJobClass>();

@@ -46,14 +46,37 @@ namespace bcsapp.ViewModels
                 return LoginInput.Length >= 1 && PasswordInput.Length >=1;
             });
 
-            WebSocketController.Instance.LoginFailed += (_, __) => Application.Current.Dispatcher.Invoke(() => ErrorMessage(__)); 
-            WebSocketController.Instance.LoginDone += (_, __) => Application.Current.Dispatcher.Invoke(() => LoginDone(__));
-            WebSocketController.Instance.ServerErr += (_, __) => Application.Current.Dispatcher.Invoke(() => ErrorMessage(__));
+            WebSocketController.Instance.LoginFailed += OnLoginFailed;
+            WebSocketController.Instance.LoginDone += OnLoginDone;
+            WebSocketController.Instance.ServerErr += OnErrorMessage;
+        }
+
+        private void OnErrorMessage(object sender, string e)
+        {
+            Application.Current.Dispatcher.Invoke(() => ErrorMessage(e));
+        }
+
+        private void OnLoginDone(object sender, ResponseLoginClass e)
+        {
+            Application.Current.Dispatcher.Invoke(() => LoginDone(e));
+        }
+
+        private void OnLoginFailed(object sender, string e)
+        {
+            Application.Current.Dispatcher.Invoke(() => ErrorMessage(e));
         }
 
         private void Notify(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void OnSubscribed()
+        {
+
+            WebSocketController.Instance.LoginFailed -= OnLoginFailed;
+            WebSocketController.Instance.LoginDone -= OnLoginDone;
+            WebSocketController.Instance.ServerErr -= OnErrorMessage;
         }
 
         
@@ -78,7 +101,8 @@ namespace bcsapp.ViewModels
             }
             else
             {
-                 NavigationService.Instance.Navigate(new AplicationViewModel()); 
+                OnSubscribed();
+                    NavigationService.Instance.Navigate(new AplicationViewModel());
             }
         }
 

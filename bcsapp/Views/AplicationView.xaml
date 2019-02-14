@@ -48,21 +48,21 @@
 
         </dxr:RibbonStatusBarControl>
 
-        <TabControl HorizontalAlignment="Stretch"  Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2"  Padding="0">
-            <TabItem x:Name="UserTabItem" Visibility="Collapsed" IsSelected="{Binding SelectedUsers, FallbackValue=true}">
-                <Grid Background="#FFE5E5E5">
+        <TabControl HorizontalAlignment="Stretch"  Grid.Column="0" Grid.Row="1"  Grid.ColumnSpan="2"  Padding="0" BorderBrush="{x:Null}">
+            <TabItem x:Name="UserTabItem" Visibility="Collapsed" IsSelected="{Binding SelectedUsers, FallbackValue=true}" BorderBrush="{x:Null}">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <dxa:AccordionControl  Grid.Column="0" Background="White" >
+                    <dxa:AccordionControl  Grid.Column="0" Background="White" BorderBrush="{x:Null}" >
                         <dxa:AccordionItem  Header="Пользователи" Command="{Binding UsersGridCommand}"/>
                         <dxa:AccordionItem  Header="Должности" Command="{Binding JobsGridCommand}"/>
                         <dxa:AccordionItem  Header="Роли"  Command="{Binding RolsGridCommand}"/>
                     </dxa:AccordionControl>
 
-                    <TabControl Grid.Column="1" Margin="0,0,0,0" Padding="0">
-                        <TabItem  Visibility="Collapsed" IsSelected="{Binding UsersGridShow, FallbackValue=true}" >
+                    <TabControl Grid.Column="1" Margin="0,0,0,0" Padding="0" BorderBrush="{x:Null}">
+                        <TabItem  Visibility="Collapsed" IsSelected="{Binding UsersGridShow, FallbackValue=true}" BorderBrush="{x:Null}">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="4*"/>
@@ -110,8 +110,8 @@
 
                                     <dxg:GridControl Margin="0,0,0,0" Grid.Column="0" Grid.Row="1"  HorizontalAlignment="Stretch" ItemsSource="{Binding UserUnusedRoles}"  AutoGenerateColumns="AddNew"  x:Name="AllRoles" >
                                         <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
-                                        <dxg:GridColumn FieldName="Name" Header="Наименование" Visible="True"/>
-                                        <dxg:GridColumn FieldName="Description" Header="Описание"  Visible="False"/>
+                                        <dxg:GridColumn FieldName="Name" Header="Наименование" HorizontalHeaderContentAlignment="Center"  Visible="True"/>
+                                        <dxg:GridColumn FieldName="Description" Header="Описание"  HorizontalHeaderContentAlignment="Center"  Visible="False"/>
                                         <dxg:GridColumn FieldName="Command" Visible="False"/>
                                         <dxg:GridColumn FieldName="Hash" Visible="False"/>
                                         <dxg:GridControl.View>
@@ -139,8 +139,8 @@
                                     </Grid>
                                     <dxg:GridControl Margin="0,0,0,0"  Grid.Column="2" Grid.Row="1"  HorizontalAlignment="Stretch" ItemsSource="{Binding UserUsedRoles}"  AutoGenerateColumns="AddNew" x:Name="UserRoles" >
                                         <dxg:GridColumn FieldName="ID" Header="№" Visible="False"/>
-                                        <dxg:GridColumn FieldName="Name" Header="Наименование" Visible="True"/>
-                                        <dxg:GridColumn FieldName="Description" Header="Описание"  Visible="False"/>
+                                        <dxg:GridColumn FieldName="Name" Header="Наименование"   HorizontalHeaderContentAlignment="Center"  Visible="True"/>
+                                        <dxg:GridColumn FieldName="Description" Header="Описание"  HorizontalHeaderContentAlignment="Center"  Visible="False"/>
                                         <dxg:GridColumn FieldName="Command" Visible="False"/>
                                         <dxg:GridColumn FieldName="Hash" Visible="False"/>
                                         <dxg:GridControl.View>

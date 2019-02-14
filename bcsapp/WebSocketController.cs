@@ -10,6 +10,7 @@ using ServerLib.JTypes.Server;
 using bcsapp.Models;
 using System.Windows;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace bcsapp
 {
@@ -336,6 +337,7 @@ namespace bcsapp
         {
             if (DataStorage.Instance.UserList.Count==0)
             {
+                DataStorage.Instance.UserList.Clear();
                 DataStorage.Instance.UserList = JsonConvert.DeserializeObject<ResponseUsersClass>(InputMessage).Items; 
                
             }
@@ -343,19 +345,25 @@ namespace bcsapp
             { 
                 foreach(ResponseUserClass user in JsonConvert.DeserializeObject<ResponseUsersClass>(InputMessage).Items)
                 {
-                    if (user.Command == ServerLib.JTypes.Enums.ItemCommands.add) DataStorage.Instance.UserList.Add(user);
+                    if (user.Command == ServerLib.JTypes.Enums.ItemCommands.add)
+                    {
+                        var usertmp = DataStorage.Instance.UserList.FirstOrDefault(x => x.ID == user.ID);
+
+                        if (usertmp == null)
+                        {
+                            DataStorage.Instance.UserList.Add(user);
+                        }
+                        else
+                        {
+                            usertmp.Builder.From(user).Update(); 
+                        }
+                    }
                     if (user.Command == ServerLib.JTypes.Enums.ItemCommands.delete) DataStorage.Instance.UserList.Remove(user);
                     if (user.Command == ServerLib.JTypes.Enums.ItemCommands.edit)
                     {
-                        ResponseUserClass temp = DataStorage.Instance.UserList.Find(x => x.ID == user.ID);
-                        int index = DataStorage.Instance.UserList.IndexOf(temp);
-                        DataStorage.Instance.UserList[index].FirstName = user.FirstName;
-                        DataStorage.Instance.UserList[index].MidleName = user.MidleName;
-                        DataStorage.Instance.UserList[index].LastName = user.LastName;
-                        DataStorage.Instance.UserList[index].JobID = user.JobID;
-                        DataStorage.Instance.UserList[index].JobName = user.JobName;
-                        DataStorage.Instance.UserList[index].Login = user.Login;
-                        DataStorage.Instance.UserList[index].Active = user.Active; 
+                        ResponseUserClass usertmp = DataStorage.Instance.UserList.FirstOrDefault(x => x.ID == user.ID);
+
+                        usertmp.Builder.From(user).Update(); 
                     }
                 }
             }
@@ -367,6 +375,7 @@ namespace bcsapp
         {
             if (DataStorage.Instance.JobList.Count == 0)
             {
+                DataStorage.Instance.JobList.Clear();
                 DataStorage.Instance.JobList = JsonConvert.DeserializeObject<ResponseJobsClass>(InputMessage).Jobs;
 
             }
@@ -374,14 +383,26 @@ namespace bcsapp
             {
                 foreach (ResponseJobClass jobs in JsonConvert.DeserializeObject<ResponseJobsClass>(InputMessage).Jobs)
                 {
-                    if (jobs.Command ==  ServerLib.JTypes.Enums.ItemCommands.add ) DataStorage.Instance.JobList.Add(jobs);
+                    if (jobs.Command == ServerLib.JTypes.Enums.ItemCommands.add)
+                    {
+
+                        var jobtmp = DataStorage.Instance.JobList.FirstOrDefault(x => x.ID == jobs.ID);
+
+                        if (jobtmp == null)
+                        {
+                            DataStorage.Instance.JobList.Add(jobs);
+                        }
+                        else
+                        {
+                            jobtmp.Builder.From(jobs).Update();
+                        }
+
+                    }
                     if (jobs.Command == ServerLib.JTypes.Enums.ItemCommands.delete) DataStorage.Instance.JobList.Remove(jobs);
                     if (jobs.Command == ServerLib.JTypes.Enums.ItemCommands.edit)
                     {
-                        ResponseJobClass temp = DataStorage.Instance.JobList.Find(x => x.ID == jobs.ID);
-                        int index = DataStorage.Instance.JobList.IndexOf(temp);
-                        DataStorage.Instance.JobList[index] = jobs; 
-
+                        ResponseJobClass jobtmp = DataStorage.Instance.JobList.FirstOrDefault(x => x.ID == jobs.ID); 
+                        jobtmp.Builder.From(jobs).Update();  
                     }
                 } 
             }
@@ -393,6 +414,7 @@ namespace bcsapp
         {
             if (DataStorage.Instance.RoleList.Count ==  0)
             {
+                DataStorage.Instance.RoleList.Clear();
                 DataStorage.Instance.RoleList = JsonConvert.DeserializeObject<ResponseRolesClass>(InputMessage).Items;
 
             }
@@ -401,13 +423,25 @@ namespace bcsapp
 
                 foreach (ResponseRoleClass role in JsonConvert.DeserializeObject<ResponseRolesClass>(InputMessage).Items)
                 {
-                    if (role.Command == ServerLib.JTypes.Enums.ItemCommands.add) DataStorage.Instance.RoleList.Add(role);
+                    if (role.Command == ServerLib.JTypes.Enums.ItemCommands.add)
+                    {
+
+                        var roltmp = DataStorage.Instance.RoleList.FirstOrDefault(x => x.ID == role.ID);
+
+                        if (roltmp == null)
+                        {
+                            DataStorage.Instance.RoleList.Add(role);
+                        }
+                        else
+                        {
+                            roltmp.Builder.From(role).Update();
+                        }
+                    }
                     if (role.Command == ServerLib.JTypes.Enums.ItemCommands.delete) DataStorage.Instance.RoleList.Remove(role);
                     if (role.Command == ServerLib.JTypes.Enums.ItemCommands.edit)
                     {
-                        ResponseRoleClass temp = DataStorage.Instance.RoleList.Find(x => x.ID == role.ID);
-                        int index = DataStorage.Instance.RoleList.IndexOf(temp);
-                        DataStorage.Instance.RoleList[index] = role; 
+                        ResponseRoleClass jobtmp = DataStorage.Instance.RoleList.FirstOrDefault(x => x.ID == role.ID);
+                        jobtmp.Builder.From(role).Update(); 
 
                     }
 
@@ -422,6 +456,7 @@ namespace bcsapp
         {
             if (DataStorage.Instance.UsersRolesList.Count == 0)
             {
+                DataStorage.Instance.UsersRolesList.Clear();
                 DataStorage.Instance.UsersRolesList = JsonConvert.DeserializeObject<ResponseUsersRolesClass>(InputMessage).Items;
 
             }

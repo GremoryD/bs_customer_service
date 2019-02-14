@@ -83,10 +83,6 @@ namespace bcsapp.ViewModels
 
         public AplicationViewModel()
         {
-            InitDoneCommand = new SimpleCommand(() =>
-            {
-                OnInitDone?.Invoke(this, EventArgs.Empty);
-            });
 
             RibbonCommand = new SimpleCommand<RibbonControl>(UserRibbon);
             UsersGridCommand = new SimpleCommand(OpenUsersGrid);
@@ -97,7 +93,7 @@ namespace bcsapp.ViewModels
             EditButtonCommad = new SimpleCommand(EditButton);
             DeleteButtonCommand = new SimpleCommand(DeleteButton);
 
-            UserSelectedItemChangedCommand = new SimpleCommand(UserSelectedItemChanged);
+            UserSelectedItemChangedCommand = new SimpleCommand(UpdateRoles);
             AddRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(AddRoleToUser);
             RemoveRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(RemoveRoleToUser);
 
@@ -119,6 +115,10 @@ namespace bcsapp.ViewModels
                 WebSocketController.Instance.OutputQueueAddObject(usersRolesClass);
             });
 
+            InitDoneCommand = new SimpleCommand(() =>
+            {
+                OnInitDone?.Invoke(this, EventArgs.Empty);
+            });
         }
 
         private void PasswordChange()
@@ -126,7 +126,7 @@ namespace bcsapp.ViewModels
             NavigationService.Instance.ShowDialogWin(new PasswordChangeViewModel(SelectedUserClass), "Изменить пароль");
         }
 
-        private void UserSelectedItemChanged()
+        private void UpdateRoles()
         {
             UserUsedRoles.Clear();
             foreach (ResponseUserRoleClass userRoleClass in DataStorage.Instance.UsersRolesList)
@@ -141,32 +141,13 @@ namespace bcsapp.ViewModels
             Notify("UserUnusedRoles");
             Notify("SelectedUserClass");
 
+            AddRoleToUserButtonEnable = UserUnusedRoles.Count > 0;
+            Notify("AddRoleToUserButtonEnable");
 
-            if (UserUnusedRoles.Count == 0)
-            {
-                AddRoleToUserButtonEnable = false;
-                Notify("AddRoleToUserButtonEnable");
-            }
-            else
-            {
-                AddRoleToUserButtonEnable = true;
-                Notify("AddRoleToUserButtonEnable");
-            }
-
-
-            if (UserUsedRoles.Count == 0)
-            {
-                RemoveRoleToUserButtonEnable = false;
-                Notify("RemoveRoleToUserButtonEnable");
-            }
-            else
-            {
-                RemoveRoleToUserButtonEnable = true;
-                Notify("RemoveRoleToUserButtonEnable");
-            }
-
+            RemoveRoleToUserButtonEnable = UserUsedRoles.Count > 0;
+            Notify("RemoveRoleToUserButtonEnable");
         }
-         
+
         private void RemoveRoleToUser(ResponseRoleClass obj)
         {
             if (obj == null) return;
@@ -313,15 +294,15 @@ namespace bcsapp.ViewModels
         {
             if (UsersGridShow && SelectedUserClass != null)
             {
-                NavigationService.Instance.ShowDialogWin(new AddUserViewModel(SelectedUserClass), "Редактировать пользователя");
+                NavigationService.Instance.ShowDialogWin(new AddUserViewModel(SelectedUserClass), "Изменение пользователя");
             }
             if (JobsGridShow && SelectedJobsClass != null)
             {
-                NavigationService.Instance.ShowDialogWin(new AddJobsViewModel(SelectedJobsClass), "Новая должность");
+                NavigationService.Instance.ShowDialogWin(new AddJobsViewModel(SelectedJobsClass), "Изменение должность");
             }
             if (RolesGridShow && SelectedRoleClass != null)
             {
-                NavigationService.Instance.ShowDialogWin(new AddRolesViewModel(SelectedRoleClass), "Новая должность");
+                NavigationService.Instance.ShowDialogWin(new AddRolesViewModel(SelectedRoleClass), "Изменение роли");
             }
 
         }
@@ -350,9 +331,10 @@ namespace bcsapp.ViewModels
             int temp = observableUserClass.IndexOf(SelectedUserClass);
             observableUserClass = new ObservableCollection<ResponseUserClass>(DataStorage.Instance.UserList);
             Notify("observableUserClass");
-            if (temp > 0) SelectedUserClass = observableUserClass[temp];
-            Notify("SelectedUserClass");
 
+            if (temp > 0)
+                SelectedUserClass = observableUserClass[temp];
+            Notify("SelectedUserClass");
         }
         private void Instance_UpdateJobs(String data)
         {
@@ -364,6 +346,8 @@ namespace bcsapp.ViewModels
         {
             observableRolesClass = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList);
             Notify("observableRolesClass");
+
+            UpdateRoles();
         }
         #region Left Menu Functions 
         //Функции кнопок левого меню

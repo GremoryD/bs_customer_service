@@ -21,7 +21,7 @@ namespace bcsapp.ViewModels
         public AddJobsViewModel()
         {
             AddJobCommand = new SimpleCommand(AddJob);
-            EditAddButton = "Добавить";
+            EditAddButton = "Сохранить";
             CancelCommand = new SimpleCommand(Cancel);
         }
 
@@ -41,7 +41,7 @@ namespace bcsapp.ViewModels
         {
             JobName = job.Name;
             AddJobCommand = new SimpleCommand(EditJob);
-            EditAddButton = "Редактировать";
+            EditAddButton = "Сохранить";
             CancelCommand = new SimpleCommand(Cancel);
         }
 

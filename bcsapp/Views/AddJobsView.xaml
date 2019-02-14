@@ -18,9 +18,9 @@
             <RowDefinition Height="19*"/>
             <RowDefinition Height="25*"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Padding="0" Text="Наименование должности:" TextWrapping="Wrap"  TextAlignment="Center" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Margin="10,0,10,0.4" Height="30" FontSize="16" />
-        <dxe:TextEdit Grid.Row="1" VerticalAlignment="Top" Text="{Binding JobName}" Grid.ColumnSpan="2" Margin="10,13.6,10,0" Height="23" />
+        <TextBlock Grid.Column="0" Padding="0" Text="Наименование должности:" TextWrapping="Wrap"  TextAlignment="Left" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Margin="10,0,10,0.4" Height="19"  />
+        <dxe:TextEdit Grid.Row="1" VerticalAlignment="Top" Text="{Binding JobName}" Grid.ColumnSpan="2" Margin="10,4.6,10,0" Height="23" />
         <dx:SimpleButton Grid.Column="0" Grid.Row="2" Content="Отмена"   Command="{Binding CancelCommand}" Margin="10,15,10.4,9.4"/>
-        <dx:SimpleButton Grid.Column="1" Grid.Row="2" Content="{Binding EditAddButton}"   Command="{Binding AddJobCommand}" Margin="9.6,15,10,9.4"/>
+        <dx:SimpleButton Grid.Column="1" Grid.Row="2" Content="Сохранить"   Command="{Binding AddJobCommand}" Margin="9.6,15,10,9.4"/>
     </Grid>
 </UserControl>
