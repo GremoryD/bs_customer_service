@@ -277,6 +277,7 @@ namespace bcsserver
         public void InputQueueAdd(string ARequest)
         {
             Requests.Enqueue(ARequest);
+            Project.Log.Trace(string.Format("in: {0}", ARequest));
         }
 
         /// <summary>
@@ -286,6 +287,7 @@ namespace bcsserver
         public void OutputQueueAddString(string AResponse)
         {
             Responses.Enqueue(AResponse);
+            Project.Log.Trace(string.Format("out: {0}", AResponse));
         }
 
         /// <summary>
