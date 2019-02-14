@@ -23,7 +23,7 @@
                     <dxr:RibbonPageGroup Caption="Список" >
                         <dxb:BarButtonItem Content="Добавить" Command="{Binding AddButtonCommand}" Glyph="{dx:DXImage Image=Add_32x32.png}" LargeGlyph="{dx:DXImage Image=Add_32x32.png}"/>
                         <dxb:BarButtonItem Content="Редактировать" Command="{Binding EditButtonCommad}" Glyph="{dx:DXImage Image=EditName_32x32.png}" LargeGlyph="{dx:DXImage Image=EditName_32x32.png}"/>
-                        <dxb:BarButtonItem Content="Удалить" Command="{Binding DeleteButtonCommand}" Glyph="{dx:DXImage Image=Remove_32x32.png}" LargeGlyph="{dx:DXImage Image=Remove_32x32.png}"/>
+                        <dxb:BarButtonItem Content="Удалить" IsEnabled="False" Command="{Binding DeleteButtonCommand}" Glyph="{dx:DXImage Image=Remove_32x32.png}" LargeGlyph="{dx:DXImage Image=Remove_32x32.png}"/>
                     </dxr:RibbonPageGroup>
                     <dxr:RibbonPageGroup IsVisible="{Binding UserInterface}" Caption="Управление">
                         <dxb:BarButtonItem Content="Заблокировать" LargeGlyph="/bcsapp;component/Images/Lock-Lock-icon.png" Command="{Binding BlockCommand}" />
@@ -69,7 +69,7 @@
                                     <RowDefinition Height="5"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <dxg:GridControl HorizontalAlignment="Stretch" SelectionMode="Row" ItemsSource="{Binding observableUserClass}" AllowUpdateTwoWayBoundPropertiesOnSynchronization="False"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedUserClass,Mode=TwoWay}"  >
+                                <dxg:GridControl HorizontalAlignment="Stretch" SelectionMode="Row" AllowInitiallyFocusedRow="False"  ItemsSource="{Binding observableUserClass}" AllowUpdateTwoWayBoundPropertiesOnSynchronization="False"  AutoGenerateColumns="AddNew" SelectedItem="{Binding Path=SelectedUserClass,Mode=TwoWay}"  >
                                     <dxg:GridColumn FieldName="ID" Header="№"  HorizontalHeaderContentAlignment="Center" Visible="False"/>
                                     <dxg:GridColumn FieldName="Login"  Header="Логин" HorizontalHeaderContentAlignment="Center" Visible="True"/>
                                     <dxg:GridColumn FieldName="FirstName" Header="Имя" HorizontalHeaderContentAlignment="Center"  Visible="True"/>
