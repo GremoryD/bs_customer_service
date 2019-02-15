@@ -26,34 +26,33 @@ namespace bcsapp.ViewModels
         }
 
         private void AddJob()
-        {
-            bool isDone;
+        { 
             TransactionService.AddJob(new Transaction(new ServerLib.JTypes.Client.RequestJobAddClass()
             {
                 Name = JobName,
                 Token = DataStorage.Instance.Login.Token
             },
-            new Action(() => isDone = true), new Action(() => isDone = false)));
+            new Action(() => { } ), new Action(() => { } )));
             Cancel();  
         }
 
         public AddJobsViewModel(ServerLib.JTypes.Server.ResponseJobClass job)
         {
             JobName = job.Name;
-            AddJobCommand = new SimpleCommand(EditJob);
             EditAddButton = "Сохранить";
+            Notify("EditAddButton");
+            AddJobCommand = new SimpleCommand(EditJob);
             CancelCommand = new SimpleCommand(Cancel);
         }
 
         private void EditJob()
-        {
-            bool isDone;
+        { 
             TransactionService.EditJob(new Transaction(new ServerLib.JTypes.Client.RequestJobEditClass()
             {
                 Name = JobName,
                 Token = DataStorage.Instance.Login.Token
             },
-            new Action(() => isDone = true), new Action(() => isDone = false)));
+            new Action(() => { } ), new Action(() => { } )));
             Cancel();  
         }
 

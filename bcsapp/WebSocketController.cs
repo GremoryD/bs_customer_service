@@ -191,8 +191,18 @@ namespace bcsapp
                                     break;
                                 case ServerLib.JTypes.Enums.Commands.users_roles_delete:
                                     UserRoleRemoveConfirmationHandler(InputMessage);//"{\"command\":\"users_roles_delete\",\"state\":\"ok\"}"
-                                                                                    //"{\"users_roles\":[{\"user_id\":8,\"role_id\":3,\"role_name\":\"Тест2\",\"id\":34,\"command\":\"delete\"}],\"command\":\"users_roles\",\"state\":\"ok\"}"
-                                    break;
+                                    break;                                               //"{\"users_roles\":[{\"user_id\":8,\"role_id\":3,\"role_name\":\"Тест2\",\"id\":34,\"command\":\"delete\"}],\"command\":\"users_roles\",\"state\":\"ok\"}"
+                                case ServerLib.JTypes.Enums.Commands.objects:
+                                    ObjectsHandler(InputMessage); 
+                                     break;                                           
+                                case ServerLib.JTypes.Enums.Commands.roles_objects:
+                                    RoleToObjectHandler(InputMessage);
+                                     break;
+                                default:
+
+                                    break; 
+
+
                             }
                         }
                         else if (Message.State == ServerLib.JTypes.Enums.ResponseState.error)
@@ -224,7 +234,8 @@ namespace bcsapp
                 Thread.Sleep(1);
             }
         }
-         
+
+
         /// <summary>
         /// Добавляет строку в выходную очередь
         /// </summary>
@@ -282,7 +293,7 @@ namespace bcsapp
 
 
 
-        #region События 
+        #region События
 
         // Функции вызываемые в LoginViewModel
         public event EventHandler<String> ServerErr;
@@ -290,12 +301,11 @@ namespace bcsapp
         public event EventHandler<String> ConnectedState;
         public event EventHandler<ResponseLoginClass> LoginDone;
         public event EventHandler<string> LoginFailed;
-
         //функция для инициализации списков
         public event EventHandler<String> UpdateUsers;
         public event EventHandler<String> UpdateJobs;
-        public event EventHandler<String> UpdateRoles;
-        public event EventHandler<String> UpdateUserRoles;
+        public event EventHandler<String> UpdateRoles; 
+        public event EventHandler<String> UpdateUserRoles; 
 
         //функции для подтверждения действий
         public event EventHandler<String> UpdateUserAdd;
@@ -316,7 +326,7 @@ namespace bcsapp
         public event EventHandler<String> UpdateUserRoleAdd_Err;
         public event EventHandler<String> UpdateUserRoleRemove_Err;
         #endregion
-
+         
         #region Обработчики 
 
         //функция логина
@@ -479,9 +489,68 @@ namespace bcsapp
                     } 
                 }
 
-            }
-            UpdateUserRoles?.Invoke(this,""); 
+            } 
         }
+
+
+        private void RoleToObjectHandler(string InputMessage)
+        {
+            if (DataStorage.Instance.accessRoleToObjectsData.Count == 0)
+            {
+                DataStorage.Instance.accessRoleToObjectsData.Clear();
+                DataStorage.Instance.accessRoleToObjectsData = JsonConvert.DeserializeObject<ResponseRolesObjectsClass>(InputMessage).Items;
+               // { "roles_objects":[{"role_id":1,"object_id":2,"object_operation":"add","id":3,"command":"add"},{"role_id":1,"object_id":6,"object_operation":"read","id":17,"command":"add"},{"role_id":1,"object_id":6,"object_operation":"add","id":18,"command":"add"},{"role_id":1,"object_id":2,"object_operation":"read","id":2,"command":"add"},{"role_id":1,"object_id":3,"object_operation":"read","id":6,"command":"add"},{"role_id":1,"object_id":5,"object_operation":"delete","id":16,"command":"add"},{"role_id":1,"object_id":8,"object_operation":"delete","id":26,"command":"add"},{"role_id":1,"object_id":7,"object_operation":"read","id":20,"command":"add"},{"role_id":1,"object_id":3,"object_operation":"edit","id":8,"command":"add"},{"role_id":1,"object_id":4,"object_operation":"read","id":10,"command":"add"},{"role_id":1,"object_id":5,"object_operation":"read","id":13,"command":"add"},{"role_id":1,"object_id":3,"object_operation":"add","id":7,"command":"add"},{"role_id":1,"object_id":4,"object_operation":"edit","id":12,"command":"add"},{"role_id":1,"object_id":5,"object_operation":"add","id":14,"command":"add"},{"role_id":1,"object_id":7,"object_operation":"add","id":21,"command":"add"},{"role_id":2,"object_id":8,"object_operation":"add","id":53,"command":"add"},{"role_id":1,"object_id":8,"object_operation":"add","id":25,"command":"add"},{"role_id":1,"object_id":4,"object_operation":"add","id":11,"command":"add"},{"role_id":1,"object_id":5,"object_operation":"edit","id":15,"command":"add"},{"role_id":2,"object_id":8,"object_operation":"read","id":54,"command":"add"},{"role_id":1,"object_id":1,"object_operation":"read","id":1,"command":"add"},{"role_id":1,"object_id":8,"object_operation":"read","id":24,"command":"add"},{"role_id":1,"object_id":2,"object_operation":"delete","id":5,"command":"add"},{"role_id":1,"object_id":2,"object_operation":"edit","id":4,"command":"add"},{"role_id":1,"object_id":10,"object_operation":"edit","id":110,"command":"add"},{"role_id":1,"object_id":6,"object_operation":"delete","id":19,"command":"add"},{"role_id":1,"object_id":7,"object_operation":"delete","id":23,"command":"add"},{"role_id":1,"object_id":3,"object_operation":"delete","id":9,"command":"add"},{"role_id":1,"object_id":7,"object_operation":"edit","id":22,"command":"add"}],"command":"roles_objects","state":"ok"}
+            }
+            else
+            {
+                foreach (ResponseRoleObjectClass roleobj in JsonConvert.DeserializeObject<ResponseRolesObjectsClass>(InputMessage).Items)
+                {
+                    if (roleobj.Command == ServerLib.JTypes.Enums.ItemCommands.add) DataStorage.Instance.accessRoleToObjectsData.Add(roleobj);
+                    if (roleobj.Command == ServerLib.JTypes.Enums.ItemCommands.delete)
+                    {
+                        ResponseRoleObjectClass temp = DataStorage.Instance.accessRoleToObjectsData.Find(x => x.Hash == roleobj.Hash);
+                        DataStorage.Instance.accessRoleToObjectsData.Remove(temp);
+
+                    }
+                    if (roleobj.Command == ServerLib.JTypes.Enums.ItemCommands.edit)
+                    {
+                        ResponseRoleObjectClass temp = DataStorage.Instance.accessRoleToObjectsData.Find(x => x.ID == roleobj.ID);
+                        DataStorage.Instance.accessRoleToObjectsData.Remove(temp);
+                        DataStorage.Instance.accessRoleToObjectsData.Add(roleobj);
+                    }
+                }
+
+            } 
+        }
+
+        private void ObjectsHandler(string inputMessage)
+        {
+            if (DataStorage.Instance.accessRolesObjectsData.Count == 0)
+            {
+                DataStorage.Instance.accessRolesObjectsData.Clear();
+                DataStorage.Instance.accessRolesObjectsData = JsonConvert.DeserializeObject<ResponseObjectsClass>(inputMessage).Items;
+                  }
+            else
+            {
+                foreach (ResponseObjectClass obj in JsonConvert.DeserializeObject<ResponseObjectsClass>(inputMessage).Items)
+                {
+                    if (obj.Command == ServerLib.JTypes.Enums.ItemCommands.add) DataStorage.Instance.accessRolesObjectsData.Add(obj);
+                    if (obj.Command == ServerLib.JTypes.Enums.ItemCommands.delete)
+                    {
+                        ResponseObjectClass temp = DataStorage.Instance.accessRolesObjectsData.Find(x => x.Hash == obj.Hash);
+                        DataStorage.Instance.accessRolesObjectsData.Remove(temp);
+
+                    }
+                    if (obj.Command == ServerLib.JTypes.Enums.ItemCommands.edit)
+                    {
+                        ResponseObjectClass temp = DataStorage.Instance.accessRolesObjectsData.Find(x => x.ID == obj.ID);
+                        DataStorage.Instance.accessRolesObjectsData.Remove(temp);
+                        DataStorage.Instance.accessRolesObjectsData.Add(obj);
+                    }
+                } 
+            } 
+        }
+
 
         public void UserRoleRemoveConfirmationHandler(string inputMessage)
         {

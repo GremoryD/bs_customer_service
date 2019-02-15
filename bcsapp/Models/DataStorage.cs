@@ -19,34 +19,13 @@ namespace bcsapp.Models
         public List<ResponseJobClass> JobList { set; get; } = new List<ResponseJobClass>();
         public List<ResponseRoleClass> RoleList { set; get; } = new List<ResponseRoleClass>();
         public List<ResponseUserRoleClass> UsersRolesList{ set; get; } = new List<ResponseUserRoleClass>();
+        public List<ResponseObjectClass> accessRolesObjectsData = new List<ResponseObjectClass>();
+        public List<ResponseRoleObjectClass> accessRoleToObjectsData = new List<ResponseRoleObjectClass>();
 
         public void ClearData()
         {
             Login = null;
             UserInformation = null;
-        } 
-
-
-
-        public List<AccessRolesData> accessRolesData = new List<AccessRolesData>()
-        {
-            new AccessRolesData(){ Name = "Пользователи" , Create = true, Delete= false, Read = true, Edit = true},
-            new AccessRolesData(){ Name = "Должности пользователей" , Create = true, Delete= true, Read = true, Edit = true},
-            new AccessRolesData(){ Name = "Роли пользователей" , Create = true, Delete= true, Read = true, Edit = true},
-            new AccessRolesData(){ Name = "Сессии пользователей" , Create = false, Delete= true, Read = true, Edit = false},
-            new AccessRolesData(){ Name = "Объекты" , Create = false, Delete= false, Read = true, Edit = false},
-            new AccessRolesData(){ Name = "Клиенты" , Create = true, Delete= true, Read = true, Edit = true},
-            new AccessRolesData(){ Name = "Параметры клиентов" , Create = true, Delete= true, Read = true, Edit = true},
-            new AccessRolesData(){ Name = "Фото клиентов" , Create = false, Delete= false, Read = true, Edit = false},
-            new AccessRolesData(){ Name = "HTTP-запросы" , Create = false, Delete= false, Read = true, Edit = false},
-            new AccessRolesData(){ Name = "Части HTTP-запросов" ,Create = false, Delete= false, Read = true, Edit = false},
-            new AccessRolesData(){ Name = "Мерчанты" , Create = true, Delete= true, Read = true, Edit = true},
-            new AccessRolesData(){ Name = "Маршруты HTTP-запросов" , Create = true, Delete= false, Read = true, Edit = true},
-            new AccessRolesData(){ Name = "Обработчики HTTP-запросов" , Create = true, Delete= true, Read = true, Edit = true},
-            new AccessRolesData(){ Name = "Журнал HTTP-запросов" , Create = false, Delete= false, Read = true, Edit = false},
-            new AccessRolesData(){ Name = "Журнал ошибок выполнения SQL-запросов" ,Create = false, Delete= false, Read = true, Edit = false},
-            new AccessRolesData(){ Name = "Транзакции платежей клиентов" , Create = false, Delete= false, Read = true, Edit = false},
-            new AccessRolesData(){ Name = "Журнал операций пользователей" ,Create = false, Delete= false, Read = true, Edit = false},
-        };
+        }  
     }
 }

@@ -99,7 +99,9 @@ namespace bcsapp.ViewModels
 
         private void AddUser()
         {
+#pragma warning disable CS0219 // Переменная назначена, но ее значение не используется
             bool isDone;
+#pragma warning restore CS0219 // Переменная назначена, но ее значение не используется
             TransactionService.AddUser(new Transaction(new ServerLib.JTypes.Client.RequestUserAddClass()
             {
                 Login = UserLogin,
@@ -117,8 +119,7 @@ namespace bcsapp.ViewModels
 
 
         private void EditUser()
-        {
-            bool isDone;
+        { 
             TransactionService.EditUser(new Transaction(new ServerLib.JTypes.Client.RequestUserEditClass()
             {
                 ID = user.ID, 
@@ -129,7 +130,7 @@ namespace bcsapp.ViewModels
                 Active = ActiveCheck ? ServerLib.JTypes.Enums.UserActive.activated : ServerLib.JTypes.Enums.UserActive.blocked,
                 Token = DataStorage.Instance.Login.Token
             },
-            new Action(() => isDone = true), new Action(() => isDone = false)));
+            new Action(() => { }), new Action(() => { } )));
             Cancel();   
         }
     }

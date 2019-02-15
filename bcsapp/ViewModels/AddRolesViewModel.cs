@@ -21,9 +21,7 @@ namespace bcsapp.ViewModels
         public ICommand CancelCommand { set; get; }
         private long  roleID { set; get; }
 
-        //roles controle
-        public ObservableCollection<AccessRolesData> accessRolesData { set; get; } = new ObservableCollection<AccessRolesData>(DataStorage.Instance.accessRolesData);
-
+        
 
         public AddRolesViewModel()
         {
@@ -39,15 +37,13 @@ namespace bcsapp.ViewModels
 
         private void AddRole()
         {
-
-            bool isDone;
             TransactionService.AddRole(new Transaction(new ServerLib.JTypes.Client.RequestRoleAddClass
             {
                 Token = DataStorage.Instance.Login.Token,
                 Name = RoleName,
                 Description = RoleDescription
             },
-            new Action(() => isDone = true), new Action(() => isDone = false)));
+            new Action(() => { }), new Action(() =>  { })));
             Cancel();
         }
 
@@ -62,8 +58,7 @@ namespace bcsapp.ViewModels
         }
 
         private void EditRole()
-        {
-            bool isDone;
+        { 
             TransactionService.EditRole(new Transaction(new ServerLib.JTypes.Client.RequestRoleEditClass
             {
                 Token = DataStorage.Instance.Login.Token,
@@ -71,7 +66,7 @@ namespace bcsapp.ViewModels
                 ID = roleID,
                 Description = RoleDescription
             },
-            new Action(() => isDone = true), new Action(() => isDone = false)));
+            new Action(() => { } ), new Action(() => { } )));
             Cancel();
         }
 

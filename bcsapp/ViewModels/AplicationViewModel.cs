@@ -40,7 +40,7 @@ namespace bcsapp.ViewModels
 
         //GridUSers
         public ICommand UserSelectedItemChangedCommand { set; get; }
-
+        public ICommand RoleSelectedItemChangedCommand { set; get; }
         //Ribon Menu Buttons
         public bool SelectedUsers { set; get; } = true;
         public bool SelectedClients { set; get; } = false;
@@ -78,7 +78,7 @@ namespace bcsapp.ViewModels
         public ICommand RemoveRoleToUserCommand { set; get; }
 
         //roles grid controle
-        public ObservableCollection<AccessRolesData> accessRolesData { set; get; } = new ObservableCollection<AccessRolesData>(DataStorage.Instance.accessRolesData);
+        public ObservableCollection<ResponseObjectClass> accessRolesData { set; get; } = new ObservableCollection<ResponseObjectClass>(DataStorage.Instance.accessRolesObjectsData);
         public ObservableCollection<ResponseRoleClass> observableUsersRole { set; get; } = new ObservableCollection<ResponseRoleClass>(DataStorage.Instance.RoleList);
 
         public AplicationViewModel()
@@ -96,6 +96,7 @@ namespace bcsapp.ViewModels
             BlockCommand = new SimpleCommand(BlockUser);
 
             UserSelectedItemChangedCommand = new SimpleCommand(UpdateRoles);
+            RoleSelectedItemChangedCommand = new SimpleCommand(UpdateRolesToAcces);
             AddRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(AddRoleToUser);
             RemoveRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(RemoveRoleToUser);
 
@@ -116,6 +117,10 @@ namespace bcsapp.ViewModels
                 WebSocketController.Instance.OutputQueueAddObject(rolesClass);
                 ServerLib.JTypes.Client.RequestUsersRolesClass usersRolesClass = new ServerLib.JTypes.Client.RequestUsersRolesClass { Token = DataStorage.Instance.Login.Token };
                 WebSocketController.Instance.OutputQueueAddObject(usersRolesClass);
+                ServerLib.JTypes.Client.RequestObjectsClass objectsClass = new ServerLib.JTypes.Client.RequestObjectsClass { Token = DataStorage.Instance.Login.Token };
+                WebSocketController.Instance.OutputQueueAddObject(objectsClass);
+                ServerLib.JTypes.Client.RequestRolesObjectsClass rolesObjectsClass = new ServerLib.JTypes.Client.RequestRolesObjectsClass { Token = DataStorage.Instance.Login.Token };
+                WebSocketController.Instance.OutputQueueAddObject(rolesObjectsClass);
             });
 
             InitDoneCommand = new SimpleCommand(() =>
@@ -125,12 +130,29 @@ namespace bcsapp.ViewModels
         }
 
         private void Instance_UpdateUserRoles(string e)
-        { 
+        {
         }
 
         private void PasswordChange()
         {
             NavigationService.Instance.ShowDialogWin(new PasswordChangeViewModel(SelectedUserClass), "Изменить пароль");
+        }
+
+        public ObservableCollection<ResponseObjectClass> responseObjectClasses { set; get; } = new ObservableCollection<ResponseObjectClass>(DataStorage.Instance.accessRolesObjectsData);
+
+        private void UpdateRolesToAcces()
+        {
+            responseObjectClasses.Clear();
+            foreach(ResponseRoleObjectClass accessData in DataStorage.Instance.accessRoleToObjectsData)
+            {
+                if(accessData.RoleID == SelectedRoleClass.ID)
+                {
+                    responseObjectClasses.Add(DataStorage.Instance.accessRolesObjectsData.Find(x=>x.ID == accessData.ObjectID));
+                }
+            }
+            responseObjectClasses =new ObservableCollection<ResponseObjectClass>( responseObjectClasses.Distinct<ResponseObjectClass>());
+
+            Notify("responseObjectClasses"); 
         }
 
         private void UpdateRoles()
@@ -157,8 +179,7 @@ namespace bcsapp.ViewModels
 
         private void RemoveRoleToUser(ResponseRoleClass obj)
         {
-            if (obj == null) return;
-            bool isDone;
+            if (obj == null) return; 
             TransactionService.RemoveRoleToUser(new Transaction(new ServerLib.JTypes.Client.RequestUserRoleDeleteClass()
             {
                 UserRoleID = DataStorage.Instance.UsersRolesList.Find(x => x.RoleID == obj.ID).ID,
@@ -182,15 +203,14 @@ namespace bcsapp.ViewModels
 
 
                  });
-             }), new Action(() => isDone = false)));
+             }), new Action(() => { })));
 
 
         }
 
         private void AddRoleToUser(ResponseRoleClass obj)
         {
-            if (obj == null) return;
-            bool isDone;
+            if (obj == null) return; 
             TransactionService.AddRoleToUser(new Transaction(new ServerLib.JTypes.Client.RequestUserRoleAddClass()
             {
                 RoleID = obj.ID,
@@ -213,7 +233,7 @@ namespace bcsapp.ViewModels
                      Notify("RemoveRoleToUserButtonEnable");
 
                  });
-             }), new Action(() => isDone = false))); ;
+             }), new Action(() => { }))); ;
 
         }
 
@@ -296,8 +316,7 @@ namespace bcsapp.ViewModels
 
 
         private void BlockUser()
-        {
-            bool isDone;
+        { 
             TransactionService.EditUser(new Transaction(new ServerLib.JTypes.Client.RequestUserEditClass()
             {
                 ID = SelectedUserClass.ID,
@@ -308,13 +327,12 @@ namespace bcsapp.ViewModels
                 Active = ServerLib.JTypes.Enums.UserActive.blocked,
                 Token = DataStorage.Instance.Login.Token
             },
-            new Action(() => isDone = true), new Action(() => isDone = false))); 
+            new Action(() => { }), new Action(() => { }))); 
 
         }
 
         private void UnBlockUser()
-        {
-            bool isDone;
+        { 
             TransactionService.EditUser(new Transaction(new ServerLib.JTypes.Client.RequestUserEditClass()
             {
                 ID = SelectedUserClass.ID,
@@ -325,7 +343,7 @@ namespace bcsapp.ViewModels
                 Active = ServerLib.JTypes.Enums.UserActive.activated,
                 Token = DataStorage.Instance.Login.Token
             },
-            new Action(() => isDone = true), new Action(() => isDone = false)));
+            new Action(() => { }), new Action(() => { })));
         }
 
         #endregion
