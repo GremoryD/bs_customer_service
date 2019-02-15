@@ -290,11 +290,11 @@ namespace bcsapp.ViewModels
             }
             if (JobsGridShow && SelectedJobsClass != null)
             {
-                NavigationService.Instance.ShowDialogWin(new AddJobsViewModel(SelectedJobsClass), "Изменение должность");
+                NavigationService.Instance.ShowDialogWin(new AddJobsViewModel(SelectedJobsClass), "Изменение должности пользователя");
             }
             if (RolesGridShow && SelectedRoleClass != null)
             {
-                NavigationService.Instance.ShowDialogWin(new AddRolesViewModel(SelectedRoleClass), "Изменение роли");
+                NavigationService.Instance.ShowDialogWin(new AddRolesViewModel(SelectedRoleClass), "Изменение роли пользователей");
             }
 
         }
@@ -306,11 +306,11 @@ namespace bcsapp.ViewModels
             }
             if (JobsGridShow)
             {
-                NavigationService.Instance.ShowDialogWin(new AddJobsViewModel(), "Новая должность");
+                NavigationService.Instance.ShowDialogWin(new AddJobsViewModel(), "Новая должность пользователей");
             }
             if (RolesGridShow)
             {
-                NavigationService.Instance.ShowDialogWin(new AddRolesViewModel(), "Новая Роль");
+                NavigationService.Instance.ShowDialogWin(new AddRolesViewModel(), "Новая роль пользователей");
             }
         }
 
