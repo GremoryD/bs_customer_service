@@ -12,11 +12,13 @@ namespace bcsapp.ViewModels
 {
     public class AddJobsViewModel : IViewModel, INotifyPropertyChanged
     {
+        public ServerLib.JTypes.Server.ResponseJobClass Job;
+
         public String JobName { set; get; }
         public String EditAddButton { set; get; }
         public ICommand AddJobCommand { set; get; }
         public ICommand CancelCommand { set; get; }
-        public bool FullscreenView { get ; set; }
+        public bool FullscreenView { get; set; }
 
         public AddJobsViewModel()
         {
@@ -26,19 +28,20 @@ namespace bcsapp.ViewModels
         }
 
         private void AddJob()
-        { 
+        {
             TransactionService.AddJob(new Transaction(new ServerLib.JTypes.Client.RequestJobAddClass()
             {
                 Name = JobName,
                 Token = DataStorage.Instance.Login.Token
             },
-            new Action(() => { } ), new Action(() => { } )));
-            Cancel();  
+            new Action(() => { }), new Action(() => { })));
+            Cancel();
         }
 
-        public AddJobsViewModel(ServerLib.JTypes.Server.ResponseJobClass job)
+        public AddJobsViewModel(ServerLib.JTypes.Server.ResponseJobClass AJob)
         {
-            JobName = job.Name;
+            Job = AJob;
+            JobName = Job.Name;
             EditAddButton = "Сохранить";
             Notify("EditAddButton");
             AddJobCommand = new SimpleCommand(EditJob);
@@ -46,16 +49,16 @@ namespace bcsapp.ViewModels
         }
 
         private void EditJob()
-        { 
+        {
             TransactionService.EditJob(new Transaction(new ServerLib.JTypes.Client.RequestJobEditClass()
             {
+                ID = Job.ID,
                 Name = JobName,
                 Token = DataStorage.Instance.Login.Token
             },
-            new Action(() => { } ), new Action(() => { } )));
-            Cancel();  
+            new Action(() => { }), new Action(() => { })));
+            Cancel();
         }
-
 
         private void Cancel()
         {
