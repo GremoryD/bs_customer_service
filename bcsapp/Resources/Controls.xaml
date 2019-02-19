@@ -22,8 +22,7 @@
                                 <ColumnDefinition Width="50" />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-
-                            <!--<Border Margin="10" Background="Red" />-->
+ 
                             <Image Margin="10" Source="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}" />
                             <ContentPresenter Grid.Column="1" VerticalAlignment="Center"  />
                         </Grid>
@@ -31,6 +30,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
-  
+    </Style> 
+
 </ResourceDictionary>

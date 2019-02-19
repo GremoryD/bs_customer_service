@@ -3,6 +3,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:bcsapp.Views"
+             xmlns:dxgt="http://schemas.devexpress.com/winfx/2008/xaml/grid/themekeys"
              xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" xmlns:dxn="http://schemas.devexpress.com/winfx/2008/xaml/navbar" 
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
              xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dxa="http://schemas.devexpress.com/winfx/2008/xaml/accordion" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
@@ -193,27 +194,45 @@
                                 </dxg:GridControl>
                                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="5" ResizeDirection="Columns"></GridSplitter>
                                 <dxg:GridControl Grid.Column="2" AllowInitiallyFocusedRow="False"   HorizontalAlignment="Stretch" ItemsSource="{Binding responseObjectClasses}"  AutoGenerateColumns="AddNew"  >
-                                    <!--<dxg:GridColumn FieldName="Name" Header="Наименование"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
-                                    <dxg:GridColumn FieldName="Read" Header="Чтение"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
-                                    <dxg:GridColumn FieldName="Create" Header="Создание"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
-                                    <dxg:GridColumn FieldName="Edit" Header="Запись"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
-                                    <dxg:GridColumn FieldName="Delete" Header="Удаление"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
-                                    <dxg:GridColumn FieldName="Description" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>-->
                                     <dxg:GridColumn FieldName="Name" Header="Наименование"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
                                     <dxg:GridColumn FieldName="Description"   Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="True">
                                         <dxg:GridColumn.EditSettings>
                                             <dxe:TextEditSettings TextWrapping="Wrap"/>
                                         </dxg:GridColumn.EditSettings>
                                     </dxg:GridColumn>
-                                    <dxg:GridColumn FieldName="OperationRead" Header="Чтение"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
-                                    <dxg:GridColumn FieldName="OperationAdd" Header="Добавление"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
-                                    <dxg:GridColumn FieldName="OperationEdit" Header="Изменение"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
-                                    <dxg:GridColumn FieldName="OperationDelete" Header="Удаление"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
+                                    <dxg:GridColumn FieldName="OperationRead" Header="Чтение"  HorizontalHeaderContentAlignment="Center"   Visible="True">
+                                        <dxg:GridColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <dxe:CheckEdit  EditValue="{Binding RowData.Row.OperationRead}"  IsEnabled="{Binding RowData.Row.OperationRead}"/>
+                                            </DataTemplate>
+                                        </dxg:GridColumn.CellTemplate>
+                                    </dxg:GridColumn>
+                                    <dxg:GridColumn FieldName="OperationAdd" Header="Добавление"  HorizontalHeaderContentAlignment="Center"   Visible="True"> 
+                                        <dxg:GridColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <dxe:CheckEdit  EditValue="{Binding RowData.Row.OperationAdd}"  IsEnabled="{Binding RowData.Row.OperationAdd}"/>
+                                            </DataTemplate>
+                                        </dxg:GridColumn.CellTemplate>
+                                    </dxg:GridColumn>
+                                    <dxg:GridColumn FieldName="OperationEdit" Header="Изменение"  HorizontalHeaderContentAlignment="Center"   Visible="True"> 
+                                        <dxg:GridColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <dxe:CheckEdit  EditValue="{Binding RowData.Row.OperationEdit}"  IsEnabled="{Binding RowData.Row.OperationEdit}"/>
+                                            </DataTemplate>
+                                        </dxg:GridColumn.CellTemplate>
+                                    </dxg:GridColumn>
+                                    <dxg:GridColumn FieldName="OperationDelete" Header="Удаление"  HorizontalHeaderContentAlignment="Center"   Visible="True"> 
+                                        <dxg:GridColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <dxe:CheckEdit  EditValue="{Binding RowData.Row.OperationDelete}"  IsEnabled="{Binding RowData.Row.OperationDelete}"/>
+                                            </DataTemplate>
+                                        </dxg:GridColumn.CellTemplate>
+                                    </dxg:GridColumn>
                                     <dxg:GridColumn FieldName="ID" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
                                     <dxg:GridColumn FieldName="Hash" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
                                     <dxg:GridColumn FieldName="Command" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
                                     <dxg:GridControl.View>
-                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AllowEditing="False" AutoWidth="True"/>
+                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AutoWidth="True"/>
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
                             </Grid>
