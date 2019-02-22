@@ -194,8 +194,8 @@
                                 </dxg:GridControl>
                                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="5" ResizeDirection="Columns"></GridSplitter>
                                 <dxg:GridControl Grid.Column="2" AllowInitiallyFocusedRow="False"   HorizontalAlignment="Stretch" ItemsSource="{Binding responseObjectClasses}"  AutoGenerateColumns="AddNew"  >
-                                    <dxg:GridColumn FieldName="Name" Header="Наименование"  HorizontalHeaderContentAlignment="Center"   Visible="True"/>
-                                    <dxg:GridColumn FieldName="Description"   Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="True">
+                                    <dxg:GridColumn FieldName="Name" Header="Наименование" ReadOnly="True" HorizontalHeaderContentAlignment="Center"   Visible="True"/>
+                                    <dxg:GridColumn FieldName="Description"   Header="Описание"  ReadOnly="True" HorizontalHeaderContentAlignment="Center"   Visible="True">
                                         <dxg:GridColumn.EditSettings>
                                             <dxe:TextEditSettings TextWrapping="Wrap"/>
                                         </dxg:GridColumn.EditSettings>

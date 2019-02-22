@@ -142,15 +142,22 @@ namespace bcsapp.ViewModels
 
         private void UpdateRolesToAcces()
         {
-            responseObjectClasses.Clear();
-            foreach(ResponseRoleObjectClass accessData in DataStorage.Instance.accessRoleToObjectsData)
+            responseObjectClasses  = new ObservableCollection<ResponseObjectClass>(DataStorage.Instance.accessRolesObjectsData);
+            
+            foreach (ResponseObjectClass  responseObject in responseObjectClasses)
             {
-                if(accessData.RoleID == SelectedRoleClass.ID)
-                {
-                    responseObjectClasses.Add(DataStorage.Instance.accessRolesObjectsData.Find(x=>x.ID == accessData.ObjectID));
-                }
+               //  if(DataStorage.Instance.accessRoleToObjectsData)
+
             }
-            responseObjectClasses =new ObservableCollection<ResponseObjectClass>( responseObjectClasses.Distinct<ResponseObjectClass>());
+
+            //foreach(ResponseRoleObjectClass accessData in DataStorage.Instance.accessRoleToObjectsData)
+            //{
+            //    if(accessData.RoleID == SelectedRoleClass.ID)
+            //    {
+            //        responseObjectClasses.Add(DataStorage.Instance.accessRolesObjectsData.Find(x=>x.ID == accessData.ObjectID));
+            //    }
+            //}
+            //responseObjectClasses =new ObservableCollection<ResponseObjectClass>( responseObjectClasses.Distinct<ResponseObjectClass>());
 
             Notify("responseObjectClasses"); 
         }
