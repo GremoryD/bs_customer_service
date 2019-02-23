@@ -38,7 +38,10 @@ namespace bcsserver.Handlers
                     ID = ReadTable.AsInt64(row, "ID"),
                     RoleID = ReadTable.AsInt64(row, "ROLE_ID"),
                     ObjectID = ReadTable.AsInt64(row, "OBJECT_ID"),
-                    ObjectOperation = (ObjectOperations)ReadTable.AsInt32(row, "OPERATION")
+                    OperationRead = ReadTable.AsInt64(row, "OPERATION_READ") == 1,
+                    OperationAdd = ReadTable.AsInt64(row, "OPERATION_ADD") == 1,
+                    OperationEdit = ReadTable.AsInt64(row, "OPERATION_EDIT") == 1,
+                    OperationDelete = ReadTable.AsInt64(row, "OPERATION_DELETE") == 1
                 };
 
                 if (ReadCollection.TryGetValue(Item.ID, out ServerLib.JTypes.Server.ResponseRoleObjectClass ExistItem))
