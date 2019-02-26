@@ -130,7 +130,8 @@ namespace bcsapp.ViewModels
         }
 
         private void Instance_UpdateUserRoles(string e)
-        {
+        { 
+
         }
 
         private void PasswordChange()
@@ -138,27 +139,29 @@ namespace bcsapp.ViewModels
             NavigationService.Instance.ShowDialogWin(new PasswordChangeViewModel(SelectedUserClass), "Изменить пароль");
         }
 
-        public ObservableCollection<ResponseObjectClass> responseObjectClasses { set; get; } = new ObservableCollection<ResponseObjectClass>(DataStorage.Instance.accessRolesObjectsData);
+        public ObservableCollection<AssetsRoleModel> responseObjectClasses { set; get; } = new ObservableCollection<AssetsRoleModel>(DataStorage.Instance.accessListData);
 
         private void UpdateRolesToAcces()
-        {
-            responseObjectClasses  = new ObservableCollection<ResponseObjectClass>(DataStorage.Instance.accessRolesObjectsData);
+        { 
+                DataStorage.Instance.accessListData.ForEach(x => x.OperationAdd = false); 
+                DataStorage.Instance.accessListData.ForEach(x => x.OperationDelete = false); 
+                DataStorage.Instance.accessListData.ForEach(x => x.OperationEdit = false); 
+                DataStorage.Instance.accessListData.ForEach(x => x.OperationRead = false);
+            responseObjectClasses = new ObservableCollection<AssetsRoleModel>(DataStorage.Instance.accessListData);
+            Notify("responseObjectClasses");
             
-            foreach (ResponseObjectClass  responseObject in responseObjectClasses)
-            {
-               //  if(DataStorage.Instance.accessRoleToObjectsData)
+            foreach (ResponseRoleObjectClass roleObjectClass in DataStorage.Instance.accessRoleToObjectsData)
+            { 
+                if (SelectedRoleClass.ID == roleObjectClass.RoleID)
+                { 
+                    DataStorage.Instance.accessListData.Find(x => x.ID==roleObjectClass.ObjectID ).OperationAdd = roleObjectClass.OperationAdd; 
+                    DataStorage.Instance.accessListData.Find(x => x.ID == roleObjectClass.ObjectID).OperationDelete = roleObjectClass.OperationDelete; 
+                    DataStorage.Instance.accessListData.Find(x => x.ID == roleObjectClass.ObjectID).OperationEdit = roleObjectClass.OperationEdit; 
+                    DataStorage.Instance.accessListData.Find(x => x.ID == roleObjectClass.ObjectID).OperationRead = roleObjectClass.OperationRead; 
+                }
+            } 
 
-            }
-
-            //foreach(ResponseRoleObjectClass accessData in DataStorage.Instance.accessRoleToObjectsData)
-            //{
-            //    if(accessData.RoleID == SelectedRoleClass.ID)
-            //    {
-            //        responseObjectClasses.Add(DataStorage.Instance.accessRolesObjectsData.Find(x=>x.ID == accessData.ObjectID));
-            //    }
-            //}
-            //responseObjectClasses =new ObservableCollection<ResponseObjectClass>( responseObjectClasses.Distinct<ResponseObjectClass>());
-
+            responseObjectClasses = new ObservableCollection<AssetsRoleModel>(DataStorage.Instance.accessListData);
             Notify("responseObjectClasses"); 
         }
 

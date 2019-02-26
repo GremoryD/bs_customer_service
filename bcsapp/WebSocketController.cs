@@ -193,11 +193,13 @@ namespace bcsapp
                                     UserRoleRemoveConfirmationHandler(InputMessage);//"{\"command\":\"users_roles_delete\",\"state\":\"ok\"}"
                                     break;                                               //"{\"users_roles\":[{\"user_id\":8,\"role_id\":3,\"role_name\":\"Тест2\",\"id\":34,\"command\":\"delete\"}],\"command\":\"users_roles\",\"state\":\"ok\"}"
                                 case ServerLib.JTypes.Enums.Commands.objects:
-                                    ObjectsHandler(InputMessage); 
-                                     break;                                           
+                                    ObjectsHandler(InputMessage);
+                                    //{"objects":[{"name":"Objects","description":"Список объектов","read":true,"add":false,"edit":false,"delete":false,"id":1,"command":"add"},{"name":"Sessions","description":"Сессии пользователей","read":true,"add":true,"edit":true,"delete":true,"id":2,"command":"add"},{"name":"Jobs","description":"Список должностей пользователей","read":true,"add":true,"edit":true,"delete":true,"id":3,"command":"add"},{"name":"Users","description":"Список пользователей","read":true,"add":true,"edit":true,"delete":false,"id":4,"command":"add"},{"name":"Roles","description":"Список ролей пользователей","read":true,"add":true,"edit":true,"delete":true,"id":5,"command":"add"},{"name":"UsersRoles","description":"Список назначенных ролей пользователей","read":true,"add":true,"edit":false,"delete":true,"id":6,"command":"add"},{"name":"UserInformation","description":"Информация о пользователе","read":true,"add":true,"edit":true,"delete":true,"id":7,"command":"add"},{"name":"RolesObjects","description":"Список ролей пользователей с правами доступа к операциям над объектами системы","read":true,"add":true,"edit":false,"delete":true,"id":8,"command":"add"},{"name":"UsersPasswords","description":"Пароли пользователей","read":false,"add":false,"edit":true,"delete":false,"id":10,"command":"add"}],"command":"objects","state":"ok"}
+                                    break;                                           
                                 case ServerLib.JTypes.Enums.Commands.roles_objects:
                                     RoleToObjectHandler(InputMessage);
-                                     break;
+                                    //{"roles_objects":[{"role_id":1,"object_id":1,"read":true,"add":false,"edit":false,"delete":false,"id":1,"command":"add"},{"role_id":1,"object_id":2,"read":true,"add":true,"edit":true,"delete":true,"id":2,"command":"add"},{"role_id":1,"object_id":3,"read":true,"add":true,"edit":true,"delete":true,"id":3,"command":"add"},{"role_id":1,"object_id":4,"read":true,"add":true,"edit":true,"delete":false,"id":4,"command":"add"},{"role_id":1,"object_id":5,"read":true,"add":true,"edit":true,"delete":true,"id":5,"command":"add"},{"role_id":1,"object_id":6,"read":true,"add":true,"edit":false,"delete":true,"id":6,"command":"add"},{"role_id":1,"object_id":7,"read":true,"add":true,"edit":true,"delete":true,"id":7,"command":"add"},{"role_id":1,"object_id":8,"read":true,"add":true,"edit":false,"delete":true,"id":8,"command":"add"},{"role_id":1,"object_id":10,"read":false,"add":false,"edit":true,"delete":false,"id":9,"command":"add"},{"role_id":2,"object_id":8,"read":true,"add":true,"edit":false,"delete":false,"id":10,"command":"add"}],"command":"roles_objects","state":"ok"}
+                                    break;
                                 default:
 
                                     break; 
@@ -499,7 +501,7 @@ namespace bcsapp
             {
                 DataStorage.Instance.accessRoleToObjectsData.Clear();
                 DataStorage.Instance.accessRoleToObjectsData = JsonConvert.DeserializeObject<ResponseRolesObjectsClass>(InputMessage).Items;
-               // { "roles_objects":[{"role_id":1,"object_id":2,"object_operation":"add","id":3,"command":"add"},{"role_id":1,"object_id":6,"object_operation":"read","id":17,"command":"add"},{"role_id":1,"object_id":6,"object_operation":"add","id":18,"command":"add"},{"role_id":1,"object_id":2,"object_operation":"read","id":2,"command":"add"},{"role_id":1,"object_id":3,"object_operation":"read","id":6,"command":"add"},{"role_id":1,"object_id":5,"object_operation":"delete","id":16,"command":"add"},{"role_id":1,"object_id":8,"object_operation":"delete","id":26,"command":"add"},{"role_id":1,"object_id":7,"object_operation":"read","id":20,"command":"add"},{"role_id":1,"object_id":3,"object_operation":"edit","id":8,"command":"add"},{"role_id":1,"object_id":4,"object_operation":"read","id":10,"command":"add"},{"role_id":1,"object_id":5,"object_operation":"read","id":13,"command":"add"},{"role_id":1,"object_id":3,"object_operation":"add","id":7,"command":"add"},{"role_id":1,"object_id":4,"object_operation":"edit","id":12,"command":"add"},{"role_id":1,"object_id":5,"object_operation":"add","id":14,"command":"add"},{"role_id":1,"object_id":7,"object_operation":"add","id":21,"command":"add"},{"role_id":2,"object_id":8,"object_operation":"add","id":53,"command":"add"},{"role_id":1,"object_id":8,"object_operation":"add","id":25,"command":"add"},{"role_id":1,"object_id":4,"object_operation":"add","id":11,"command":"add"},{"role_id":1,"object_id":5,"object_operation":"edit","id":15,"command":"add"},{"role_id":2,"object_id":8,"object_operation":"read","id":54,"command":"add"},{"role_id":1,"object_id":1,"object_operation":"read","id":1,"command":"add"},{"role_id":1,"object_id":8,"object_operation":"read","id":24,"command":"add"},{"role_id":1,"object_id":2,"object_operation":"delete","id":5,"command":"add"},{"role_id":1,"object_id":2,"object_operation":"edit","id":4,"command":"add"},{"role_id":1,"object_id":10,"object_operation":"edit","id":110,"command":"add"},{"role_id":1,"object_id":6,"object_operation":"delete","id":19,"command":"add"},{"role_id":1,"object_id":7,"object_operation":"delete","id":23,"command":"add"},{"role_id":1,"object_id":3,"object_operation":"delete","id":9,"command":"add"},{"role_id":1,"object_id":7,"object_operation":"edit","id":22,"command":"add"}],"command":"roles_objects","state":"ok"}
+                
             }
             else
             {
@@ -529,7 +531,20 @@ namespace bcsapp
             {
                 DataStorage.Instance.accessRolesObjectsData.Clear();
                 DataStorage.Instance.accessRolesObjectsData = JsonConvert.DeserializeObject<ResponseObjectsClass>(inputMessage).Items;
-                  }
+                DataStorage.Instance.accessListData = new List<AssetsRoleModel>();
+                foreach (ResponseObjectClass responseRoles in DataStorage.Instance.accessRolesObjectsData)
+                {
+                    AssetsRoleModel AssetData = new AssetsRoleModel();
+                    AssetData.ID = responseRoles.ID;
+                    AssetData.Name = responseRoles.Name;
+                    AssetData.Description = responseRoles.Description;
+                    AssetData.OperationAddAsset = responseRoles.OperationAdd;
+                    AssetData.OperationDeleteAsset = responseRoles.OperationDelete;
+                    AssetData.OperationEditAsset = responseRoles.OperationEdit;
+                    AssetData.OperationReadAsset = responseRoles.OperationRead;
+                    DataStorage.Instance.accessListData.Add(AssetData);
+                }
+            }
             else
             {
                 foreach (ResponseObjectClass obj in JsonConvert.DeserializeObject<ResponseObjectsClass>(inputMessage).Items)

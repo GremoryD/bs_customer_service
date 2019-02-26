@@ -22,6 +22,8 @@ namespace bcsapp.Models
         public List<ResponseObjectClass> accessRolesObjectsData = new List<ResponseObjectClass>();
         public List<ResponseRoleObjectClass> accessRoleToObjectsData = new List<ResponseRoleObjectClass>();
 
+        public List<AssetsRoleModel> accessListData = new List<AssetsRoleModel>();
+
         public void ClearData()
         {
             Login = null;

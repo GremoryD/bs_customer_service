@@ -32,7 +32,7 @@ namespace bcsapp.ViewModels
 
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler OnInitDone;
+        public event EventHandler OnInitDone; 
 
         public LoginViewModel()
         {

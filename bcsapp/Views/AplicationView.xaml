@@ -203,34 +203,36 @@
                                     <dxg:GridColumn FieldName="OperationRead" Header="Чтение"  HorizontalHeaderContentAlignment="Center"   Visible="True">
                                         <dxg:GridColumn.CellTemplate>
                                             <DataTemplate>
-                                                <dxe:CheckEdit  EditValue="{Binding RowData.Row.OperationRead}" HorizontalAlignment="Center"   IsEnabled="{Binding RowData.Row.OperationRead}"/>
+                                                <dxe:CheckEdit  EditValue="{Binding Data.OperationRead,Mode=TwoWay}" HorizontalAlignment="Center"   IsEnabled="{Binding RowData.Row.OperationReadAsset}"/>
                                             </DataTemplate>
                                         </dxg:GridColumn.CellTemplate>
                                     </dxg:GridColumn>
                                     <dxg:GridColumn FieldName="OperationAdd" Header="Добавление"  HorizontalHeaderContentAlignment="Center"   Visible="True"> 
                                         <dxg:GridColumn.CellTemplate>
                                             <DataTemplate>
-                                                <dxe:CheckEdit  EditValue="{Binding RowData.Row.OperationAdd}" HorizontalAlignment="Center"  IsEnabled="{Binding RowData.Row.OperationAdd}"/>
+                                                <dxe:CheckEdit  EditValue="{Binding Data.OperationAdd,Mode=TwoWay}" HorizontalAlignment="Center"  IsEnabled="{Binding RowData.Row.OperationAddAsset}"/>
                                             </DataTemplate>
                                         </dxg:GridColumn.CellTemplate>
                                     </dxg:GridColumn>
                                     <dxg:GridColumn FieldName="OperationEdit" Header="Изменение"  HorizontalHeaderContentAlignment="Center"   Visible="True"> 
                                         <dxg:GridColumn.CellTemplate>
                                             <DataTemplate>
-                                                <dxe:CheckEdit  EditValue="{Binding RowData.Row.OperationEdit}" HorizontalAlignment="Center"  IsEnabled="{Binding RowData.Row.OperationEdit}"/>
+                                                <dxe:CheckEdit  EditValue="{Binding Data.OperationEdit,Mode=TwoWay}" HorizontalAlignment="Center"  IsEnabled="{Binding RowData.Row.OperationEditAsset}"/>
                                             </DataTemplate>
                                         </dxg:GridColumn.CellTemplate>
                                     </dxg:GridColumn>
                                     <dxg:GridColumn FieldName="OperationDelete" Header="Удаление"  HorizontalHeaderContentAlignment="Center"   Visible="True"> 
                                         <dxg:GridColumn.CellTemplate>
                                             <DataTemplate>
-                                                <dxe:CheckEdit  EditValue="{Binding RowData.Row.OperationDelete}" HorizontalAlignment="Center"  IsEnabled="{Binding RowData.Row.OperationDelete}"/>
+                                                <dxe:CheckEdit  EditValue="{Binding Data.OperationDelete,Mode=TwoWay}" HorizontalAlignment="Center"  IsEnabled="{Binding RowData.Row.OperationDeleteAsset}"/>
                                             </DataTemplate>
                                         </dxg:GridColumn.CellTemplate>
                                     </dxg:GridColumn>
                                     <dxg:GridColumn FieldName="ID" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
-                                    <dxg:GridColumn FieldName="Hash" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
-                                    <dxg:GridColumn FieldName="Command" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
+                                    <dxg:GridColumn FieldName="OperationReadAsset" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
+                                    <dxg:GridColumn FieldName="OperationAddAsset" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
+                                    <dxg:GridColumn FieldName="OperationEditAsset" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
+                                    <dxg:GridColumn FieldName="OperationDeleteAsset" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
                                     <dxg:GridControl.View>
                                         <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AutoWidth="True"/>
                                     </dxg:GridControl.View>
