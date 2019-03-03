@@ -31,5 +31,7 @@ namespace ServerLib.JTypes.Server
         /// </summary>
         [JsonProperty(PropertyName = "object_operation", Required = Required.Always), JsonConverter(typeof(StringEnumConverter))]
         public Enums.ObjectOperations ObjectOperation { get; set; }
+
+        public ResponseRolesObjectsAddClass() : base(Enums.Commands.roles_objects_add) { }
     }
 }
