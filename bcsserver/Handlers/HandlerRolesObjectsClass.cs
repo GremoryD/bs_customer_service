@@ -142,7 +142,9 @@ namespace bcsserver.Handlers
                 ServerLib.JTypes.Client.RequestRolesObjectsDeleteClass Request = JsonConvert.DeserializeObject<ServerLib.JTypes.Client.RequestRolesObjectsDeleteClass>(ARequest);
                 DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
                 Params.CreateParameterValue("Token", Request.Token);
-                Params.CreateParameterValue("OperationId", Request.RolesObjectsPermissionID);
+                Params.CreateParameterValue("RoleId", Request.RoleID);
+                Params.CreateParameterValue("ObjectId", Request.ObjectID);
+                Params.CreateParameterValue("OperationId", (int)Request.ObjectOperation);
                 Params.CreateParameterValue("State");
                 Params.CreateParameterValue("ErrorText");
                 UserSession.Project.Database.Execute("RolesObjectsDelete", ref Params);
@@ -150,7 +152,9 @@ namespace bcsserver.Handlers
                 {
                     UserSession.OutputQueueAddObject(new ServerLib.JTypes.Server.ResponseRolesObjectsDeleteClass()
                     {
-                        ID = Request.RolesObjectsPermissionID
+                        RoleID = Request.RoleID,
+                        ObjectID = Request.ObjectID,
+                        ObjectOperation = Request.ObjectOperation
                     });
                     ProcessingSuccess = true;
                 }
