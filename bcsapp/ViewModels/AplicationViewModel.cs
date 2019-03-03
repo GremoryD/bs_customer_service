@@ -14,6 +14,7 @@ using ServerLib.JTypes.Server;
 using System.Collections.ObjectModel;
 using bcsapp.Models;
 using System.Diagnostics;
+using DevExpress.Xpf.Grid;
 
 namespace bcsapp.ViewModels
 {
@@ -41,6 +42,7 @@ namespace bcsapp.ViewModels
         //GridUSers
         public ICommand UserSelectedItemChangedCommand { set; get; }
         public ICommand RoleSelectedItemChangedCommand { set; get; }
+        public ICommand CellAssetsRolesValueChangedCommand { set; get; }
         //Ribon Menu Buttons
         public bool SelectedUsers { set; get; } = true;
         public bool SelectedClients { set; get; } = false;
@@ -99,6 +101,7 @@ namespace bcsapp.ViewModels
             RoleSelectedItemChangedCommand = new SimpleCommand(UpdateRolesToAcces);
             AddRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(AddRoleToUser);
             RemoveRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(RemoveRoleToUser);
+            CellAssetsRolesValueChangedCommand = new SimpleCommand<Object>(CellAssetsRolesValueChanging);
 
             WebSocketController.Instance.UpdateUserUI += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUserUI(__));
             WebSocketController.Instance.ConnectedState += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_ConnectedState(__));
@@ -127,6 +130,12 @@ namespace bcsapp.ViewModels
             {
                 OnInitDone?.Invoke(this, EventArgs.Empty);
             });
+        }
+
+        private void CellAssetsRolesValueChanging(Object aplication)
+        {
+
+            
         }
 
         private void Instance_UpdateUserRoles(string e)

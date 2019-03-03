@@ -279,8 +279,12 @@ namespace bcsapp.Models
             WebSocketController.Instance.OutputQueueAddObject(roleRemoveUserTransaction.Data);
         }
 
+        public static void CellAssetsRolesValueChanging(Transaction roleRemoveUserTransaction)
+        {
 
-         
+        }
+
+
 
     }
 

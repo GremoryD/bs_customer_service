@@ -2,12 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:bcsapp.Views"
-             xmlns:dxgt="http://schemas.devexpress.com/winfx/2008/xaml/grid/themekeys"
+             xmlns:local="clr-namespace:bcsapp.Views" 
+             xmlns:dxgt="http://schemas.devexpress.com/winfx/2008/xaml/grid/themekeys" 
              xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" xmlns:dxn="http://schemas.devexpress.com/winfx/2008/xaml/navbar" 
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
              xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dxa="http://schemas.devexpress.com/winfx/2008/xaml/accordion" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" x:Class="bcsapp.Views.AplicationView"
+             x:Name="view"
              mc:Ignorable="d" >
     <Grid > 
         <Grid.RowDefinitions>
@@ -200,31 +201,47 @@
                                             <dxe:TextEditSettings TextWrapping="Wrap"/>
                                         </dxg:GridColumn.EditSettings>
                                     </dxg:GridColumn>
-                                    <dxg:GridColumn FieldName="OperationRead" Header="Чтение"  HorizontalHeaderContentAlignment="Center"   Visible="True">
+                                    <dxg:GridColumn FieldName="OperationRead" Header="Чтение"   HorizontalHeaderContentAlignment="Center"   Visible="True">
                                         <dxg:GridColumn.CellTemplate>
                                             <DataTemplate>
-                                                <dxe:CheckEdit  EditValue="{Binding Data.OperationRead,Mode=TwoWay}" HorizontalAlignment="Center"   IsEnabled="{Binding RowData.Row.OperationReadAsset}"/>
+                                                <dxe:CheckEdit  EditValue="{Binding Data.OperationRead}" HorizontalAlignment="Center"   IsEnabled="{Binding RowData.Row.OperationReadAsset}">
+                                                    <dxmvvm:Interaction.Behaviors>
+                                                        <dxmvvm:EventToCommand EventName="EditValueChanged" Command="{Binding ElementName=view, Path=DataContext.CellAssetsRolesValueChangedCommand}" CommandParameter="{Binding RowData.Row}" />
+                                                    </dxmvvm:Interaction.Behaviors>
+                                                </dxe:CheckEdit>
                                             </DataTemplate>
                                         </dxg:GridColumn.CellTemplate>
                                     </dxg:GridColumn>
                                     <dxg:GridColumn FieldName="OperationAdd" Header="Добавление"  HorizontalHeaderContentAlignment="Center"   Visible="True"> 
                                         <dxg:GridColumn.CellTemplate>
                                             <DataTemplate>
-                                                <dxe:CheckEdit  EditValue="{Binding Data.OperationAdd,Mode=TwoWay}" HorizontalAlignment="Center"  IsEnabled="{Binding RowData.Row.OperationAddAsset}"/>
+                                                <dxe:CheckEdit   EditValue="{Binding Data.OperationAdd}" HorizontalAlignment="Center"  IsEnabled="{Binding RowData.Row.OperationAddAsset}">
+                                                    <dxmvvm:Interaction.Behaviors>
+                                                        <dxmvvm:EventToCommand EventName="EditValueChanged" Command="{Binding ElementName=view, Path=DataContext.CellAssetsRolesValueChangedCommand}" CommandParameter="{Binding RowData.Row}" />
+                                                    </dxmvvm:Interaction.Behaviors>
+                                                </dxe:CheckEdit>
                                             </DataTemplate>
                                         </dxg:GridColumn.CellTemplate>
                                     </dxg:GridColumn>
                                     <dxg:GridColumn FieldName="OperationEdit" Header="Изменение"  HorizontalHeaderContentAlignment="Center"   Visible="True"> 
                                         <dxg:GridColumn.CellTemplate>
                                             <DataTemplate>
-                                                <dxe:CheckEdit  EditValue="{Binding Data.OperationEdit,Mode=TwoWay}" HorizontalAlignment="Center"  IsEnabled="{Binding RowData.Row.OperationEditAsset}"/>
+                                                <dxe:CheckEdit EditValue="{Binding Data.OperationEdit}" HorizontalAlignment="Center"  IsEnabled="{Binding RowData.Row.OperationEditAsset}">
+                                                    <dxmvvm:Interaction.Behaviors>
+                                                        <dxmvvm:EventToCommand EventName="EditValueChanged" Command="{Binding ElementName=view, Path=DataContext.CellAssetsRolesValueChangedCommand}" CommandParameter="{Binding RowData.Row}" />
+                                                    </dxmvvm:Interaction.Behaviors>
+                                                </dxe:CheckEdit>
                                             </DataTemplate>
                                         </dxg:GridColumn.CellTemplate>
                                     </dxg:GridColumn>
                                     <dxg:GridColumn FieldName="OperationDelete" Header="Удаление"  HorizontalHeaderContentAlignment="Center"   Visible="True"> 
                                         <dxg:GridColumn.CellTemplate>
                                             <DataTemplate>
-                                                <dxe:CheckEdit  EditValue="{Binding Data.OperationDelete,Mode=TwoWay}" HorizontalAlignment="Center"  IsEnabled="{Binding RowData.Row.OperationDeleteAsset}"/>
+                                                <dxe:CheckEdit  EditValue="{Binding Data.OperationDelete}" HorizontalAlignment="Center"  IsEnabled="{Binding RowData.Row.OperationDeleteAsset}">
+                                                    <dxmvvm:Interaction.Behaviors>
+                                                        <dxmvvm:EventToCommand EventName="EditValueChanged" Command="{Binding ElementName=view, Path=DataContext.CellAssetsRolesValueChangedCommand}" CommandParameter="{Binding RowData.Row}" />
+                                                    </dxmvvm:Interaction.Behaviors>
+                                                </dxe:CheckEdit>
                                             </DataTemplate>
                                         </dxg:GridColumn.CellTemplate>
                                     </dxg:GridColumn>
@@ -232,9 +249,10 @@
                                     <dxg:GridColumn FieldName="OperationReadAsset" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
                                     <dxg:GridColumn FieldName="OperationAddAsset" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
                                     <dxg:GridColumn FieldName="OperationEditAsset" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
-                                    <dxg:GridColumn FieldName="OperationDeleteAsset" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/>
+                                    <dxg:GridColumn FieldName="OperationDeleteAsset" Header="Описание"  HorizontalHeaderContentAlignment="Center"   Visible="False"/> 
                                     <dxg:GridControl.View>
-                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AutoWidth="True"/>
+                                        <dxg:TableView ShowGroupedColumns="True" ShowAutoFilterRow="True"  AutoWidth="True">
+                                        </dxg:TableView>
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
                             </Grid>
