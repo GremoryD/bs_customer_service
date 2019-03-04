@@ -101,7 +101,7 @@ namespace bcsapp.ViewModels
             RoleSelectedItemChangedCommand = new SimpleCommand(UpdateRolesToAcces);
             AddRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(AddRoleToUser);
             RemoveRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(RemoveRoleToUser);
-            CellAssetsRolesValueChangedCommand = new SimpleCommand<Object>(CellAssetsRolesValueChanging);
+            CellAssetsRolesValueChangedCommand = new SimpleCommand<AssetsRoleModel>(CellAssetsRolesValueChanging);
 
             WebSocketController.Instance.UpdateUserUI += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUserUI(__));
             WebSocketController.Instance.ConnectedState += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_ConnectedState(__));
@@ -132,7 +132,7 @@ namespace bcsapp.ViewModels
             });
         }
 
-        private void CellAssetsRolesValueChanging(Object aplication)
+        private void CellAssetsRolesValueChanging(AssetsRoleModel aplication)
         {
 
             
