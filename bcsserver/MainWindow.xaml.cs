@@ -130,7 +130,7 @@ namespace bcsserver
             // Права доступа ролей пользователей к объектам системы
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "RolesObjects", "USR.GET_ROLES_ACCESS_RIGTHS(:Token)", "Чтение списка прав доступа ролей пользователей к объектам системы");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "RolesObjectsAdd", "USR.ROLES_ACCESS_RIGTHS_ADD(:Token, :RoleId, :ObjectId, :OperationId, :NewId, :State, :ErrorText)", "Добавление роли пользователей разрешения на операцию над объектом системы");
-            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "RolesObjectsDelete", "USR.ROLES_ACCESS_RIGTHS_DELETE(:Token, :OperationId, :State, :ErrorText)", "Удаление у роли пользователей разрешения на операцию над объектом системы");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "RolesObjectsDelete", "USR.ROLES_ACCESS_RIGTHS_DELETE(:Token, :RoleId, :ObjectId, :OperationId, :State, :ErrorText)", "Удаление у роли пользователей разрешения на операцию над объектом системы");
 
             // Пароли пользователей
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserPasswordChange", "USR.USER_PASSWORD_CHANGE(:Token, :UserId, :Password, :State, :ErrorText)", "Изменение пароля пользователя");
