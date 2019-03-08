@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace bcsserver.Handlers
 {
-    public class UserInformationClass : ServerLib.JTypes.Server.UserInformationClass
+    public class UserInformationClass : ServerLib.JTypes.Server.ResponseUserInformationClass
     {
         private UserSessionClass UserSession;
 
@@ -48,7 +48,7 @@ namespace bcsserver.Handlers
                             IsRunning = true;
                             DatabaseParameterValuesClass Param = new DatabaseParameterValuesClass();
                             Param.CreateParameterValue("Token", UserSession.Login.Token);
-                            Param.CreateParameterValue("UserId", UserSession.Login.UserId);
+                            Param.CreateParameterValue("UserId", UserSession.Login.ID);
                             Param.CreateParameterValue("FirstName");
                             Param.CreateParameterValue("LastName");
                             Param.CreateParameterValue("MidleName");
@@ -57,16 +57,32 @@ namespace bcsserver.Handlers
                             Param.CreateParameterValue("State");
                             Param.CreateParameterValue("ErrorText");
                             UserSession.Project.Database.Execute("UserInformation", ref Param);
-                            if(Param.ParameterByName("State").Value.ToString() == "ok")
+                            if (Param.ParameterByName("State").AsString == "ok")
                             {
+                                DatabaseParameterValuesClass Params = new DatabaseParameterValuesClass();
+                                Params.CreateParameterValue("Token", UserSession.Login.Token);
+                                DatabaseTableClass ReadTable = new DatabaseTableClass
+                                {
+                                    Table = (System.Data.DataTable)UserSession.Project.Database.Execute("UserPermissions", ref Params)
+                                };
+                                Permissions.Clear();
+                                foreach (System.Data.DataRow row in ReadTable.Table.Rows)
+                                {
+                                    Permissions.Add(new ServerLib.JTypes.Server.ResponseUserPermissionClass
+                                    {
+                                        ObjectName = ReadTable.AsString(row, "OBJECT"),
+                                        Operation = (ServerLib.JTypes.Enums.ObjectOperations)ReadTable.AsInt32(row, "OPERATION")
+                                    });
+                                }
+
                                 string OldMessage = JsonConvert.SerializeObject(this);
-                                FirstName = Param.ParameterByName("FirstName").Value.ToString();
-                                LastName = Param.ParameterByName("LastName").Value.ToString();
-                                MidleName = Param.ParameterByName("MidleName").Value.ToString();
-                                Job = Param.ParameterByName("Job").Value.ToString();
-                                Active = Convert.ToInt32(Param.ParameterByName("Active").Value.ToString()) == 1 ? ServerLib.JTypes.Enums.UserActive.activated : ServerLib.JTypes.Enums.UserActive.blocked;
+                                FirstName = Param.ParameterByName("FirstName").AsString;
+                                LastName = Param.ParameterByName("LastName").AsString;
+                                MidleName = Param.ParameterByName("MidleName").AsString;
+                                JobName = Param.ParameterByName("Job").AsString;
+                                Active = Param.ParameterByName("Active").AsInt32 == 1 ? ServerLib.JTypes.Enums.UserActive.activated : ServerLib.JTypes.Enums.UserActive.blocked;
                                 State = ServerLib.JTypes.Enums.ResponseState.ok;
-                                if(JsonConvert.SerializeObject(this) != OldMessage)
+                                if (JsonConvert.SerializeObject(this) != OldMessage)
                                 {
                                     UserSession.OutputQueueAddObject(this);
                                 }

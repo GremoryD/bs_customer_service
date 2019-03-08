@@ -1,22 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using System.Windows.Threading;
-using Oracle.ManagedDataAccess.Types;
 using Oracle.ManagedDataAccess.Client;
 using CLProject;
 
@@ -98,22 +85,56 @@ namespace bcsserver
             Project.Database.Parameters.CreateParameter("Job", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Должность пользователя", 200);
             Project.Database.Parameters.CreateParameter("JobName", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Должность пользователя", 200);
             Project.Database.Parameters.CreateParameter("JobId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Идентификатор должности", 20);
+            Project.Database.Parameters.CreateParameter("RoleId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Идентификатор роли пользователей", 20);
+            Project.Database.Parameters.CreateParameter("ObjectId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Идентификатор объекта системы", 20);
+            Project.Database.Parameters.CreateParameter("OperationId", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Идентификатор типа операции над объектом системы", 20);
             Project.Database.Parameters.CreateParameter("Active", System.Data.ParameterDirection.Output, OracleDbType.Decimal, "Признак активности пользователя (1 - активен, 0 - заблокирован)", 20);
             Project.Database.Parameters.CreateParameter("InActive", System.Data.ParameterDirection.Input, OracleDbType.Decimal, "Признак активности пользователя (1 - активен, 0 - заблокирован)", 20);
             Project.Database.Parameters.CreateParameter("Token", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Ключ доступа");
             Project.Database.Parameters.CreateParameter("State", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Статус завершения SQL-запроса", 20);
             Project.Database.Parameters.CreateParameter("ErrorText", System.Data.ParameterDirection.Output, OracleDbType.NVarchar2, "Текст ошибки выполнения SQL-запроса", 500);
+            Project.Database.Parameters.CreateParameter("Name", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Наименование", 200);
+            Project.Database.Parameters.CreateParameter("Description", System.Data.ParameterDirection.Input, OracleDbType.NVarchar2, "Описание", 200);
 
             Project.Database.Commands.CreateCommand("conn", RequestType.Reader, "ConnectionCheck", "SELECT 1 FROM DUAL", "Проверка соединения с базой данных");
+
+            // Пользователь
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Login", "USR.LOGIN(:WebSocketID, :Login, :Password, :AccessToken, :AccessUserId, :Active)", "Аутентификация пользователя");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "Logout", "USR.LOGOUT(:Token, :State)", "Выход из системы");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserInformation", "USR.GET_USER_INFORMATION(:Token, :UserId, :FirstName, :LastName, :MidleName, :Job, :Active, :State, :ErrorText)", "Чтение информации и пользователе");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Table, "UserPermissions", "USR.GET_USER_PERMISSIONS(:Token)", "Права доступа пользователя к операциям над объектами системы");
+
+            // Пользователи
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Users", "USR.GET_USERS(:Token)", "Чтение списка пользователей");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserAdd", "USR.USER_CREATE(:Token, :Login, :Password, :InFirstName, :InLastName, :InMidleName, :InActive, :JobId, :AccessUserId, :Job, :State, :ErrorText)", "Добавление пользователя");
-            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserEdit", "USR.USER_UPDATE(:Token, :UserId, :Password, :InFirstName, :InLastName, :InMidleName, :InActive, :JobId, :Job, :State, :ErrorText)", "Изменение пользователя");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserEdit", "USR.USER_UPDATE(:Token, :UserId, :InFirstName, :InLastName, :InMidleName, :InActive, :JobId, :Job, :State, :ErrorText)", "Изменение пользователя");
+
+            // Должности пользователей
             Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Jobs", "USR.GET_JOBS(:Token)", "Чтение списка должностей пользователей");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "JobAdd", "USR.JOB_CREATE(:Token, :JobName, :NewId, :State, :ErrorText)", "Добавление должности пользователей");
             Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "JobEdit", "USR.JOB_UPDATE(:Token, :JobName, :JobId, :State, :ErrorText)", "Изменение должности пользователей");
+
+            // Роли
+            Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Roles", "USR.GET_ROLES_LIST(:Token)", "Чтение общего списка ролей пользователей");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "RoleAdd", "USR.USER_ROLES_LIST_ADD(:Token, :Name, :Description, :NewId, :State, :ErrorText)", "Добавление роли пользователей");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "RoleEdit", "USR.USER_ROLES_LIST_WRITE(:Token, :Name, :Description, :InId, :State, :ErrorText)", "Изменение роли пользователей");
+
+            // Роли пользователей
+            Project.Database.Commands.CreateCommand("conn", RequestType.Table, "UsersRoles", "USR.GET_USERS_ROLES(:Token)", "Чтение списка назанченных ролей пользователей");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UsersRolesAdd", "USR.USERS_ROLES_ADD(:Token, :UserId, :RoleId, :NewId, :State, :ErrorText)", "Добавление роли пользователю");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UsersRolesDelete", "USR.USERS_ROLES_DELETE(:Token, :RoleId, :State, :ErrorText)", "Удаление роли пользователя");
+
+            // Объекты системы
+            Project.Database.Commands.CreateCommand("conn", RequestType.Table, "Objects", "USR.GET_OBJECTS(:Token)", "Чтение списка объектов системы");
+
+            // Права доступа ролей пользователей к объектам системы
+            Project.Database.Commands.CreateCommand("conn", RequestType.Table, "RolesObjects", "USR.GET_ROLES_ACCESS_RIGTHS(:Token)", "Чтение списка прав доступа ролей пользователей к объектам системы");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "RolesObjectsAdd", "USR.ROLES_ACCESS_RIGTHS_ADD(:Token, :RoleId, :ObjectId, :OperationId, :NewId, :State, :ErrorText)", "Добавление роли пользователей разрешения на операцию над объектом системы");
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "RolesObjectsDelete", "USR.ROLES_ACCESS_RIGTHS_DELETE(:Token, :RoleId, :ObjectId, :OperationId, :State, :ErrorText)", "Удаление у роли пользователей разрешения на операцию над объектом системы");
+
+            // Пароли пользователей
+            Project.Database.Commands.CreateCommand("conn", RequestType.Procedure, "UserPasswordChange", "USR.USER_PASSWORD_CHANGE(:Token, :UserId, :Password, :State, :ErrorText)", "Изменение пароля пользователя");
+
 
             DatabaseCheck.Start();
             SetSettingsButtons();
@@ -125,14 +146,7 @@ namespace bcsserver
         {
             if (Project.Settings.IssueOnExit)
             {
-                if (System.Windows.MessageBox.Show("Завершить работу\r\nсервера клиентской поддержки?", "Завершение работы", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question) == System.Windows.MessageBoxResult.Yes)
-                {
-                    e.Cancel = false;
-                }
-                else
-                {
-                    e.Cancel = true;
-                }
+                e.Cancel = System.Windows.MessageBox.Show("Завершить работу\r\nсервера клиентской поддержки?", "Завершение работы", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes ? false : true;
             }
             else
             {

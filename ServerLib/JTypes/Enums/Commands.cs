@@ -5,6 +5,109 @@
     /// </summary>
     public enum Commands
     {
-        none, login, logout, user_information, users, user_add, user_edit, jobs, job_add, job_edit
+        /// <summary>
+        /// Неисполняемая команда
+        /// </summary>
+        none,
+
+        /// <summary>
+        /// Аутентификация пользователя
+        /// </summary>
+        login,
+
+        /// <summary>
+        /// Выход из системы пользователя
+        /// </summary>
+        logout,
+
+        /// <summary>
+        /// Информация о пользователе
+        /// </summary>
+        user_information,
+
+        /// <summary>
+        /// Список пользователей
+        /// </summary>
+        users,
+
+        /// <summary>
+        /// Добавление пользователя
+        /// </summary>
+        user_add,
+
+        /// <summary>
+        /// Изменение пользователя
+        /// </summary>
+        user_edit,
+
+        /// <summary>
+        /// Список должностей
+        /// </summary>
+        jobs,
+
+        /// <summary>
+        /// Добавление должности
+        /// </summary>
+        job_add,
+
+        /// <summary>
+        /// Изменение должности
+        /// </summary>
+        job_edit,
+        
+        /// <summary>
+        /// Список всех ролей пользователей
+        /// </summary>
+        roles,                
+        
+        /// <summary>
+        /// Добавление роли пользователей
+        /// </summary>
+        roles_add,
+        
+        /// <summary>
+        /// Изменение роли пользователей
+        /// </summary>
+        roles_edit,
+
+        /// <summary>
+        /// Список ролей назначенных пользователям
+        /// </summary>
+        users_roles,
+
+        /// <summary>
+        /// Добавление роли пользователю
+        /// </summary>
+        users_roles_add,
+
+        /// <summary>
+        /// Удаление роли у пользователя
+        /// </summary>
+        users_roles_delete,
+
+        /// <summary>
+        /// Список объектов системы
+        /// </summary>
+        objects,
+
+        /// <summary>
+        /// Список прав доступа ролей пользователей к объектам системы
+        /// </summary>
+        roles_objects,
+
+        /// <summary>
+        /// Добавление разрешения роли пользователей на операцию над объектом системы
+        /// </summary>
+        roles_objects_add,
+
+        /// <summary>
+        /// Удаление разрешения роли пользователей на операцию над объектом системы
+        /// </summary>
+        roles_objects_delete,
+
+        /// <summary>
+        /// Изменение пароля пользователя
+        /// </summary>
+        user_password_change
     }
 }

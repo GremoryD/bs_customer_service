@@ -50,18 +50,67 @@ namespace bcsapp.Controls
             {
                 viewModels.Remove(viewModels.Last());
                 currentWindow.Content = viewModels.Last();
-            });
 
+                if (viewModels.Last().FullscreenView)
+                    currentWindow.WindowState = WindowState.Maximized;
+                else
+                    currentWindow.WindowState = WindowState.Normal;
+            });
         }
 
         public void Navigate(IViewModel model)
         {
+
+            if (model is LoginViewModel)
+            {
+                currentWindow.ResizeMode = ResizeMode.NoResize;
+            }
+            else
+            {
+                currentWindow.ResizeMode = ResizeMode.CanResize;
+            } 
+
             Application.Current.Dispatcher.Invoke(() =>
             {
+                currentWindow.Visibility = Visibility.Collapsed;
+
+                model.OnInitDone += (_, __) =>
+                {
+                    if (model.FullscreenView)
+                    {
+                        currentWindow.WindowState = WindowState.Maximized;
+                        currentWindow.SizeToContent = SizeToContent.Manual;
+                    }
+                    else
+                    {
+                        currentWindow.WindowState = WindowState.Normal;
+                        currentWindow.SizeToContent = SizeToContent.WidthAndHeight;
+                    }
+
+                    currentWindow.Visibility = Visibility.Visible;
+                };
+
                 currentWindow.Content = model;
                 viewModels.Add(model);
             });
         }
 
+        Window window;
+        public void ShowDialogWin(IViewModel viewModel, string title)
+        {
+            window = new Window();
+            window.Title = title;
+            window.WindowStyle = WindowStyle.ToolWindow;
+            window.ShowInTaskbar = false;
+            window.Owner = currentWindow;
+            window.Content = viewModel;
+            window.SizeToContent = SizeToContent.WidthAndHeight;
+            window.ShowDialog();
+        }
+
+        public void CloseDialogWin()
+        {
+            window.Close();
+        }
     }
 }

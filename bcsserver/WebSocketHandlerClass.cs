@@ -89,17 +89,17 @@ namespace bcsserver
                     }
                     else
                     {
-                        SendObject(new ServerLib.JTypes.Server.ExceptionClass(ServerLib.JTypes.Enums.Commands.none, ServerLib.JTypes.Enums.ErrorCodes.SessionNotFound));
+                        SendObject(new ServerLib.JTypes.Server.ResponseExceptionClass(ServerLib.JTypes.Enums.Commands.none, ServerLib.JTypes.Enums.ErrorCodes.SessionNotFound));
                     }
                 }
                 else
                 {
-                    SendObject(new ServerLib.JTypes.Server.ExceptionClass(ServerLib.JTypes.Enums.Commands.none, ServerLib.JTypes.Enums.ErrorCodes.NonTextMessage));
+                    SendObject(new ServerLib.JTypes.Server.ResponseExceptionClass(ServerLib.JTypes.Enums.Commands.none, ServerLib.JTypes.Enums.ErrorCodes.NonTextMessage));
                 }
             }
             catch (Exception ex)
             {
-                SendObject(new ServerLib.JTypes.Server.ExceptionClass(ServerLib.JTypes.Enums.Commands.none, ServerLib.JTypes.Enums.ErrorCodes.FatalError, ex.Message));
+                SendObject(new ServerLib.JTypes.Server.ResponseExceptionClass(ServerLib.JTypes.Enums.Commands.none, ServerLib.JTypes.Enums.ErrorCodes.FatalError, ex.Message));
             }
         }
     }

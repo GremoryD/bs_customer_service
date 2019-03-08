@@ -1,8 +1,8 @@
 ﻿using System;
-using CLProject;
-using System.Threading;
 using System.Collections.Concurrent;
+using System.Threading;
 using Newtonsoft.Json;
+using CLProject;
 using ServerLib.JTypes.Server;
 using ServerLib.JTypes.Enums;
 
@@ -46,7 +46,7 @@ namespace bcsserver
         /// <summary>
         /// Признак аутентификации пользователя
         /// </summary>
-        public bool IsAuthenticated { get { return Login.UserId > 0; } }
+        public bool IsAuthenticated { get { return Login.ID > 0; } }
 
         /// <summary>
         /// Поток обработки входной очереди
@@ -76,12 +76,32 @@ namespace bcsserver
         /// <summary>
         /// Обработчик списка пользователей
         /// </summary>
-        public Handlers.UsersClass Users;
+        public Handlers.HandlerUsersClass Users;
 
         /// <summary>
         /// Обработчик списка должностей пользователей
         /// </summary>
-        public Handlers.JobsClass Jobs;
+        public Handlers.HandlerJobsClass Jobs;
+
+        /// <summary>
+        /// Обработчик списка ролей пользователей
+        /// </summary>
+        public Handlers.HandlerRolesClass Roles;
+
+        /// <summary>
+        /// Обработчик списка ролей пользователей
+        /// </summary>
+        public Handlers.HandlerUsersRolesClass UsersRoles;
+
+        /// <summary>
+        /// Обработчик списка объектов системы
+        /// </summary>
+        public Handlers.HandlerObjectsClass Objects;
+
+        /// <summary>
+        /// Обработчик списка прав доступа ролей пользователей к объектам системы
+        /// </summary>
+        public Handlers.HandlerRolesObjectsClass RolesObjects;
 
         /// <summary>
         /// Конструктор класса сессии пользователя
@@ -105,8 +125,12 @@ namespace bcsserver
             UserInformation = new Handlers.UserInformationClass();
             UserInformation.SetUserSession(this);
 
-            Users = new Handlers.UsersClass(this);
-            Jobs = new Handlers.JobsClass(this);
+            Users = new Handlers.HandlerUsersClass(this);
+            Jobs = new Handlers.HandlerJobsClass(this);
+            Roles = new Handlers.HandlerRolesClass(this);
+            UsersRoles = new Handlers.HandlerUsersRolesClass(this);
+            Objects = new Handlers.HandlerObjectsClass(this);
+            RolesObjects = new Handlers.HandlerRolesObjectsClass(this);
 
             InputQueueProcessing = new Thread(InputQueueProcessingThread);
             OutputQueueProcessing = new Thread(OutputQueueProcessingThread);
@@ -144,7 +168,7 @@ namespace bcsserver
                         }
                         catch
                         {
-                            OutputQueueAddObject(new ExceptionClass(Commands.none, ErrorCodes.NotJSONObject));
+                            OutputQueueAddObject(new ResponseExceptionClass(Commands.none, ErrorCodes.NotJSONObject));
                         }
                         if (CommandStr.Length > 0)
                         {
@@ -171,7 +195,7 @@ namespace bcsserver
                                                     Users.SendData();
                                                     break;
                                                 case Commands.user_add:
-                                                    Users.Add(ARequest: Request);
+                                                    Users.Add(Request);
                                                     break;
                                                 case Commands.user_edit:
                                                     Users.Edit(Request);
@@ -185,16 +209,49 @@ namespace bcsserver
                                                 case Commands.job_edit:
                                                     Jobs.Edit(Request);
                                                     break;
+                                                case Commands.roles:
+                                                    Roles.SendData();
+                                                    break;
+                                                case Commands.roles_add:
+                                                    Roles.Add(Request);
+                                                    break;
+                                                case Commands.roles_edit:
+                                                    Roles.Edit(Request);
+                                                    break;
+                                                case Commands.users_roles:
+                                                    UsersRoles.SendData();
+                                                    break;
+                                                case Commands.users_roles_add:
+                                                    UsersRoles.Add(Request);
+                                                    break;
+                                                case Commands.users_roles_delete:
+                                                    UsersRoles.Delete(Request);
+                                                    break;
+                                                case Commands.objects:
+                                                    Objects.SendData();
+                                                    break;
+                                                case Commands.roles_objects:
+                                                    RolesObjects.SendData();
+                                                    break;
+                                                case Commands.roles_objects_add:
+                                                    RolesObjects.Add(Request);
+                                                    break;
+                                                case Commands.roles_objects_delete:
+                                                    RolesObjects.Delete(Request);
+                                                    break;
+                                                case Commands.user_password_change:
+                                                    Users.ChangePassword(Request);
+                                                    break;
                                             }
                                         }
                                         else
                                         {
-                                            OutputQueueAddObject(new ExceptionClass(Command, ErrorCodes.NotAuthenticated));
+                                            OutputQueueAddObject(new ResponseExceptionClass(Command, ErrorCodes.NotAuthenticated));
                                         }
                                     }
                                     else
                                     {
-                                        OutputQueueAddObject(new ExceptionClass(Command, ErrorCodes.IncorrectToken));
+                                        OutputQueueAddObject(new ResponseExceptionClass(Command, ErrorCodes.IncorrectToken));
                                     }
                                 }
                             }
@@ -220,6 +277,7 @@ namespace bcsserver
         public void InputQueueAdd(string ARequest)
         {
             Requests.Enqueue(ARequest);
+            Project.Log.Trace(string.Format("in: {0}", ARequest));
         }
 
         /// <summary>
@@ -229,6 +287,7 @@ namespace bcsserver
         public void OutputQueueAddString(string AResponse)
         {
             Responses.Enqueue(AResponse);
+            Project.Log.Trace(string.Format("out: {0}", AResponse));
         }
 
         /// <summary>

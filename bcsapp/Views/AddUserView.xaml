@@ -1,0 +1,43 @@
+﻿<UserControl xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"  x:Class="bcsapp.Views.AddUserView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:bcsapp.Views"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             MinWidth="350"
+             MinHeight="300"
+             mc:Ignorable="d" >
+    <Grid Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.5*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="" TextWrapping="Wrap"  TextAlignment="Left" VerticalAlignment="Top" FontSize="18"/>
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="Логин:" TextWrapping="Wrap"  IsEnabled="{Binding PasswordEnable}"  TextAlignment="Left" VerticalAlignment="Top" Margin="9.8,0,10.4,0"/>
+        <dxe:TextEdit Grid.Row="1" Grid.Column="2" VerticalAlignment="Top" IsEnabled="{Binding PasswordEnable}"  Text="{Binding UserLogin,UpdateSourceTrigger=PropertyChanged}"    Margin="9.8,21,10.4,0"/>
+        <TextBlock Grid.Row="2" Grid.Column="2" Text="Пароль:" IsEnabled="{Binding PasswordEnable}"  TextWrapping="Wrap"  TextAlignment="Left" VerticalAlignment="Top" Margin="9.8,0.4,10.4,0"/>
+        <dxe:TextEdit Grid.Row="2" IsEnabled="{Binding PasswordEnable}" VerticalAlignment="Top" Text="{Binding UserPassword,UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Margin="9.8,21.4,10.4,0"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Имя:" TextWrapping="Wrap"  TextAlignment="Left" VerticalAlignment="Top" Margin="10,0,10.2,0"/>
+        <dxe:TextEdit Grid.Row="1" Grid.Column="1"  VerticalAlignment="Top" Text="{Binding UserName}"  Margin="10,21,10.2,0"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="Фамилия:" TextWrapping="Wrap"  TextAlignment="Left" VerticalAlignment="Top" Margin="10,0.4,10.2,0"/>
+        <dxe:TextEdit Grid.Row="2" VerticalAlignment="Top" Text="{Binding UserSurname}"  Grid.Column="1" Margin="10,21.4,10.2,0"/>
+        <dxe:CheckEdit Grid.Column="2" Content="Активен" IsChecked="{Binding ActiveCheck}" Grid.Row="3" VerticalAlignment="Center" Margin="9.8,24.4,10.4,24.4" />
+        <TextBlock Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Text="Должность:" TextWrapping="Wrap"  TextAlignment="Left" VerticalAlignment="Top" Height="21" Margin="10,0,10.4,0"/>
+        <dxe:ComboBoxEdit Grid.Row="4" Grid.ColumnSpan="2" IsTextEditable="False"  Grid.Column="1" Margin="10,21.4,10.4,0" ItemsSource="{Binding observableJobsClass}" DisplayMember="Name" SelectedItem="{Binding SelectedJob}" Height="28" VerticalAlignment="Top" IsPopupOpen="True"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="Отчество:" TextWrapping="Wrap"  TextAlignment="Left" VerticalAlignment="Top" Margin="10,3.8,10.2,0"/>
+        <dxe:TextEdit Grid.Row="3" VerticalAlignment="Center" Text="{Binding UserMiddleName}"  Grid.Column="1" Margin="10,24.8,10.2,25.2"/>
+        <dx:SimpleButton Grid.Column="1" Grid.Row="5" Content="Сохранить" Margin="10,5,10,5"   Command="{Binding AddUserCommand}"/>
+        <dx:SimpleButton Grid.Column="2" Grid.Row="5" Content="Отмена" Margin="10,5,10,5"  Command="{Binding CancelCommand}"/>
+    </Grid>
+</UserControl>
