@@ -239,7 +239,8 @@
                                             <DataTemplate>
                                                 <dxe:CheckEdit  EditValue="{Binding Data.OperationDelete}" HorizontalAlignment="Center"  IsEnabled="{Binding RowData.Row.OperationDeleteAsset}">
                                                     <dxmvvm:Interaction.Behaviors>
-                                                        <dxmvvm:EventToCommand EventName="EditValueChanged" Command="{Binding ElementName=view, Path=DataContext.CellAssetsRolesValueChangedCommand}" CommandParameter="{Binding RowData.Row}" />
+                                                        <dxmvvm:EventToCommand EventName="Checked" Command="{Binding ElementName=view, Path=DataContext.CellAssetsRolesValueCheckedCommand}" CommandParameter="{Binding RowData.Row}" />
+                                                        <dxmvvm:EventToCommand EventName="Unchecked" Command="{Binding ElementName=view, Path=DataContext.CellAssetsRolesValueUncheckedCommand}" CommandParameter="{Binding RowData.Row}" />
                                                     </dxmvvm:Interaction.Behaviors>
                                                 </dxe:CheckEdit>
                                             </DataTemplate>

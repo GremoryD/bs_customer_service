@@ -42,7 +42,8 @@ namespace bcsapp.ViewModels
         //GridUSers
         public ICommand UserSelectedItemChangedCommand { set; get; }
         public ICommand RoleSelectedItemChangedCommand { set; get; }
-        public ICommand CellAssetsRolesValueChangedCommand { set; get; }
+        public ICommand CellAssetsRolesValueCheckedCommand { set; get; }
+        public ICommand CellAssetsRolesValueUncheckedCommand { set; get; }
         //Ribon Menu Buttons
         public bool SelectedUsers { set; get; } = true;
         public bool SelectedClients { set; get; } = false;
@@ -101,7 +102,8 @@ namespace bcsapp.ViewModels
             RoleSelectedItemChangedCommand = new SimpleCommand(UpdateRolesToAcces);
             AddRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(AddRoleToUser);
             RemoveRoleToUserCommand = new SimpleCommand<ResponseRoleClass>(RemoveRoleToUser);
-            CellAssetsRolesValueChangedCommand = new SimpleCommand<AssetsRoleModel>(CellAssetsRolesValueChanging);
+            CellAssetsRolesValueCheckedCommand = new SimpleCommand<AssetsRoleModel>(CellAssetsRolesValueChecked);
+            CellAssetsRolesValueUncheckedCommand = new SimpleCommand<AssetsRoleModel>(CellAssetsRolesValueUnchecked);
 
             WebSocketController.Instance.UpdateUserUI += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_UpdateUserUI(__));
             WebSocketController.Instance.ConnectedState += (_, __) => Application.Current.Dispatcher.Invoke(() => Instance_ConnectedState(__));
@@ -132,10 +134,25 @@ namespace bcsapp.ViewModels
             });
         }
 
-        private void CellAssetsRolesValueChanging(AssetsRoleModel aplication)
+        private void CellAssetsRolesValueUnchecked(AssetsRoleModel obj)
         {
+            WebSocketController.Instance.OutputQueueAddObject(new ServerLib.JTypes.Client.RequestRolesObjectsAddClass()
+            {
+                Token = DataStorage.Instance.Login.Token,
+                ObjectID = obj.ID,
+                RoleID = SelectedRoleClass.ID 
+            });
+        }
 
-            
+        private void CellAssetsRolesValueChecked(AssetsRoleModel obj)
+        {  
+            WebSocketController.Instance.OutputQueueAddObject(new ServerLib.JTypes.Client.RequestRolesObjectsDeleteClass()
+            {
+                Token = DataStorage.Instance.Login.Token,
+                ObjectID = obj.ID,
+                RoleID = SelectedRoleClass.ID
+
+            }); 
         }
 
         private void Instance_UpdateUserRoles(string e)
